@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
@@ -21,8 +22,25 @@ class AuthController extends Controller
     }
 
     public function loginAction(Request $request) {
-        // Logic to authenticate the user
-        // Redirect to dashboard page with success message
-        // return redirect()->route('dashboard')->with('success', 'Login successful!');
+        $credentials = $request->validate([
+            'email' => ['required', 'email'],
+            'password' => ['required'],
+        ]);
+
+        if (Auth::attempt($credentials)) {
+            $request->session()->regenerate();
+
+            $user = Auth::user();
+
+            if ($user->role === 'admin') {
+                return redirect()->route('admin.dashboard');
+            } elseif ($user->role === 'user') {
+                return redirect()->route('sewa.index');
+            }
+        }
+
+        return back()->withErrors([
+            'email' => 'The provided credentials do not match our records.',
+        ]);
     }
 }
