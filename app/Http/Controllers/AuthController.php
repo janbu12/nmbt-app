@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -15,10 +16,25 @@ class AuthController extends Controller
         return view('auth.register');
     }
 
-    public function registerAction() {
-        // Logic to register a new user
-        // Redirect to login page with success message
-        // return redirect()->route('login')->with('success', 'Registration successful!');
+    public function registerAction(Request $request) {
+        $request->validate([
+            'firstname' => 'required',
+            'lastname' => 'required',
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
+
+        // Create a new user in the database
+        $user = User::create([
+            'firstname' => $request->firstname,
+            'lastname' => $request->lastname,
+            'email' => $request->email,
+            'password' => bcrypt($request->password),
+        ]);
+
+
+        Auth::login($user);
+        return redirect()->route('home')->with('success', 'Registration successful!');
     }
 
     public function loginAction(Request $request) {

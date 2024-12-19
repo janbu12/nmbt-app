@@ -4,7 +4,7 @@
     ])
 
 @php
-    $baseClass = 'font-medium px-10 py-2.5 rounded-lg';
+    $baseClass = 'font-medium px-10 py-2.5 rounded-lg transition-all duration-300';
     $variants = [
         'primary' => 'btn-primary',
         'secondary' => 'btn-secondary',

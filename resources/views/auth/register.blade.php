@@ -2,7 +2,8 @@
     <a class="hover:scale-110 hover:-translate-y-2 transition duration-300" href="/">
         <img src="{{asset('images/Logo.png')}}" alt="Logo.png" class="max-w-28 drop-shadow-md">
     </a>
-    <div class="bg-white drop-shadow-sm rounded-3xl flex flex-col px-10 py-5">
+    <form  method="POST" action="{{route('auth.register.action')}}" class="bg-white drop-shadow-sm rounded-3xl flex flex-col px-10 py-5">
+        @csrf
         <div class="flex justify-center">
             <h1 class="text-center font-semibold text-tertiery1 text-2xl">Sign Up</h1>
         </div>
@@ -29,9 +30,9 @@
         </div>
         <div class="flex flex-col items-center gap-6">
                 <div>
-                    <x-button variant="secondary">Sign In</x-button>
+                    <x-button variant="secondary" type="submit">Sign Up</x-button>
                 </div>
                 <p class="text-center text-slate-400">Already have an account?<a href="/login" class="text-tertiery1 hover:text-secondary1"> Sign in</a></p>
         </div>
-    </div>
+    </form>
 </x-app-layout>
