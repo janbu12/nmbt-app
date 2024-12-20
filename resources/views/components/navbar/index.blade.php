@@ -5,13 +5,11 @@
     </a>
     <div class="flex items-center gap-14">
         {{-- Navbar Link --}}
+        <x-navbar.link href="/">Beranda</x-navbar.link>
+        <x-navbar.link href="/sewa">Sewa</x-navbar.link>
+        <x-navbar.link href="/about">Tentang Kami</x-navbar.link>
         @if (Auth::user() && Auth::user()->role === 'admin')
             <x-navbar.link href="/admin/dashboard">Dasboard</x-navbar.link>
-
-        @else
-            <x-navbar.link href="/">Beranda</x-navbar.link>
-            <x-navbar.link href="/sewa">Sewa</x-navbar.link>
-            <x-navbar.link href="/about">Tentang Kami</x-navbar.link>
         @endif
         @auth
             <div class="relative" x-data="{ open: false }">
@@ -35,7 +33,7 @@
                     x-transition
                 >
                     <ul class="py-2 text-sm text-gray-700">
-                        @if (Auth::check() && !Auth::user()->role === 'admin')
+                        @if (Auth::user()->role !== 'admin')
                             <li>
                                 <a href="/profile" class="block px-4 py-2 hover:bg-gray-100">Profile</a>
                             </li>
