@@ -10,6 +10,11 @@ Route::get('/about', function () {
 })->name('about');
 Route::get('/sewa', [App\Http\Controllers\RentsController::class, 'index'])->name(name: 'sewa.index');
 
+Route::middleware(['auth'])->group(function () {
+    Route::get('/user/profile', [App\Http\Controllers\ProfileController::class, 'edit'])->name('user.profile.edit');
+    Route::put('/user/profile', [App\Http\Controllers\ProfileController::class, 'update'])->name('user.profile.update');
+});
+
 Route::middleware('guest')->group(function () {
     Route::get('/login', [App\Http\Controllers\AuthController::class, 'index'])->name('auth.login');
     Route::get('/register', [App\Http\Controllers\AuthController::class, 'register'])->name('auth.register');

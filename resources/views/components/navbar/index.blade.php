@@ -35,7 +35,7 @@
                     <ul class="py-2 text-sm text-gray-700">
                         @if (Auth::user()->role !== 'admin')
                             <li>
-                                <a href="/profile" class="block px-4 py-2 hover:bg-gray-100">Profile</a>
+                                <a href="/user/profile" class="block px-4 py-2 hover:bg-gray-100">Profile</a>
                             </li>
                             <li>
                                 <a href="/cart" class="block px-4 py-2 hover:bg-gray-100">Cart</a>
