@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('address')->nullable()->defaultValue(null);
             $table->string('phone')->nullable()->defaultValue(null);
             $table->date('birthdate')->nullable()->defaultValue(null);
+            $table->string('imageUser')->nullable()->defaultValue(null);
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();

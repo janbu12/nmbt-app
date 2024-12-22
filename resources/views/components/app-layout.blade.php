@@ -30,4 +30,8 @@
 
         {{$slot}}
     </body>
+
+    @isset($scripts)
+        {{ $scripts }}
+    @endisset
 </html>
