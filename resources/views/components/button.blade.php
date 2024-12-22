@@ -6,8 +6,8 @@
 @php
     $baseClass = 'font-medium px-10 py-2.5 rounded-lg transition-all duration-300';
     $variants = [
-        'primary' => 'btn-primary',
-        'secondary' => 'btn-secondary',
+        'primary' => 'btn-primary-custom',
+        'secondary' => 'btn-secondary-custom',
         'danger' => 'bg-red-500 text-white hover:bg-red-600',
         'success' => 'bg-green-500 text-white hover:bg-green-600',
     ];
