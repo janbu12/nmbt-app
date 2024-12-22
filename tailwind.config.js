@@ -11,9 +11,6 @@ export default {
     ],
     theme: {
         extend: {
-            fontFamily: {
-                sans: ['Figtree', ...defaultTheme.fontFamily.sans],
-            },
             colors: {
                 bg1: '#DDF2FD',
                 primary1: "#    427D9D",
@@ -30,5 +27,11 @@ export default {
             },
         },
     },
-    plugins: [],
+    plugins: [
+        require('daisyui'),
+      ],
+    daisyui: {
+        themes: false,
+        darkTheme: false, // Disable dark mode
+    },
 };
