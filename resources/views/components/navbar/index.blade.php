@@ -29,7 +29,7 @@
                         src="{{ asset('storage/' . Auth::user()->imageUser) }}" />
                 @else
                     <img
-                        class="rounded-full group-hover:scale-90 transition-all duration-300"
+                        class="rounded-full group-hover/userInfo:scale-90 transition-all duration-300"
                         alt="user.png"
                         src="{{asset('images/boy.png')}}" />
                 @endif
