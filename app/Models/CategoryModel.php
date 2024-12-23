@@ -6,5 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class CategoryModel extends Model
 {
-    //
+    protected $table = 'categories';
+    protected $fillable = ['category_name', 'created_at', 'updated_at'];
+
+    public function products(){
+        return $this->hasMany(ProductRentModel::class);
+    }
 }

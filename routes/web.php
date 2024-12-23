@@ -22,6 +22,8 @@ Route::middleware('guest')->group(function () {
     Route::post('/register', [App\Http\Controllers\AuthController::class, 'registerAction'])->name('auth.register.action');
 });
 
+Route::resource('products', App\Http\Controllers\ProductsRentController::class);
+
 
 Route::middleware(['auth','role:admin'])->group(function () {
     Route::get('/admin/dashboard', [App\Http\Controllers\AdminController::class, 'index'])->name('admin.dashboard');
