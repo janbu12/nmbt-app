@@ -34,7 +34,10 @@ class AuthController extends Controller
 
 
         Auth::login($user);
-        return redirect()->route('home')->with('success', 'Registration successful!');
+
+        $user->sendEmailVerificationNotification();
+
+        return redirect('/email/verify');
     }
 
     public function loginAction(Request $request) {
@@ -51,7 +54,7 @@ class AuthController extends Controller
             if ($user->role === 'admin') {
                 return redirect()->route('admin.dashboard');
             } elseif ($user->role === 'user') {
-                return redirect()->route('sewa.index');
+                return redirect()->route('products.index');
             }
         }
 
