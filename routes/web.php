@@ -15,6 +15,7 @@ Route::get('/sewa', [App\Http\Controllers\RentsController::class, 'index'])->nam
 Route::middleware(['auth'])->group(function () {
     Route::get('/user/profile', [App\Http\Controllers\ProfileController::class, 'edit'])->name('user.profile.edit');
     Route::put('/user/profile', [App\Http\Controllers\ProfileController::class, 'update'])->name('user.profile.update');
+    Route::post('/logout', [App\Http\Controllers\AuthController::class, 'logout'])->name('auth.logout');
 });
 
 Route::middleware('guest')->group(function () {
@@ -31,6 +32,10 @@ Route::middleware(['auth','role:admin'])->group(function () {
     Route::get('/admin/dashboard', [App\Http\Controllers\AdminController::class, 'index'])->name('admin.dashboard');
 });
 
+
+
+
+// Route Email
 Route::get('/email/verify', function () {
     return view('auth.verify-email');
 })->middleware('auth')->name('verification.notice');
@@ -44,5 +49,3 @@ Route::post('/email/verification-notification', function (Request $request) {
     $request->user()->sendEmailVerificationNotification();
     return back()->with('message', 'Verification link sent!');
 })->middleware(['auth', 'throttle:6,1'])->name('verification.send');
-
-Route::post('/logout', [App\Http\Controllers\AuthController::class, 'logout'])->name('auth.logout')->middleware('auth');
