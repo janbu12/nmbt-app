@@ -35,9 +35,11 @@ class AuthController extends Controller
 
         Auth::login($user);
 
-        $user->sendEmailVerificationNotification();
+        // Send verification email
+        // $user->sendEmailVerificationNotification();
+        // return redirect('/email/verify');
 
-        return redirect('/email/verify');
+        return redirect()->route('products.index')->with("success", 'login success');
     }
 
     public function loginAction(Request $request) {
