@@ -94,9 +94,7 @@ class ProductsRentController extends Controller
         if ($request->hasFile('images')) {
             // Hapus gambar lama dari penyimpanan dan database
             foreach ($product->images as $image) {
-                if (Storage::exists('public/' . $image->image_path)) {
-                    Storage::delete('public/' . $image->image_path);
-                }
+                Storage::disk('public')->delete($image->image_path);
                 $image->delete();
             }
 
