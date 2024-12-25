@@ -108,7 +108,7 @@ class ProductsRentController extends Controller
             }
         }
 
-        return redirect()->back()->with('success', 'Product created successfully!');
+        return redirect()->back()->with('success', 'Product edit successfully!');
     }
 
 
