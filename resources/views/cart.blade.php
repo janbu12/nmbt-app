@@ -1,48 +1,65 @@
 <x-app-layout title="Cart" bodyClass="bg-tertiery3 gap-2 h-screen">
     <div class="py-5 px-10 flex gap-10 h-full">
-        <div class="p-3 flex flex-col bg-white w-full h-fit rounded-lg drop-shadow-lg text-tertiery1">
-            <div class="text-2xl font-medium">
-                Keranjang
-            </div>
-            <hr class="font-bold bg-black">
-            <div class="flex py-4 ">
-                <div class="flex flex-col">
-                    <input type="checkbox" name="" id="" class="mr-2 items-center">
+        {{-- <div class="p-3 flex flex-col bg-white w-full h-fit rounded-lg drop-shadow-lg text-tertiery1"> --}}
+        <div class="p-3 flex flex-col bg-white w-full h-fit max-h-[564px] overflow-y-auto rounded-lg drop-shadow-lg text-tertiery1">
+            {{-- <div class="sticky top-0 bg-red-500 z-10"> --}}
+                <div class="flex flex-row justify-between pb-3">
+                    <div class="text-2xl font-medium">
+                        Keranjang
+                    </div>
+                    <div class="p-2 bg-secondary3 hover:bg-tertiery3 rounded-lg text-white">
+                        <button id="check">Pilih semua</button>
+                    </div>
                 </div>
-                <div class="p-16 border-4 rounded-lg flex flex-col text-center">
-                    Ini gambar produk
-                </div>
+                <hr class="font-bold bg-black">
+            {{-- </div> --}}
+            @if ($cartItems->count() > 0)
+                @foreach ($cartItems as $item)
+                    <div class="flex py-4 ">
+                        <div class="flex items-center">
+                            <input type="checkbox" name="selected_items[]" id="checkbox" value="{{ $item['id'] }}" class="mr-2">
+                        </div>
+                        <div class="p-16 border-4 rounded-lg flex flex-col text-center">
+                            <img src="{{ $item['image'] }}" alt="{{ $item['image'] }}">
+                        </div>
 
-                <div class="flex flex-col px-3 w-full">
-                    <div class="font-medium text-2xl">
-                        Tenda 2 Orang
-                    </div>
-                    <div class="flex w-full justify-between">
-                        <div class="flex text-lg">
-                            Rp. 250,000
-                        </div>
-                        <div class="flex flex-row gap-2">
-                            <div class="p-2 border-2 rounded-lg">
-                                -
+                        <div class="flex flex-col px-3 w-full">
+                            <div class="font-medium text-2xl">
+                                {{ $item['name'] }}
                             </div>
-                            <div class="p-2 border-2 rounded-lg">
-                                1
+                            <div class="flex w-full justify-between">
+                                <div class="flex text-lg">
+                                    Rp. {{ number_format($item['price'], 0, ',', '.') }}
+                                </div>
+                                <div class="flex flex-row gap-2">
+                                    <button class="p-2 border-2 rounded-lg">
+                                        -
+                                    </button>
+                                    <div class="p-2 border-2 rounded-lg">
+                                        {{ $item['quantity'] }}
+                                    </div>
+                                    <button class="p-2 border-2 rounded-lg">
+                                        +
+                                    </button>
+                                </div>
                             </div>
-                            <div class="p-2 border-2 rounded-lg">
-                                +
+                            <div class="flex h-full justify-between items-end">
+                                <div class="text-2xl align-baseline">
+                                    Rp. {{ number_format($item['price'] * $item['quantity'], 0, ',', '.') }}
+                                </div>
+                                <div>
+                                    <button class="border rounded-xl bg-secondary3 hover:bg-tertiery3 text-white font-medium py-2 px-3">Hapus</button>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="flex h-full justify-between items-end">
-                        <div class="text-2xl align-baseline">
-                            Rp. 250,000
-                        </div>
-                        <div>
-                            <button class="border rounded-xl bg-secondary3 hover:bg-tertiery3 text-white font-medium py-2 px-3">Hapus</button>
-                        </div>
-                    </div>
+                    <hr>
+                @endforeach
+            @else
+                <div class="py-4 text-center text-lg font-medium">
+                    Keranjang Kosong, Ayo Mendaki!
                 </div>
-            </div>
+            @endif
         </div>
 
         <div class="p-3 flex flex-col bg-white w-full h-full rounded-lg drop-shadow-lg text-tertiery1">
@@ -103,3 +120,15 @@
         </div>
     </div>
 </x-app-layout>
+
+<script>
+    const checkAllButton = document.querySelector('#check');
+    const checkboxes = document.querySelectorAll('input[type="checkbox"][name="selected_items[]"]');
+    
+    checkAllButton.addEventListener('click', function() {
+        const allChecked = Array.from(checkboxes).every(checkbox => checkbox.checked);
+        checkboxes.forEach(checkbox => {
+            checkbox.checked = !allChecked; // Toggle semua checkbox
+        });
+    });
+</script>
