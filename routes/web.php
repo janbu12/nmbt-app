@@ -15,6 +15,9 @@ Route::get('/sewa', [App\Http\Controllers\RentsController::class, 'index'])->nam
 Route::middleware(['auth'])->group(function () {
     Route::get('/user/profile', [App\Http\Controllers\ProfileController::class, 'edit'])->name('user.profile.edit');
     Route::put('/user/profile', [App\Http\Controllers\ProfileController::class, 'update'])->name('user.profile.update');
+    Route::get('/cart', function() {
+        return view('cart');
+    });
     Route::post('/logout', [App\Http\Controllers\AuthController::class, 'logout'])->name('auth.logout');
 });
 
@@ -49,3 +52,7 @@ Route::post('/email/verification-notification', function (Request $request) {
     $request->user()->sendEmailVerificationNotification();
     return back()->with('message', 'Verification link sent!');
 })->middleware(['auth', 'throttle:6,1'])->name('verification.send');
+
+Route::get('coba', function() {
+    return view('coba');
+});
