@@ -69,7 +69,7 @@
                             <h2 class="card-title">{{ $product->name }}</h2>
                             <p>{{ $product->teaser }}</p>
                             <div class="card-actions justify-end">
-                                <button class="btn btn-primary">Buy Now</button>
+                                {{-- <button class="btn btn-primary">Buy Now</button> --}}
                             </div>
                         </div>
                     </div>
