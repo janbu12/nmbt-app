@@ -13,13 +13,35 @@ class ProductsRentController extends Controller
 {
     public function index(Request $request){
 
-        $search = $request->get('search');
+        // $search = $request->get('search');
 
-        $products = Product::with('images')
-        ->when($search, function($query, $search) {
-            return $query->where('name', 'like', '%'.$search.'%');
-        })
-        ->paginate(9);
+        // $products = Product::with('images')
+        // ->when($search, function($query, $search) {
+        //     return $query->where('name', 'like', '%'.$search.'%');
+        // })
+        // ->paginate(9);
+
+        $query = Product::query();
+
+        // Filter berdasarkan kategori
+        if ($request->has('category')) {
+            $categories = $request->input('category');
+            $query->whereIn('category_id', $categories);  // Menyaring produk berdasarkan beberapa kategori
+        }
+
+        // Filter berdasarkan urutan
+        if ($request->has('sort')) {
+            $sort = $request->input('sort');
+            // Menambahkan logika pengurutan berdasarkan 'sort'
+            if ($sort == 'Harga Terkecil') {
+                $query->orderBy('price', 'asc');
+            } elseif ($sort == 'Harga Terbesar') {
+                $query->orderBy('price', 'desc');
+            }
+            // Filter lain sesuai kebutuhan
+        }
+
+        $products = $query->paginate(6);
 
         $categories = Category::all();
         $filters = ['Rating', 'Harga Terkecil', 'Harga Terbesar'];

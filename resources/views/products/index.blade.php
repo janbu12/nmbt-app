@@ -27,7 +27,24 @@
                 <h1 class="text-tertiery1 font-medium text-2xl">Kategori</h1>
                 <div class="flex flex-wrap gap-2 items-center justify-center">
                     @foreach ($categories as $category)
-                        <x-button variant="secondary"  class="px-3 text-sm">{{ $category->category_name }}</x-button>
+                        @php
+                        // Ambil kategori yang ada di query
+                        $selectedCategories = (array) request('category', []);
+
+                        // Periksa apakah kategori ini sudah dipilih
+                        $isSelected = in_array($category->id, $selectedCategories);
+
+                        // Jika kategori ini sudah dipilih, hapus dari array, jika tidak, tambahkan ke array
+                        $newCategories = $isSelected
+                            ? array_diff($selectedCategories, [$category->id])  // Hapus kategori
+                            : array_merge($selectedCategories, [$category->id]); // Tambahkan kategori
+                        @endphp
+
+                        <a href="{{ route('products.index', array_merge(request()->query(), ['category' => $newCategories])) }}">
+                            <button class="px-3 text-sm p-2 rounded-lg {{ $isSelected ? 'bg-tertiery3 text-secondary3' : 'bg-secondary3 text-bg3 hover:bg-tertiery3 hover:text-secondary3' }}">
+                                {{ $category->category_name }}
+                            </button>
+                        </a>
                     @endforeach
                 </div>
             </div>
@@ -35,7 +52,11 @@
                 <h1 class="text-tertiery1 font-medium text-2xl">Urutkan Berdasarkan</h1>
                 <div class="flex flex-wrap gap-2 items-center justify-center">
                     @foreach ($filters as $filter)
-                        <x-button variant="secondary"  class="px-3 text-sm">{{ $filter }}</x-button>
+                        <a href="{{ route('products.index', array_merge(request()->query(), ['sort' => $filter])) }}">
+                            <button class="px-3 text-sm p-2 rounded-lg {{ request('sort') == $filter ? 'bg-tertiery3 text-secondary3' : 'bg-secondary3 text-bg3 hover:bg-tertiery3 hover:text-secondary3' }}">
+                                {{ $filter}}
+                            </button>
+                        </a>
                     @endforeach
                 </div>
             </div>
@@ -56,18 +77,23 @@
             {{-- Card Item --}}
             <div class="grid grid-cols-3 gap-5 overflow-auto py-4 px-8 justify-items-center">
                 @foreach ( $products as $product)
-                    <div class="card bg-base-100 w-96 shadow-lg cursor-pointer hover:scale-90 transition group">
+                    <div class="card bg-white w-96 shadow-lg drop-shadow cursor-pointer hover:scale-90 transition group">
                         <figure>
                             @if ($product->images->isNotEmpty())
-                            <img src="{{ asset('storage/' . $product->images->first()->file_path) }}" alt="Product Image" />
+                            <div class="h-24 w-24">
+                                <img src="{{ asset('storage/' . $product->images->first()->file_path) }}" alt="Product Image" class="w-full h-full object-cover"/>
+                            </div>
                             @else
-                                <img
-                                    src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp"
-                                    alt="Shoes"
-                                />
+                                <div class="h-48 w-62">
+                                    <img
+                                        src="{{ asset('images/produk-icon-dummy.png') }}"
+                                        alt="Shoes"
+                                        class="w-full h-full object-cover"
+                                    />
+                                </div>
                             @endif
                         </figure>
-                        <div class="card-body">
+                        <div class="card-body text-tertiery1">
                             <h2 class="card-title">{{ $product->name }}</h2>
                             <p>{{ $product->teaser }}</p>
                             <div class="flex space-x-1">
@@ -82,10 +108,15 @@
                                 <button type="button" class="text-yellow-500 text-3xl"
                                     id="star5">&#9733;</button>
                             </div>
-                            <div class="card-actions w-full items-center justify-between ">
-                                <button class="w-full py-2 rounded-xl border border-secondary3 text-secondary3 group-hover:text-bg3 group-hover:bg-secondary3 transition">
-                                    <span class="font-medium text-2xl">Rp. {{ number_format($product->price, 2, ',', '.') }}</span>
-                                </button>
+                            <div class="flex flex-col items-end gap-2 mt-2">
+                                <span class="font-medium text-2xl">
+                                    Rp. {{ number_format($product->price ?? 0, 2, ',', '.') }}
+                                </span>
+                                <div class="card-actions justify-end">
+                                    <div class="badge badge-outline">
+                                        {{ $categories[$product->category_id]->category_name }}
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
