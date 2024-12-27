@@ -55,7 +55,14 @@
         </div>
         <div class="bg-white my-8 rounded-3xl drop-shadow-md p-8 w-3/4 flex flex-col gap-5">
             <div class="border-b">
-                Header
+                <div class="flex justify-between">
+                    <div class="text-tertiery1 font-medium text-xl">
+                        Showing {{ $products->firstItem() }}-{{ $products->lastItem() }} of {{ $totalProducts }} Results
+                    </div>
+                    <div>
+                        {{ $products->links('pagination::tailwind') }}
+                    </div>
+                </div>
             </div>
             <div class="grid grid-cols-3 gap-5">
                 @foreach ( $products as $product)
@@ -69,7 +76,7 @@
                             <h2 class="card-title">{{ $product->name }}</h2>
                             <p>{{ $product->teaser }}</p>
                             <div class="card-actions justify-end">
-                                {{-- <button class="btn btn-primary">Buy Now</button> --}}
+                                <button class="btn btn-primary">Buy Now</button>
                             </div>
                         </div>
                     </div>

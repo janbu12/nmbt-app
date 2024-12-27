@@ -15,8 +15,9 @@ class ProductsRentController extends Controller
         $products = Product::with('images')->paginate(9);
         $categories = Category::all();
         $filters = ['Rating', 'Harga Terkecil', 'Harga Terbesar'];
+        $totalProducts = Product::count();
 
-        return view('products.index', compact('products', 'categories', 'filters'));
+        return view('products.index', compact('products', 'categories', 'filters', 'totalProducts'));
     }
 
     public function create() {
