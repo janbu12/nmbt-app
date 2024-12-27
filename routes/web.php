@@ -3,6 +3,7 @@
 use App\Http\Controllers\CartController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
+use Illuminate\Routing\RouteGroup;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -16,7 +17,16 @@ Route::get('/sewa', [App\Http\Controllers\RentsController::class, 'index'])->nam
 Route::middleware(['auth'])->group(function () {
     Route::get('/user/profile', [App\Http\Controllers\ProfileController::class, 'edit'])->name('user.profile.edit');
     Route::put('/user/profile', [App\Http\Controllers\ProfileController::class, 'update'])->name('user.profile.update');
-    Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+
+    Route::group([
+        'prefix' => 'cart',
+        'as' => 'cart.',
+    ], function () {
+        Route::get('/', [CartController::class, 'index'])->name('index');
+        Route::delete('/{id}', [CartController::class, 'destroy'])->name('destroy');
+        Route::patch('/{id}', [CartController::class, 'update'])->name('update');
+    });
+
     Route::post('/logout', [App\Http\Controllers\AuthController::class, 'logout'])->name('auth.logout');
 });
 
