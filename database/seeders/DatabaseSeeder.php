@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
         Cart::factory(10)->create();
         $this->call([
             CategorySeeders::class,
+            ProductSeeders::class,
         ]);
 
     }

@@ -12,9 +12,9 @@ use Illuminate\Support\Facades\Storage;
 class ProductsRentController extends Controller
 {
     public function index(){
-        // $products = Product::with('images')->paginate(10);
+        $products = Product::with('images')->paginate(10);
 
-        return view('products.index');
+        return view('products.index', compact('products'));
     }
 
     public function create() {
