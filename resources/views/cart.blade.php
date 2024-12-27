@@ -1,11 +1,17 @@
-<x-app-layout title="Cart" bodyClass="bg-tertiery3 gap-2 h-screen">
+<x-app-layout title="Cart" bodyClass="bg-tertiery3 gap-1 h-screen">
+    @if (session('error'))
+        <div class="bg-red-500 text-white p-2 rounded-lg mb-4">
+            {{ session('error') }}
+        </div>
+    @endif
+
     <div class="py-5 px-10 flex gap-10 h-full">
         {{-- <div class="p-3 flex flex-col bg-white w-full h-fit rounded-lg drop-shadow-lg text-tertiery1"> --}}
         <div class="p-3 flex flex-col bg-white w-full h-fit max-h-[564px] overflow-y-auto rounded-lg drop-shadow-lg text-tertiery1">
             {{-- <div class="sticky top-0 bg-red-500 z-10"> --}}
                 <div class="flex flex-row justify-between pb-3">
                     <div class="text-2xl font-medium">
-                        Keranjang
+                        Keranjang ({{ count($cartItems) }} item)
                     </div>
                     <div class="p-2 bg-secondary3 hover:bg-tertiery3 rounded-lg text-white">
                         <button id="check">Pilih semua</button>
@@ -27,29 +33,48 @@
                             <div class="font-medium text-2xl">
                                 {{ $item['name'] }}
                             </div>
-                            <div class="flex w-full justify-between">
-                                <div class="flex text-lg">
-                                    Rp. {{ number_format($item['price'], 0, ',', '.') }}
-                                </div>
-                                <div class="flex flex-row gap-2">
-                                    <button class="p-2 border-2 rounded-lg">
-                                        -
-                                    </button>
-                                    <div class="p-2 border-2 rounded-lg">
-                                        {{ $item['quantity'] }}
+                                <div class="flex w-full justify-between">
+                                    <div class="flex text-lg">
+                                        Rp. {{ number_format($item['price'], 0, ',', '.') }}
                                     </div>
-                                    <button class="p-2 border-2 rounded-lg">
-                                        +
-                                    </button>
+                                    <div class="flex flex-row gap-2">
+                                        <form action="{{ route('cart.update', $item['id']) }}" method="POST" class="inline">
+                                            @csrf
+                                            @method('patch')
+                                            <input type="hidden" name="quantity" value="{{ $item['quantity']- 1 }}">
+                                            <button class="p-2 border-2 rounded-lg">
+                                                -
+                                            </button>
+                                        </form>
+
+                                        <div class="p-2 border-2 rounded-lg">
+                                            {{ $item['quantity'] }}
+                                        </div>
+
+                                        <form action="{{ route('cart.update', $item['id']) }}" method="POST" class="inline">
+                                            @csrf
+                                            @method('patch')
+                                            <input type="hidden" name="quantity" value="{{ $item['quantity'] + 1 }}">
+                                            <button class="p-2 border-2 rounded-lg">
+                                                +
+                                            </button>
+                                        </form>
+                                    </div>
                                 </div>
-                            </div>
+
                             <div class="flex h-full justify-between items-end">
                                 <div class="text-2xl align-baseline">
                                     Rp. {{ number_format($item['price'] * $item['quantity'], 0, ',', '.') }}
                                 </div>
-                                <div>
-                                    <button class="border rounded-xl bg-secondary3 hover:bg-tertiery3 text-white font-medium py-2 px-3">Hapus</button>
-                                </div>
+
+                                <form action="{{  route('cart.destroy', $item['id']) }}" method="POST" class="inline">
+                                    @csrf
+                                    @method('delete')
+                                    <div>
+                                        <button class="border rounded-xl bg-secondary3 hover:bg-tertiery3 text-white font-medium py-2 px-3" id="hapus">Hapus</button>
+                                    </div>
+                                </form>
+
                             </div>
                         </div>
                     </div>
@@ -80,7 +105,7 @@
                 <div class="flex py-3 text-2xl flex-row justify-between">
                     Subtotal
                     <div>
-                        Rp. 250,000
+                        Rp. {{ number_format($subtotal, 0, ',', '.') }}
                     </div>
                 </div>
                 <div class="flex py-3 text-2xl flex-row justify-between">
@@ -129,6 +154,29 @@
         const allChecked = Array.from(checkboxes).every(checkbox => checkbox.checked);
         checkboxes.forEach(checkbox => {
             checkbox.checked = !allChecked; // Toggle semua checkbox
+        });
+    });
+
+    document.querySelectorAll('#hapus').forEach(form => {
+        form.addEventListener('submit', function(e) {
+            const confirmed = confirm('Apakah Anda yakin ingin menghapus item ini?');
+            if (!confirmed) {
+                e.preventDefault(); // Batalkan penghapusan
+            }
+        });
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const decreaseButtons = document.querySelectorAll('form[action*="cart/update"] button[type="submit"]');
+
+        decreaseButtons.forEach(button => {
+            button.addEventListener('click', (e) => {
+                const input = e.target.closest('form').querySelector('input[name="quantity"]');
+                if (parseInt(input.value) <= 1) {
+                    e.preventDefault();
+                    alert('Jumlah barang tidak boleh kurang dari 1.');
+                }
+            });
         });
     });
 </script>
