@@ -96,9 +96,9 @@
                 <div class="flex flex-col py-3">
                     Tanggal Penyewaan
                     <div class="flex flex-row py-2 items-center gap-4">
-                        <input type="date" name="" id="" class="border-4 rounded-xl p-2 w-full">
+                        <input type="date" name="" id="tanggal_awal" class="border-4 rounded-xl p-2 w-full">
                         -
-                        <input type="date" name="" id="" class="border-4 rounded-xl p-2 w-full">
+                        <input type="date" name="" id="tanggal_akhir" class="border-4 rounded-xl p-2 w-full">
                     </div>
                 </div>
                 <hr>
@@ -109,22 +109,24 @@
                     </div>
                 </div>
                 <div class="flex py-3 text-2xl flex-row justify-between">
-                    Lama pinjam (2 hari)
-                    <div>
-                        Rp. 20,000
+                    <div id="jumlah_hari">
+                        Lama pinjam: {{ $days ?? 0 }} hari
+                    </div>
+                    <div id="harga_hari">
+                        Rp. {{ $totalPrice ?? 0 }}
                     </div>
                 </div>
                 <div class="flex py-3 text-2xl flex-row justify-between">
                     Pajak (11%)
-                    <div>
-                        Rp. 29,700
+                    <div id="pajak">
+                        Rp. 0
                     </div>
                 </div>
                 <hr>
                 <div class="flex py-3 text-2xl flex-row justify-between">
                     Total (Pembulatan)
-                    <div>
-                        Rp. 280,000
+                    <div id="total">
+                        Rp. 0
                     </div>
                 </div>
                 <div class="flex py-3 text-2xl items-center flex-row justify-between">
@@ -178,5 +180,41 @@
                 }
             });
         });
+
+        const startDateInput = document.getElementById('tanggal_awal');
+        const endDateInput = document.getElementById('tanggal_akhir');
+        const daysDisplay = document.getElementById('jumlah_hari');
+        const hargaHari = document.getElementById('harga_hari');
+        const totalPajak = document.getElementById('pajak');
+
+        // const hargaPajak = 0.11;
+        const hargaPinjam = 5000;
+
+        function calculateDays() {
+            const startDate = new Date(startDateInput.value);
+            const endDate = new Date(endDateInput.value);
+
+            if (!isNaN(startDate) && !isNaN(endDate) && endDate >= startDate) {
+                const difference = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24));
+                const totalHarga = difference * hargaPinjam;
+
+                daysDisplay.textContent = `Lama Pinjam: ${difference} hari`;
+                hargaHari.textContent = `Rp. ${totalHarga.toLocaleString('id-ID')}`;
+        //         totalPajak.textContent = `Rp. ${Math.ceil(totalHarga * hargaPajak).toLocaleString('id-ID')}`;
+            } else if (endDate < startDate) {
+                alert('Tanggal akhir tidak boleh lebih awal dari tanggal awal.');
+            } else {
+                daysDisplay.textContent = 'Lama Pinjam: 0 hari';
+                hargaHari.value = 'Rp. 0';
+        //         totalPajak.textContent = 'Rp. 0';
+            }
+        }
+
+        startDateInput.addEventListener('change', calculateDays);
+        endDateInput.addEventListener('change', calculateDays);
+
+        
+        
     });
+
 </script>

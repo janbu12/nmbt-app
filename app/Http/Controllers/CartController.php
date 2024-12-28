@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Cart;
 use App\Models\Rent;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class CartController extends Controller
@@ -54,6 +55,25 @@ class CartController extends Controller
         }
     
         return redirect()->route('cart.index')->with('error', 'Item tidak ditemukan.');
+    }
+
+    public function calculatePrice(Request $request)
+    {
+        $startDate = Carbon::parse($request->input('start_date'));
+        $endDate = Carbon::parse($request->input('end_date'));
+        $pricePerDay = 5000;
+
+        if ($endDate->gte($startDate)) {
+            $days = $startDate->diffInDays($endDate);
+            $totalPrice = $days * $pricePerDay;
+        } else {
+            return back()->with('error', 'Tanggal akhir harus lebih besar atau sama dengan tanggal mulai.');
+        }
+
+        return view('cart.index', [
+            'days' => $days,
+            'totalPrice' => $totalPrice,
+        ]);
     }
 
 }
