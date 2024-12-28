@@ -5,11 +5,15 @@
     </a>
     <div class="flex items-center gap-14">
         {{-- Navbar Link --}}
+        @if (Auth::user() && Auth::user()->role === 'admin')
+        <x-navbar.link href="/admin/dashboard">Dasboard</x-navbar.link>
+        <x-navbar.link href="/admin/item">Item</x-navbar.link>
+        <x-navbar.link href="/admin/history">Riwayat</x-navbar.link>
+        @elseif (Auth::user() && Auth::user()->role === 'user')
         <x-navbar.link href="/">Beranda</x-navbar.link>
         <x-navbar.link href="/products">Sewa</x-navbar.link>
         <x-navbar.link href="/about">Tentang Kami</x-navbar.link>
-        @if (Auth::user() && Auth::user()->role === 'admin')
-            <x-navbar.link href="/admin/dashboard">Dasboard</x-navbar.link>
+
         @endif
 
         @if (!auth()->user())
