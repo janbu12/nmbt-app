@@ -1,5 +1,6 @@
-<x-app-layout title="Item List" bodyClass="bg-tertiery3 gap-1 h-screen">
-    <div class="flex flex-row justify-between px-8 py-6">
+<x-app-layout title="Item List" bodyClass="bg-tertiery3 w-full items-center overflow-hidden max-h-screen">
+  <div class="flex w-full px-10 py-6 h-screen overflow-hidden flex-col">
+    <div class="flex flex-row justify-between">
         <div class="flex">
             <input type="text" name="" id="" placeholder="Search" class="w-full p-2 rounded-lg">
         </div>
@@ -8,135 +9,44 @@
                 Tambah
             </button>
         </div>
-    </div>
+      </div>
 
-    <div class="flex h-full max-h-[564px] overflow-y-auto px-8">
-        <div class="flex h-fit w-screen p-2 bg-white rounded-lg flex-wrap justify-between gap-3">
-            <div class="card bg-secondary1 w-96 shadow-xl">
-                <figure class="px-10 pt-10">
-                  <img
-                    src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp"
-                    alt="Shoes"
-                    class="rounded-xl" />
-                </figure>
-                <div class="card-body items-center text-center">
-                  <h2 class="card-title">Shoes!</h2>
-                  <p>If a dog chews shoes whose shoes does he choose?</p>
-                  <div class="card-actions">
-                    <button class="btn btn-primary">Buy Now</button>
-                  </div>
+    <div class="bg-white my-4 rounded-3xl drop-shadow-md w-full flex flex-col gap-5">
+      <div class="grid grid-cols-3 gap-3 overflow-auto py-4 px-8 justify-items-center">
+        
+        @foreach ($products as $item)
+          <div class="card bg-base-100 lg:card-side shadow-xl w-full">
+            <figure class="w-full">
+              @if ($item->images->isNotEmpty())
+                <div class="h-24 w-24">
+                  <img src="{{ asset('storage/' . $item->images->first()->file_path) }}" alt="Product Image" class="w-full h-full object-cover"/>
                 </div>
-              </div>
-
-              <div class="card bg-secondary1 w-96 shadow-xl">
-                <figure class="px-10 pt-10">
-                  <img
-                    src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp"
-                    alt="Shoes"
-                    class="rounded-xl" />
-                </figure>
-                <div class="card-body items-center text-center">
-                  <h2 class="card-title">Shoes!</h2>
-                  <p>If a dog chews shoes whose shoes does he choose?</p>
-                  <div class="card-actions">
-                    <button class="btn btn-primary">Buy Now</button>
-                  </div>
+              @else
+                <div class="h-48 w-62">
+                  <img src="{{ asset('images/produk-icon-dummy.png') }}" alt="Shoes" class="w-full h-full object-cover" class="w-full h-full object-cover"/>
                 </div>
+              @endif
+            </figure>
+            <div class="card-body w-full">
+              <h2 class="card-title text-xl">{{ $item->id }}</h2>
+              <div class="flex gap-0 flex-col">
+                <p class="text-lg">{{ $item->name }}</p>
+                <p>Rp. {{ number_format($item->price?? 0, 2, ',', '.') }}</p>
+                <p>{{ $categories[$item->category_id]->category_name }}</p>
               </div>
-              <div class="card bg-secondary1 w-96 shadow-xl">
-                <figure class="px-10 pt-10">
-                  <img
-                    src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp"
-                    alt="Shoes"
-                    class="rounded-xl" />
-                </figure>
-                <div class="card-body items-center text-center">
-                  <h2 class="card-title">Shoes!</h2>
-                  <p>If a dog chews shoes whose shoes does he choose?</p>
-                  <div class="card-actions">
-                    <button class="btn btn-primary">Buy Now</button>
-                  </div>
-                </div>
+              <div class="card-actions justify-end pt-3 h-full items-end">
+                <button class="text-white font-medium btn bg-secondary3 hover:bg-secondary1">Edit</button>
+                <button class="text-white font-medium btn bg-red-600 hover:bg-red-300">Hapus</button>
               </div>
-              <div class="card bg-secondary1 w-96 shadow-xl">
-                <figure class="px-10 pt-10">
-                  <img
-                    src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp"
-                    alt="Shoes"
-                    class="rounded-xl" />
-                </figure>
-                <div class="card-body items-center text-center">
-                  <h2 class="card-title">Shoes!</h2>
-                  <p>If a dog chews shoes whose shoes does he choose?</p>
-                  <div class="card-actions">
-                    <button class="btn btn-primary">Buy Now</button>
-                  </div>
-                </div>
-              </div>
-              <div class="card bg-secondary1 w-96 shadow-xl">
-                <figure class="px-10 pt-10">
-                  <img
-                    src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp"
-                    alt="Shoes"
-                    class="rounded-xl" />
-                </figure>
-                <div class="card-body items-center text-center">
-                  <h2 class="card-title">Shoes!</h2>
-                  <p>If a dog chews shoes whose shoes does he choose?</p>
-                  <div class="card-actions">
-                    <button class="btn btn-primary">Buy Now</button>
-                  </div>
-                </div>
-              </div>
-              <div class="card bg-secondary1 w-96 shadow-xl">
-                <figure class="px-10 pt-10">
-                  <img
-                    src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp"
-                    alt="Shoes"
-                    class="rounded-xl" />
-                </figure>
-                <div class="card-body items-center text-center">
-                  <h2 class="card-title">Shoes!</h2>
-                  <p>If a dog chews shoes whose shoes does he choose?</p>
-                  <div class="card-actions">
-                    <button class="btn btn-primary">Buy Now</button>
-                  </div>
-                </div>
-              </div>
-              <div class="card bg-secondary1 w-96 shadow-xl">
-                <figure class="px-10 pt-10">
-                  <img
-                    src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp"
-                    alt="Shoes"
-                    class="rounded-xl" />
-                </figure>
-                <div class="card-body items-center text-center">
-                  <h2 class="card-title">Shoes!</h2>
-                  <p>If a dog chews shoes whose shoes does he choose?</p>
-                  <div class="card-actions">
-                    <button class="btn btn-primary">Buy Now</button>
-                  </div>
-                </div>
-              </div>
-              <div class="card bg-secondary1 w-96 shadow-xl">
-                <figure class="px-10 pt-10">
-                  <img
-                    src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp"
-                    alt="Shoes"
-                    class="rounded-xl" />
-                </figure>
-                <div class="card-body items-center text-center">
-                  <h2 class="card-title">Shoes!</h2>
-                  <p>If a dog chews shoes whose shoes does he choose?</p>
-                  <div class="card-actions">
-                    <button class="btn btn-primary">Buy Now</button>
-                  </div>
-                </div>
-              </div>
-        </div>
+            </div>
+          </div>
+        @endforeach
+        
+      </div>
     </div>
 
     <div class="px-8 py-6">
-        Ini Buat slide barang
+      {{ $products->appends(request()->query())->links('pagination::custom-pagination') }}
     </div>
+  </div>
 </x-app-layout>
