@@ -16,14 +16,12 @@ class CategorySeeders extends Seeder
         $categories = [
             ['category_name' => 'Tenda'],
             ['category_name' => 'Tas dan Ransel'],
-            ['category_name' => 'Peralatan Memasak'],
-            ['category_name' => 'Lampu dan Senter'],
-            ['category_name' => 'Peralatan Tidur'],
-            ['category_name' => 'Pakaian Outdoor'],
-            ['category_name' => 'Sepatu dan Sandal'],
-            ['category_name' => 'Peralatan Survival'],
-            ['category_name' => 'Alat Kebersihan'],
-            ['category_name' => 'Aksesoris Lainnya'],
+            ['category_name' => 'Sepatu'],
+            ['category_name' => 'Matras'],
+            ['category_name' => 'Kursi Lipat'],
+            ['category_name' => 'Kompor'],
+            ['category_name' => 'Jaket'],
+            ['category_name' => 'Flysheet'],
         ];
 
         DB::table('categories')->insert($categories);
