@@ -87,9 +87,9 @@
                     <a href="{{ route('products.show', $product->id) }}" class="card bg-white w-full md:w-80 xl:w-1/3 2xl:w-96 max-xl: h-auto shadow-lg drop-shadow cursor-pointer hover:scale-90 transition group">
                         <figure>
                             @if ($product->images->isNotEmpty())
-                            <div class="h-24 w-24">
-                                <img src="{{ asset('storage/' . $product->images->first()->file_path) }}" alt="Product Image" class="w-full h-full object-cover"/>
-                            </div>
+                                <div class="lg:h-48 lg:w-62">
+                                    <img src="{{ asset('storage/' . $product->images->first()->image_path) }}" alt="Product Image" class="w-full h-full object-cover"/>
+                                </div>
                             @else
                                 <div class="lg:h-48 lg:w-62">
                                     <img
@@ -121,7 +121,7 @@
                                 </span>
                                 <div class="card-actions justify-end">
                                     <div class="badge badge-outline 2xl:text-sm lg:text-xs" >
-                                        {{ $categories[$product->category_id]->category_name }}
+                                        {{ $categories[$product->category_id - 1]->category_name }}
                                     </div>
                                 </div>
                             </div>
