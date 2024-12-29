@@ -8,13 +8,13 @@
             </ul>
         </div>
         {{-- Main Content --}}
-        <div class="bg-white rounded mt-2 drop-shadow-md w-full mb-6 p-10">
+        <div class="bg-white rounded mt-2 drop-shadow-md w-full mb-6">
 
             {{-- Product Content --}}
-            <div class="flex gap-8">
+            <div class="flex gap-8 border-b p-10 flex-wrap justify-center lg:flex-nowrap">
 
                 {{-- Carousel --}}
-                <div class="w-2/4">
+                <div class="w-full md:w-2/4">
                     <div class="relative w-full mx-auto">
                         <!-- Main Image -->
                         <div class="overflow-hidden rounded-lg">
@@ -24,8 +24,8 @@
                         </div>
 
                         <!-- Controls -->
-                        <div class="flex mt-4 gap-2 justify-center">
-                            <button id="prev" class="bg-base-100 p-2 rounded-md drop-shadow hover:bg-base-200">
+                        <div class="flex mt-4 gap-2 py-2 justify-center overflow-y-auto">
+                            <button id="prev" class="bg-base-100 p-2 hidden lg:block rounded-md drop-shadow hover:bg-base-200">
                                 &#8592;
                             </button>
                             <!-- Thumbnails -->
@@ -36,7 +36,7 @@
                                             id="images-{{ $loop->index }}"
                                             src="{{ asset('storage/' . $image->image_path) }}"
                                             alt="Thumbnail {{ $loop->index }}"
-                                            class="thumbnail w-16 h-16 object-cover rounded-md cursor-pointer border-2 border-transparent hover:border-primary transition-all">
+                                            class="thumbnail w-16 h-16 object-cover rounded-md cursor-pointer border-2 border-transparent hover:outline-none hover:ring-2 hover:ring-secondary3 transition-all">
                                     @endforeach
                                 @else
                                     <img
@@ -46,7 +46,7 @@
                                         class="thumbnail w-16 h-16 object-cover rounded-md cursor-pointer border-2 border-transparent hover:border-primary transition-all">
                                 @endif
                             </div>
-                            <button id="next" class="bg-base-100 p-2 rounded-md drop-shadow hover:bg-base-200">
+                            <button id="next" class="bg-base-100 p-2 hidden lg:block rounded-md drop-shadow hover:bg-base-200">
                                 &#8594;
                             </button>
                         </div>
@@ -59,9 +59,9 @@
                     <div class="text-3xl font-medium">
                         {{ $product->name }}
                     </div>
-                    <div class="flex gap-3 mt-2">
+                    <div class="flex gap-3 mt-2 flex-wrap">
                         <div class="flex items-center gap-2">
-                            <span class="border-b-2 w-full">4,6</span>
+                            <span class="border-b-2 w-full">4.9</span>
                             <div class="flex space-x-1 lg:text-xl 2xl:text-3xl">
                                 <button type="button" class="text-yellow-500 "
                                     id="star1">&#9733;</button>
@@ -84,14 +84,14 @@
                             <p>Rent</p>
                         </div>
                     </div>
-                    <div class="py-5">
+                    <div class="py-5 text-balance">
                         {{ $product->description }}
                     </div>
-                    <div class="flex justify-between text-secondary3">
+                    <div class="flex flex-wrap lg:flex-nowrap gap-4 justify-between text-secondary3">
                         <span class="font-medium text-3xl">
                             Rp. {{ number_format($product->price ?? 0, 2, ',', '.') }}
                         </span>
-                        <div class="flex items-center space-x-2">
+                        <div class="flex items-center space-x-2 h-9 lg:h-auto">
                             <button id="decrease" class="bg-base-100 px-3 border border-secondary3 h-full rounded-md hover:bg-secondary3 hover:text-bg3 transition">
                                 -
                             </button>
@@ -106,17 +106,74 @@
                             </button>
                         </div>
                     </div>
-                    <div class="w-full flex justify-end mt-5">
+                    <div class="w-full flex justify-start md:justify-end mt-5">
                         <x-button variant="secondary">Add To Cart</x-button>
                     </div>
                 </div>
                 {{-- Description Content End--}}
 
             </div>
-            <div>
-                <h1>Reviews</h1>
+
+            {{-- Review Sections --}}
+            <div class="flex flex-col p-10">
+                {{-- Header --}}
+                <div class="flex items-center justify-between mb-6">
+                    <div class="text-3xl font-medium">Penilaian Produk</div>
+                    <div class="text-sm text-gray-500">4.9 dari 5</div>
+                </div>
+
+                {{-- Rating Summary --}}
+                <div class="flex items-center flex-wrap gap-4 mb-6">
+                    <div class="text-5xl font-bold text-yellow-500">4.9</div>
+                    <div class="flex flex-col gap-2">
+                        @php
+                            $ratings = [
+                                ['stars' => 5, 'percentage' => 90, 'count' => '3.5RB'],
+                                ['stars' => 4, 'percentage' => 7, 'count' => '303'],
+                                ['stars' => 3, 'percentage' => 2, 'count' => '16'],
+                                ['stars' => 2, 'percentage' => 1, 'count' => '2'],
+                                ['stars' => 1, 'percentage' => 0.5, 'count' => '3'],
+                            ];
+                        @endphp
+                        @foreach ($ratings as $rating)
+                            <div class="flex items-center flex-wrap gap-2">
+                                <span class="text-sm">{{ $rating['stars'] }} Bintang</span>
+                                <progress
+                                    class="progress progress-warning w-56"
+                                    value="{{ $rating['percentage'] }}"
+                                    max="100"
+                                ></progress>
+                                <span class="text-sm text-gray-500">({{ $rating['count'] }})</span>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
+
+
+                {{-- Review List --}}
+                <div class="space-y-6">
+                    <div class="p-4 bg-gray-50 rounded-lg shadow-sm">
+                        <div class="flex items-center gap-4 mb-3">
+                            <div class="w-12 h-12 bg-gray-200 rounded-full"></div>
+                            <div>
+                                <div class="text-sm font-medium">e******o</div>
+                                <div class="text-xs text-gray-500">2023-08-16 21:37</div>
+                            </div>
+                        </div>
+                        <div class="text-sm">
+                            <p><strong>Fitur Terbaik:</strong> Garansi</p>
+                            <p><strong>Sepadan dengan Harga:</strong> Sepadan</p>
+                            <p>Barang oke, seller oke, kiriman memuaskan, harga oke, kemasan oke, semuanya bagus. Saya beri jempol, keep up the good work.</p>
+                        </div>
+                        <div class="flex gap-2 mt-3">
+                            <img src="{{ asset('path-to-image-1.jpg') }}" alt="Review Image 1" class="w-20 h-20 object-cover rounded-md">
+                            <img src="{{ asset('path-to-image-2.jpg') }}" alt="Review Image 2" class="w-20 h-20 object-cover rounded-md">
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
+
         {{-- Main Content End --}}
     </div>
 
@@ -137,10 +194,10 @@
                 mainImage.src = `{{ asset('storage/') }}/${images[index].image_path}`;
 
                 // Remove 'border-primary' class from all thumbnails
-                thumbnails.forEach((thumbnail) => thumbnail.classList.remove("border-primary"));
+                thumbnails.forEach((thumbnail) => thumbnail.classList.remove("ring-2"));
 
                 // Add 'border-primary' class to the active thumbnail
-                thumbnails[index].classList.add("border-primary");
+                thumbnails[index].classList.add("ring-2","ring-secondary3");
             };
 
             // Add click event to thumbnails
