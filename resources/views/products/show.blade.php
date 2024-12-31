@@ -1,5 +1,5 @@
 <x-app-layout title="Sewa" bodyClass="bg-tertiery3 w-full items-center min-h-screen text-tertiery1">
-    <div class="w-full px-10">
+    <div class="w-full px-10 ">
         <div class="breadcrumbs text-sm text-tertiery1 mt-4">
             <ul>
                 <li><a href="/products">NMBT</a></li>
@@ -100,7 +100,8 @@
                                 type="text"
                                 value="1"
                                 class="w-10 h-full focus:outline-none text-center border border-secondary3 rounded-md"
-                                readonly>
+                                readonly
+                                >
                             <button id="increase" class="bg-base-100 px-3 rounded-md border border-secondary3 h-full hover:bg-secondary3 hover:text-bg3 transition">
                                 +
                             </button>
@@ -184,9 +185,7 @@
             const thumbnails = document.querySelectorAll(".thumbnail");
             const prevBtn = document.getElementById("prev");
             const nextBtn = document.getElementById("next");
-            const quantityInput = document.getElementById("quantity");
-            const increaseBtn = document.getElementById("increase");
-            const decreaseBtn = document.getElementById("decrease");
+
             let currentIndex = 0;
 
             // Update main image and active thumbnail
@@ -222,18 +221,23 @@
 
             // Initialize with the first image and active thumbnail
             updateMainImage(currentIndex);
+        });
 
-            increaseBtn.addEventListener("click", () => {
-                const currentValue = parseInt(quantityInput.value);
-                quantityInput.value = currentValue + 1;
-            });
+        const quantityInput = document.getElementById("quantity");
+        const increaseBtn = document.getElementById("increase");
+        const decreaseBtn = document.getElementById("decrease");
 
-            decreaseBtn.addEventListener("click", () => {
-                const currentValue = parseInt(quantityInput.value);
-                if (currentValue > 1) {
-                    quantityInput.value = currentValue - 1;
-                }
-            });
+
+        increaseBtn.addEventListener("click", () => {
+            const currentValue = parseInt(quantityInput.value);
+            quantityInput.value = currentValue + 1;
+        });
+
+        decreaseBtn.addEventListener("click", () => {
+            const currentValue = parseInt(quantityInput.value);
+            if (currentValue > 1) {
+                quantityInput.value = currentValue - 1;
+            }
         });
     </script>
 </x-app-layout>
