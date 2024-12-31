@@ -22,8 +22,7 @@ class DatabaseSeeder extends Seeder
             CategorySeeders::class,
             ProductSeeders::class,
             RentSeeder::class,
+            ReviewSeeder::class,
         ]);
-        Review::factory(10)->create();
-
     }
 }
