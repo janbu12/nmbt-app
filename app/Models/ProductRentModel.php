@@ -28,4 +28,8 @@ class ProductRentModel extends Model
     public function category(){
         return $this->belongsTo(CategoryModel::class);
     }
+
+    public function rent_details(){
+        return $this->hasMany(RentDetailsModel::class, 'product_id');
+    }
 }
