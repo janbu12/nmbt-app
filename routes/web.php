@@ -43,6 +43,9 @@ Route::resource('products', App\Http\Controllers\ProductsRentController::class);
 Route::middleware(['auth','role:admin'])->group(function () {
     Route::get('/admin/dashboard', [App\Http\Controllers\AdminController::class, 'index'])->name('admin.dashboard');
     Route::get('/admin/item',[App\Http\Controllers\ProductsRentController::class, 'index'])->name('admin.item');
+    Route::get('/admin/history', function() {
+        return view('admin.history');
+    });
 });
 
 
