@@ -15,6 +15,8 @@ class ReviewFactory extends Factory
             'user_id' => null,    // Akan diisi oleh Seeder
             'rating' => $this->faker->numberBetween(3, 5),
             'comment' => $this->faker->text(100),
+            'created_at' => now(),
+            'updated_at' => now(),
         ];
     }
 }

@@ -13,7 +13,7 @@ class RentSeeder extends Seeder
      */
     public function run(): void
     {
-        Rent::factory(10)
+        Rent::factory(1000)
             ->has(
                 \App\Models\RentDetailsModel::factory()
                     ->count(3), // Setiap Rent memiliki 3 RentDetails

@@ -103,17 +103,18 @@
                         <div class="card-body text-tertiery1">
                             <h2 class="card-title lg:text-base">{{ $product->name }}</h2>
                             <p class="lg:text-sm 2xl:text-base">{{ $product->teaser }}</p>
-                            <div class="flex space-x-1 lg:text-xl 2xl:text-3xl">
-                                <button type="button" class="text-yellow-500 "
-                                    id="star1">&#9733;</button>
-                                <button type="button" class="text-yellow-500 "
-                                    id="star2">&#9733;</button>
-                                <button type="button" class="text-yellow-500 "
-                                    id="star3">&#9733;</button>
-                                <button type="button" class="text-yellow-500 "
-                                    id="star4">&#9733;</button>
-                                <button type="button" class="text-yellow-500 "
-                                    id="star5">&#9733;</button>
+                            <div class="flex items-center gap-2">
+                                <div class="flex space-x-1 lg:text-xl 2xl:text-3xl">
+                                    @php $averageRatingProduct = round($product->average_rating); @endphp
+                                    @for ($i = 1; $i <= 5; $i++)
+                                        @if ($i <= $averageRatingProduct)
+                                            <span class="text-yellow-500 }}">&#9733;</span>
+                                        @else
+                                            <span class="text-gray-300 }}">&#9733;</span>
+                                        @endif
+                                    @endfor
+                                </div>
+                                <span class="text-sm">{{number_format($product->average_rating,1)}}</span>
                             </div>
                             <div class="flex flex-col items-end gap-2 mt-2">
                                 <span class="font-medium lg:text-lg 2xl:text-2xl">
