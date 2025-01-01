@@ -16,7 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id');
             $table->date('pickup_date');
             $table->date('return_date');
-            $table->enum('status_rent', ['process', 'ready_pickup', 'renting', 'done']);
+            $table->enum('status_rent', ['process', 'ready_pickup', 'renting', 'done', 'cancelled']);
             $table->double('total_price');
             $table->string('payment_method');
             $table->timestamps();

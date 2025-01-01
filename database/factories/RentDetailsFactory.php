@@ -28,6 +28,8 @@ class RentDetailsFactory extends Factory
             'product_id' => $product->id,
             'quantity' => $quantity,
             'subtotal' => $quantity * $product->price,
+            'created_at' => now(),
+            'updated_at' => now(),
         ];
     }
 }

@@ -59,28 +59,27 @@
                     <div class="text-3xl font-medium">
                         {{ $product->name }}
                     </div>
+                    {{-- @dump($product->ratingsDistribution()) --}}
                     <div class="flex gap-3 mt-2 flex-wrap">
                         <div class="flex items-center gap-2">
-                            <span class="border-b-2 w-full">4.9</span>
+                            <span class="border-b-2 w-full min-w-6 text-center">{{number_format($product->average_rating,1)}}</span>
                             <div class="flex space-x-1 lg:text-xl 2xl:text-3xl">
-                                <button type="button" class="text-yellow-500 "
-                                    id="star1">&#9733;</button>
-                                <button type="button" class="text-yellow-500 "
-                                    id="star2">&#9733;</button>
-                                <button type="button" class="text-yellow-500 "
-                                    id="star3">&#9733;</button>
-                                <button type="button" class="text-yellow-500 "
-                                    id="star4">&#9733;</button>
-                                <button type="button" class="text-yellow-500 "
-                                    id="star5">&#9733;</button>
+                                @php $averageRatingProduct = round($product->average_rating); @endphp
+                                @for ($i = 1; $i <= 5; $i++)
+                                    @if ($i <= $averageRatingProduct)
+                                        <span class="text-xl text-yellow-500 }}">&#9733;</span>
+                                    @else
+                                        <span class="text-xl text-gray-300 }}">&#9733;</span>
+                                    @endif
+                                @endfor
                             </div>
                         </div>
                         <div class="flex items-center gap-2">
-                            <span class="border-b-2 w-full">178</span>
+                            <span class="border-b-2 w-full min-w-6 text-center">{{$product->reviews->count() }}</span>
                             <p>Reviews</p>
                         </div>
                         <div class="flex items-center gap-2">
-                            <span class="border-b-2 w-full">215</span>
+                            <span class="border-b-2 w-full min-w-6 text-center">{{ $product->total_rented }}</span>
                             <p>Rent</p>
                         </div>
                     </div>
@@ -116,35 +115,30 @@
             </div>
 
             {{-- Review Sections --}}
-            <div class="flex flex-col p-10">
+            <div class="flex flex-col p-10" id="reviews-container">
                 {{-- Header --}}
                 <div class="flex items-center justify-between mb-6">
                     <div class="text-3xl font-medium">Penilaian Produk</div>
-                    <div class="text-sm text-gray-500">4.9 dari 5</div>
+                    <div class="text-sm text-gray-500">{{number_format($product->average_rating,1)}} dari 5</div>
                 </div>
 
                 {{-- Rating Summary --}}
                 <div class="flex items-center flex-wrap gap-4 mb-6">
-                    <div class="text-5xl font-bold text-yellow-500">4.9</div>
+                    <div class="text-5xl font-bold text-yellow-500">{{number_format($product->average_rating,1)}}</div>
                     <div class="flex flex-col gap-2">
-                        @php
-                            $ratings = [
-                                ['stars' => 5, 'percentage' => 90, 'count' => '3.5RB'],
-                                ['stars' => 4, 'percentage' => 7, 'count' => '303'],
-                                ['stars' => 3, 'percentage' => 2, 'count' => '16'],
-                                ['stars' => 2, 'percentage' => 1, 'count' => '2'],
-                                ['stars' => 1, 'percentage' => 0.5, 'count' => '3'],
-                            ];
-                        @endphp
-                        @foreach ($ratings as $rating)
+                        @foreach (range(5, 1) as $star)
+                            @php
+                                $rating = $product->ratingsDistribution()[$star] ?? ['percentage' => 0, 'count' => 0];
+                                $formatedCount = $product->formatCountRating($rating['count']);
+                            @endphp
                             <div class="flex items-center flex-wrap gap-2">
-                                <span class="text-sm">{{ $rating['stars'] }} Bintang</span>
+                                <span class="text-sm">{{ $star }} Bintang</span>
                                 <progress
                                     class="progress progress-warning w-56"
                                     value="{{ $rating['percentage'] }}"
                                     max="100"
                                 ></progress>
-                                <span class="text-sm text-gray-500">({{ $rating['count'] }})</span>
+                                <span class="text-sm text-gray-500">({{ $formatedCount }})</span>
                             </div>
                         @endforeach
                     </div>
@@ -153,24 +147,52 @@
 
                 {{-- Review List --}}
                 <div class="space-y-6">
-                    <div class="p-4 bg-gray-50 rounded-lg shadow-sm">
-                        <div class="flex items-center gap-4 mb-3">
-                            <div class="w-12 h-12 bg-gray-200 rounded-full"></div>
-                            <div>
-                                <div class="text-sm font-medium">e******o</div>
-                                <div class="text-xs text-gray-500">2023-08-16 21:37</div>
+                    <!-- Filter Rating -->
+                    <div class="flex gap-4 mb-4">
+                        <form action="{{ route('products.show', $product->id) }}" method="GET">
+                            <div class="flex gap-2">
+                                @foreach (range(1, 5) as $star)
+                                    <button
+                                        type="submit"
+                                        name="rating"
+                                        value="{{ $star }}"
+                                        class="px-4 py-2 border rounded-lg {{ request()->get('rating') == $star ? 'bg-yellow-500 text-white' : 'bg-white text-gray-800'}} hover:bg-slate-100 hover:text-gray-800 transition">
+                                        {{ $star }} Bintang
+                                    </button>
+                                @endforeach
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Ulasan Produk -->
+                    @foreach ($reviews as $review)
+                        <div class="p-4 bg-gray-50 rounded-lg shadow-sm">
+                            <div class="flex items-center gap-4 mb-3">
+                                <div class="w-12 h-12 bg-gray-200 rounded-full">
+                                    <img src="{{ $review->user->imageUser ?? asset('images/boy.png') }}" alt="User Avatar" class="w-full h-full object-cover rounded-full">
+                                </div>
+                                <div>
+                                    <div class="text-sm font-medium">{{ $review->user->lastname }}</div>
+                                    <div class="text-xs text-gray-500">{{ $review->created_at }}</div>
+                                    <div class="flex items-center gap-2">
+                                        <div>
+                                            @for ($i = 1; $i <= 5; $i++)
+                                                @if ($i <= $review->rating)
+                                                    <span class="text-yellow-500 }}">&#9733;</span>
+                                                @else
+                                                    <span class="text-gray-300 }}">&#9733;</span>
+                                                @endif
+                                             @endfor
+                                        </div>
+                                        <span class="text-xs">{{ number_format($review->rating,1)  }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="text-sm">
+                                <p>{{ $review->comment }}</p>
                             </div>
                         </div>
-                        <div class="text-sm">
-                            <p><strong>Fitur Terbaik:</strong> Garansi</p>
-                            <p><strong>Sepadan dengan Harga:</strong> Sepadan</p>
-                            <p>Barang oke, seller oke, kiriman memuaskan, harga oke, kemasan oke, semuanya bagus. Saya beri jempol, keep up the good work.</p>
-                        </div>
-                        <div class="flex gap-2 mt-3">
-                            <img src="{{ asset('path-to-image-1.jpg') }}" alt="Review Image 1" class="w-20 h-20 object-cover rounded-md">
-                            <img src="{{ asset('path-to-image-2.jpg') }}" alt="Review Image 2" class="w-20 h-20 object-cover rounded-md">
-                        </div>
-                    </div>
+                    @endforeach
                 </div>
             </div>
         </div>
@@ -178,66 +200,79 @@
         {{-- Main Content End --}}
     </div>
 
-    <script>
-        document.addEventListener("DOMContentLoaded", () => {
-            const images = @json($product->images);
-            const mainImage = document.getElementById("main-image");
-            const thumbnails = document.querySelectorAll(".thumbnail");
-            const prevBtn = document.getElementById("prev");
-            const nextBtn = document.getElementById("next");
+    <x-slot name="scripts">
+        <script>
+            const quantityInput = document.getElementById("quantity");
+            const increaseBtn = document.getElementById("increase");
+            const decreaseBtn = document.getElementById("decrease");
 
-            let currentIndex = 0;
 
-            // Update main image and active thumbnail
-            const updateMainImage = (index) => {
-                mainImage.src = `{{ asset('storage/') }}/${images[index].image_path}`;
+            increaseBtn.addEventListener("click", () => {
+                const currentValue = parseInt(quantityInput.value);
+                quantityInput.value = currentValue + 1;
+            });
 
-                // Remove 'border-primary' class from all thumbnails
-                thumbnails.forEach((thumbnail) => thumbnail.classList.remove("ring-2"));
+            decreaseBtn.addEventListener("click", () => {
+                const currentValue = parseInt(quantityInput.value);
+                if (currentValue > 1) {
+                    quantityInput.value = currentValue - 1;
+                }
+            });
 
-                // Add 'border-primary' class to the active thumbnail
-                thumbnails[index].classList.add("ring-2","ring-secondary3");
-            };
+            document.addEventListener("DOMContentLoaded", () => {
+                const images = @json($product->images);
+                const mainImage = document.getElementById("main-image");
+                const thumbnails = document.querySelectorAll(".thumbnail");
+                const prevBtn = document.getElementById("prev");
+                const nextBtn = document.getElementById("next");
+                const urlParams = new URLSearchParams(window.location.search);
+                const ratingParam = urlParams.get('rating');
 
-            // Add click event to thumbnails
-            thumbnails.forEach((thumbnail, index) => {
-                thumbnail.addEventListener("click", () => {
-                    currentIndex = index;
+                let currentIndex = 0;
+
+                // Update main image and active thumbnail
+                const updateMainImage = (index) => {
+                    mainImage.src = `{{ asset('storage/') }}/${images[index].image_path}`;
+
+                    // Remove 'border-primary' class from all thumbnails
+                    thumbnails.forEach((thumbnail) => thumbnail.classList.remove("ring-2"));
+
+                    // Add 'border-primary' class to the active thumbnail
+                    thumbnails[index].classList.add("ring-2","ring-secondary3");
+                };
+
+                // Add click event to thumbnails
+                thumbnails.forEach((thumbnail, index) => {
+                    thumbnail.addEventListener("click", () => {
+                        currentIndex = index;
+                        updateMainImage(currentIndex);
+                    });
+                });
+
+                // Prev button click
+                prevBtn.addEventListener("click", () => {
+                    currentIndex = (currentIndex - 1 + images.length) % images.length;
                     updateMainImage(currentIndex);
                 });
-            });
 
-            // Prev button click
-            prevBtn.addEventListener("click", () => {
-                currentIndex = (currentIndex - 1 + images.length) % images.length;
+                // Next button click
+                nextBtn.addEventListener("click", () => {
+                    currentIndex = (currentIndex + 1) % images.length;
+                    updateMainImage(currentIndex);
+                });
+
+                // Jika parameter 'rating' ada
+                if (ratingParam) {
+                    // Scroll ke elemen dengan id 'reviews-container'
+                    const reviewsContainer = document.getElementById('reviews-container');
+                    if (reviewsContainer) {
+                        reviewsContainer.scrollIntoView({ behavior: 'smooth' });
+                    }
+                }
+
+                // Initialize with the first image and active thumbnail
                 updateMainImage(currentIndex);
             });
-
-            // Next button click
-            nextBtn.addEventListener("click", () => {
-                currentIndex = (currentIndex + 1) % images.length;
-                updateMainImage(currentIndex);
-            });
-
-            // Initialize with the first image and active thumbnail
-            updateMainImage(currentIndex);
-        });
-
-        const quantityInput = document.getElementById("quantity");
-        const increaseBtn = document.getElementById("increase");
-        const decreaseBtn = document.getElementById("decrease");
-
-
-        increaseBtn.addEventListener("click", () => {
-            const currentValue = parseInt(quantityInput.value);
-            quantityInput.value = currentValue + 1;
-        });
-
-        decreaseBtn.addEventListener("click", () => {
-            const currentValue = parseInt(quantityInput.value);
-            if (currentValue > 1) {
-                quantityInput.value = currentValue - 1;
-            }
-        });
-    </script>
+        </script>
+    </x-slot>
 </x-app-layout>
