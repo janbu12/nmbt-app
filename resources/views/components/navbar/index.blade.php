@@ -1,4 +1,4 @@
-<div class="flex px-10 py-3 drop-shadow-md w-full justify-between text-tertiery1 bg-white">
+<div class="flex px-10 py-3 drop-shadow-md w-full justify-between text-tertiery1 bg-white z-50">
     <a href="{{Auth::user() && Auth::user()->role === 'admin' ? '/admin/dashboard':'/' }}" class="flex items-center gap-3 hover:text-secondary1 transition-all duration-300">
         <img src="{{asset('images/Logo.png')}}" alt="logo.png" class="lg:max-w-12">
         <h1 class="font-medium">Nordic Mountain Bound Travelers</h1>
@@ -9,7 +9,7 @@
         <x-navbar.link href="/admin/dashboard">Dasboard</x-navbar.link>
         <x-navbar.link href="/admin/item">Item</x-navbar.link>
         <x-navbar.link href="/admin/history">Riwayat</x-navbar.link>
-        @elseif (Auth::user() && Auth::user()->role === 'user')
+        @else
         <x-navbar.link href="/">Beranda</x-navbar.link>
         <x-navbar.link href="/products">Sewa</x-navbar.link>
         <x-navbar.link href="/about">Tentang Kami</x-navbar.link>
