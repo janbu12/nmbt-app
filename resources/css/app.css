@@ -14,3 +14,7 @@ body {
 .btn-secondary-custom {
     @apply bg-secondary3 text-bg3 hover:bg-bg1 hover:text-secondary3 hover:border-bg1
 }
+
+.btn-tertiery-custom {
+    @apply bg-base-100 text-gray-800 hover:text-secondary3
+}

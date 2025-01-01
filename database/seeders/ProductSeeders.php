@@ -13,6 +13,6 @@ class ProductSeeders extends Seeder
      */
     public function run(): void
     {
-        ProductRentModel::factory(10)->create();
+        ProductRentModel::factory(30)->create();
     }
 }
