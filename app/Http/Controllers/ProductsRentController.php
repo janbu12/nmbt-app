@@ -5,16 +5,50 @@ namespace App\Http\Controllers;
 use App\Models\CategoryModel as Category;
 use App\Models\ProductImageModel as ProductImage;
 use App\Models\ProductRentModel as Product;
+use App\Models\Review;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
 
 class ProductsRentController extends Controller
 {
-    public function index(){
-        // $products = Product::with('images')->paginate(10);
+    public function index(Request $request){
 
-        return view('products.index');
+        // $search = $request->get('search');
+
+        // $products = Product::with('images')
+        // ->when($search, function($query, $search) {
+        //     return $query->where('name', 'like', '%'.$search.'%');
+        // })
+        // ->paginate(9);
+
+        $query = Product::query();
+
+        // Filter berdasarkan kategori
+        if ($request->has('category')) {
+            $categories = $request->input('category');
+            $query->whereIn('category_id', $categories);  // Menyaring produk berdasarkan beberapa kategori
+        }
+
+        // Filter berdasarkan urutan
+        if ($request->has('sort')) {
+            $sort = $request->input('sort');
+            // Menambahkan logika pengurutan berdasarkan 'sort'
+            if ($sort == 'Harga Terkecil') {
+                $query->orderBy('price', 'asc');
+            } elseif ($sort == 'Harga Terbesar') {
+                $query->orderBy('price', 'desc');
+            }
+            // Filter lain sesuai kebutuhan
+        }
+
+        $products = $query->paginate(6);
+
+        $categories = Category::all();
+        $filters = ['Rating', 'Harga Terkecil', 'Harga Terbesar'];
+        $totalProducts = Product::count();
+
+        return view('products.index', compact('products', 'categories', 'filters', 'totalProducts'));
     }
 
     public function create() {
@@ -115,7 +149,20 @@ class ProductsRentController extends Controller
     public function show($id)
     {
         $product = Product::with('images')->findOrFail($id);
+        // $reviews = $product->reviews()->paginate(5);
+        $rating = request()->get('rating');
 
-        return view('products.show', compact('product'));
+        // Filter ulasan berdasarkan rating
+        if ($rating) {
+            $reviews = $product->reviews()
+                                ->where('rating', $rating)
+                                ->with('user')  // Mengambil informasi pengguna
+                                ->get();
+        } else {
+            // Jika tidak ada filter rating, ambil semua ulasan
+            $reviews = $product->reviews()->with('user')->get();
+        }
+
+        return view('products.show',compact('product', 'reviews'));
     }
 }
