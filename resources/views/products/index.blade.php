@@ -28,6 +28,9 @@
                 <div class="flex flex-wrap gap-2 items-center justify-center">
                     @foreach ($categories as $category)
                         @php
+                        // Ambil query tanpa parameter 'page'
+                        $query = array_filter(request()->query(), fn($key) => $key !== 'page', ARRAY_FILTER_USE_KEY);
+
                         // Ambil kategori yang ada di query
                         $selectedCategories = (array) request('category', []);
 
@@ -38,9 +41,11 @@
                         $newCategories = $isSelected
                             ? array_diff($selectedCategories, [$category->id])  // Hapus kategori
                             : array_merge($selectedCategories, [$category->id]); // Tambahkan kategori
+
+                        $query['category'] = $newCategories;
                         @endphp
 
-                        <a href="{{ route('products.index', array_merge(request()->query(), ['category' => $newCategories])) }}">
+                        <a href="{{ route('products.index', $query) }}">
                             <button class="px-3 text-sm p-2 rounded-lg {{ $isSelected ? 'bg-tertiery3 text-secondary3' : 'bg-secondary3 text-bg3 hover:bg-tertiery3 hover:text-secondary3' }}">
                                 {{ $category->category_name }}
                             </button>
