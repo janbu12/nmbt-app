@@ -6,25 +6,51 @@ use App\Models\Cart;
 use App\Models\Rent;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CartController extends Controller
 {
     // private $cartItems = [];
 
     public function index()
+    // {
+    //     // Mengambil semua data dari tabel 'carts'
+    //     $cartItems = Cart::all();
+
+    //     $subtotal = $cartItems->sum(function ($item) {
+    //         return $item->price * $item->quantity;
+    //     });
+
+    //     // Kirim data ke view
+    //     return view('cart', [
+    //         'cartItems' => $cartItems,
+    //         'subtotal' => $subtotal
+    //     ]);
+    // }
+    // {
+    //     $user = Auth::user(); // Dapatkan user login
+    // if (!$user) {
+    //     abort(403, 'User not authenticated');
+    // }
+
+    // // Ambil data cart berdasarkan user login
+    // $cartItems = $user->cart;
+
+    // // Debugging sementara
+    // dd($cartItems);
+    // }
     {
-        // Mengambil semua data dari tabel 'carts'
-        $cartItems = Cart::all();
+        $user = Auth::user(); // Dapatkan user login
+    $cartItems = $user->cart ?? collect(); // Pastikan $cartItems selalu berupa koleksi, bukan null
 
-        $subtotal = $cartItems->sum(function ($item) {
-            return $item->price * $item->quantity;
-        });
+    $subtotal = $cartItems->sum(function ($item) {
+        return $item->price * $item->quantity;
+    });
 
-        // Kirim data ke view
-        return view('cart', [
-            'cartItems' => $cartItems,
-            'subtotal' => $subtotal
-        ]);
+    return view('cart', [
+        'cartItems' => $cartItems,
+        'subtotal' => $subtotal,
+    ]);
     }
 
     public function destroy($id)
