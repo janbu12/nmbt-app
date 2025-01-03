@@ -54,7 +54,7 @@
                     <li>
                         <a href="/cart" class="flex px-4 py-2 hover:bg-gray-100 justify-between">
                             Cart
-                            <span class="badge bg-secondary3 text-bg3">8</span>
+                            <span class="badge bg-secondary3 text-bg3">{{ auth()->user()->cart->count() }}</span>
                         </a>
                     </li>
                     <li>

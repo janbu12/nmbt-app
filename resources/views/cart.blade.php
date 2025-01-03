@@ -23,7 +23,7 @@
                 @foreach ($cartItems as $item)
                     <div class="flex py-4 ">
                         <div class="flex items-center">
-                            <input type="checkbox" name="selected_items[]" id="checkbox" value="{{ $item['id'] }}" class="mr-2">
+                            <input type="checkbox" name="selected_items[]" id="checkbox" value="{{ $item->id }}" class="mr-2">
                         </div>
                         <div class="p-16 border-4 rounded-lg flex flex-col text-center">
                             <img src="{{ $item['image'] }}" alt="{{ $item['image'] }}">
@@ -31,30 +31,30 @@
 
                         <div class="flex flex-col px-3 w-full">
                             <div class="font-medium text-2xl">
-                                {{ $item['name'] }}
+                                {{ $item->product->name }}
                             </div>
                                 <div class="flex w-full justify-between">
                                     <div class="flex text-lg">
-                                        Rp. {{ number_format($item['price'], 0, ',', '.') }}
+                                        Rp. {{ number_format($item->product->price, 0, ',', '.') }}
                                     </div>
                                     <div class="flex flex-row gap-2">
-                                        <form action="{{ route('cart.update', $item['id']) }}" method="POST" class="inline">
+                                        <form action="{{ route('cart.update', $item->id) }}" method="POST" class="inline">
                                             @csrf
                                             @method('patch')
-                                            <input type="hidden" name="quantity" value="{{ $item['quantity']- 1 }}">
+                                            <input type="hidden" name="quantity" value="{{ $item->quantity- 1 }}">
                                             <button class="p-2 border-2 rounded-lg">
                                                 -
                                             </button>
                                         </form>
 
                                         <div class="p-2 border-2 rounded-lg">
-                                            {{ $item['quantity'] }}
+                                            {{ $item->quantity }}
                                         </div>
 
-                                        <form action="{{ route('cart.update', $item['id']) }}" method="POST" class="inline">
+                                        <form action="{{ route('cart.update', $item->id) }}" method="POST" class="inline">
                                             @csrf
                                             @method('patch')
-                                            <input type="hidden" name="quantity" value="{{ $item['quantity'] + 1 }}">
+                                            <input type="hidden" name="quantity" value="{{ $item->quantity + 1 }}">
                                             <button class="p-2 border-2 rounded-lg">
                                                 +
                                             </button>
@@ -64,10 +64,10 @@
 
                             <div class="flex h-full justify-between items-end">
                                 <div class="text-2xl align-baseline">
-                                    Rp. {{ number_format($item['price'] * $item['quantity'], 0, ',', '.') }}
+                                    Rp. {{ number_format($item->product->price * $item->quantity, 0, ',', '.') }}
                                 </div>
 
-                                <form action="{{  route('cart.destroy', $item['id']) }}" method="POST" class="inline">
+                                <form action="{{  route('cart.destroy', $item->id) }}" method="POST" class="inline">
                                     @csrf
                                     @method('delete')
                                     <div>
@@ -151,7 +151,7 @@
 <script>
     const checkAllButton = document.querySelector('#check');
     const checkboxes = document.querySelectorAll('input[type="checkbox"][name="selected_items[]"]');
-    
+
     checkAllButton.addEventListener('click', function() {
         const allChecked = Array.from(checkboxes).every(checkbox => checkbox.checked);
         checkboxes.forEach(checkbox => {
@@ -213,8 +213,8 @@
         startDateInput.addEventListener('change', calculateDays);
         endDateInput.addEventListener('change', calculateDays);
 
-        
-        
+
+
     });
 
 </script>

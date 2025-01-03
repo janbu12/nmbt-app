@@ -37,6 +37,10 @@ class ProductRentModel extends Model
         return $this->hasMany(Review::class, 'product_id');
     }
 
+    public function cart(){
+        return $this->hasMany(Cart::class, 'product_id');
+    }
+
     public function getAverageRatingAttribute()
     {
         return $this->reviews()

@@ -12,4 +12,8 @@ class Cart extends Model
     public function user(){
         return $this->belongsTo(user::class);
     }
+
+    public function product(){
+        return $this->belongsTo(ProductRentModel::class);
+    }
 }
