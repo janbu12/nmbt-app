@@ -165,4 +165,9 @@ class ProductsRentController extends Controller
 
         return view('products.show',compact('product', 'reviews'));
     }
+
+    public function addToCart(Request $request, $id){
+
+        return dd($request);
+    }
 }
