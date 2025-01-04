@@ -55,7 +55,8 @@
                 {{-- Carousel End --}}
 
                 {{-- Description Content --}}
-                <div class="w-full h-full">
+                <form class="w-full h-full" action="{{ route('product.cart', $product->id) }}" method="POST">
+                    @csrf
                     <div class="text-3xl font-medium">
                         {{ $product->name }}
                     </div>
@@ -91,25 +92,26 @@
                             Rp. {{ number_format($product->price ?? 0, 2, ',', '.') }}
                         </span>
                         <div class="flex items-center space-x-2 h-9 lg:h-auto">
-                            <button id="decrease" class="bg-base-100 px-3 border border-secondary3 h-full rounded-md hover:bg-secondary3 hover:text-bg3 transition">
+                            <button type="button" id="decrease" class="bg-base-100 px-3 border border-secondary3 h-full rounded-md hover:bg-secondary3 hover:text-bg3 transition">
                                 -
                             </button>
                             <input
                                 id="quantity"
+                                name="quantity"
                                 type="text"
                                 value="1"
                                 class="w-10 h-full focus:outline-none text-center border border-secondary3 rounded-md"
                                 readonly
                                 >
-                            <button id="increase" class="bg-base-100 px-3 rounded-md border border-secondary3 h-full hover:bg-secondary3 hover:text-bg3 transition">
+                            <button type="button" id="increase" class="bg-base-100 px-3 rounded-md border border-secondary3 h-full hover:bg-secondary3 hover:text-bg3 transition">
                                 +
                             </button>
                         </div>
                     </div>
                     <div class="w-full flex justify-start md:justify-end mt-5">
-                        <x-button variant="secondary">Add To Cart</x-button>
+                        <x-button type="submit" variant="secondary">Add To Cart</x-button>
                     </div>
-                </div>
+                </form>
                 {{-- Description Content End--}}
 
             </div>

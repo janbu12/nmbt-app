@@ -6,31 +6,66 @@ use App\Models\Cart;
 use App\Models\Rent;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CartController extends Controller
 {
     // private $cartItems = [];
 
     public function index()
-    {
-        // Mengambil semua data dari tabel 'carts'
-        $cartItems = Cart::all();
+    // {
+    //     // Mengambil semua data dari tabel 'carts'
+    //     $cartItems = Cart::all();
 
-        $subtotal = $cartItems->sum(function ($item) {
-            return $item->price * $item->quantity;
+    //     $subtotal = $cartItems->sum(function ($item) {
+    //         return $item->price * $item->quantity;
+    //     });
+
+    //     // Kirim data ke view
+    //     return view('cart', [
+    //         'cartItems' => $cartItems,
+    //         'subtotal' => $subtotal
+    //     ]);
+    // }
+    // {
+    //     $user = Auth::user(); // Dapatkan user login
+    // if (!$user) {
+    //     abort(403, 'User not authenticated');
+    // }
+
+    // // Ambil data cart berdasarkan user login
+    // $cartItems = $user->cart;
+
+    // // Debugging sementara
+    // dd($cartItems);
+    // }
+    {
+        $idUser = Auth::user()->id; // Dapatkan user login
+    // $cartItems = $user->cart ?? collect(); // Pastikan $cartItems selalu berupa koleksi, bukan null
+
+    // $subtotal = $cartItems->sum(function ($item) {
+    //     return $item->price * $item->quantity;
+    // });
+
+        $carts = Cart::with(['user', 'product'])
+        ->where('user_id', $idUser)
+        ->get();
+
+        $subtotal = $carts->sum(function ($item) {
+            return $item->product->price * $item->quantity;
         });
 
-        // Kirim data ke view
+
         return view('cart', [
-            'cartItems' => $cartItems,
-            'subtotal' => $subtotal
+            'cartItems' => $carts,
+            'subtotal' => $subtotal,
         ]);
     }
 
     public function destroy($id)
     {
         $cartItem = Cart::find($id); // Cari item berdasarkan ID
-    
+
         if ($cartItem) {
             $cartItem->delete(); // Hapus item dari database
             return redirect()->route('cart.index')->with('success', 'Item berhasil dihapus dari keranjang.');
@@ -47,13 +82,13 @@ class CartController extends Controller
             if ($request->quantity < 1) {
                 return redirect()->route('cart.index')->with('error', 'Jumlah barang tidak boleh kurang dari 1.');
             }
-    
+
             $cartItem->quantity = $request->quantity;
             $cartItem->save();
-    
+
             return redirect()->route('cart.index')->with('success', 'Jumlah barang berhasil diperbarui.');
         }
-    
+
         return redirect()->route('cart.index')->with('error', 'Item tidak ditemukan.');
     }
 
@@ -74,6 +109,34 @@ class CartController extends Controller
             'days' => $days,
             'totalPrice' => $totalPrice,
         ]);
+    }
+
+    public function addToCart(Request $request, $id){
+        $request->validate([
+            'quantity' => 'required|numeric|min:1',
+        ]);
+
+        $userId = Auth::user()->id;
+
+        $existingCart = Cart::where('user_id', $userId)
+        ->where('product_id', $id)
+        ->first();
+
+        if ($existingCart) {
+            // Jika produk sudah ada, tambahkan quantity baru ke quantity yang ada
+            $existingCart->quantity += $request->quantity;
+            $existingCart->save();
+        } else {
+            // Jika produk belum ada, buat entri baru
+            Cart::create([
+                'user_id' => $userId,
+                'product_id' => $id,
+                'quantity' => $request->quantity,
+            ]);
+        }
+
+        return redirect()->back()->with('success', 'Add To Cart Successfully!');
+        // return dd($cart);
     }
 
 }

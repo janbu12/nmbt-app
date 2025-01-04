@@ -14,14 +14,13 @@ return new class extends Migration
         Schema::create('carts', function (Blueprint $table) {
             $table->id(); // Kolom primary key
             $table->unsignedBigInteger('user_id'); // Foreign key ke tabel users
-            $table->string('name'); // Nama produk
-            $table->string('image_url')->nullable(); // URL gambar produk
-            $table->decimal('price', 10, 2); // Harga produk
+            $table->unsignedBiginteger('product_id'); // Foreign key ke tabel products
             $table->integer('quantity')->default(1); // Jumlah produk
             $table->timestamps(); // Kolom created_at dan updated_at
 
             // Tambahkan foreign key constraint
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
         });
     }
 

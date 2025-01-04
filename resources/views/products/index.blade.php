@@ -28,6 +28,9 @@
                 <div class="flex flex-wrap gap-2 items-center justify-center">
                     @foreach ($categories as $category)
                         @php
+                        // Ambil query tanpa parameter 'page'
+                        $query = array_filter(request()->query(), fn($key) => $key !== 'page', ARRAY_FILTER_USE_KEY);
+
                         // Ambil kategori yang ada di query
                         $selectedCategories = (array) request('category', []);
 
@@ -38,9 +41,11 @@
                         $newCategories = $isSelected
                             ? array_diff($selectedCategories, [$category->id])  // Hapus kategori
                             : array_merge($selectedCategories, [$category->id]); // Tambahkan kategori
+
+                        $query['category'] = $newCategories;
                         @endphp
 
-                        <a href="{{ route('products.index', array_merge(request()->query(), ['category' => $newCategories])) }}">
+                        <a href="{{ route('products.index', $query) }}">
                             <button class="px-3 text-sm p-2 rounded-lg {{ $isSelected ? 'bg-tertiery3 text-secondary3' : 'bg-secondary3 text-bg3 hover:bg-tertiery3 hover:text-secondary3' }}">
                                 {{ $category->category_name }}
                             </button>
@@ -87,11 +92,11 @@
                     <a href="{{ route('products.show', $product->id) }}" class="card bg-white w-full md:w-80 xl:w-1/3 2xl:w-96 max-xl: h-auto shadow-lg drop-shadow cursor-pointer hover:scale-90 transition group">
                         <figure>
                             @if ($product->images->isNotEmpty())
-                                <div class="lg:h-48 lg:w-62">
+                                <div class="lg:h-48 lg:h-62">
                                     <img src="{{ asset('storage/' . $product->images->first()->image_path) }}" alt="Product Image" class="w-full h-full object-cover"/>
                                 </div>
                             @else
-                                <div class="lg:h-48 lg:w-62">
+                                <div class="lg:h-48 lg:h-62">
                                     <img
                                         src="{{ asset('images/produk-icon-dummy.png') }}"
                                         alt="Shoes"
