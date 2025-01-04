@@ -36,6 +36,13 @@
   ```bash
       php artisan key:gen
   ```
+
+- Storage Links
+  <p> Generate the symbolic links for storage:
+      
+  ```bash
+      php artisan storage:link
+  ```
   
 - Npm Run Build
   <p> Build the assets for intial manifest.json:
