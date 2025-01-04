@@ -31,8 +31,12 @@
                                 data-quantity="{{ $item->quantity }}"
                                 class="mr-2">
                         </div>
-                        <div class="p-16 border-4 rounded-lg flex flex-col text-center">
-                            <img src="{{ $item['image'] }}" alt="{{ $item['image'] }}">
+                        <div class="h-28 w-36 border-4 rounded-lg flex flex-col text-center">
+                            @if($item->product->images->isNotEmpty())
+                                <img src="{{ asset('storage/' . $item->product->images->first()->image_path) }}" alt="{{ $item->product->name }}" class="w-full h-full object-cover">
+                            @else
+                                <img src="{{ asset('images/produk-icon-dummy.png') }}" alt="icon-dummy.png" class="w-full h-full object-cover">
+                            @endif
                         </div>
 
                         <div class="flex flex-col px-3 w-full">
