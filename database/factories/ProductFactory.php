@@ -20,7 +20,7 @@ class ProductFactory extends Factory
             'category_id' => $this->faker->numberBetween(1, 8),
             'description' => $this->faker->words(50, true),
             'teaser' => $this->faker->words(12, true),
-            'price' => $this->faker->randomFloat(2, 100000, 500000),
+            'price' => $this->faker->randomFloat(2, 15000, 100000),
             'stock' => $this->faker->numberBetween(1, 10),
         ];
     }

@@ -92,11 +92,11 @@
                     <a href="{{ route('products.show', $product->id) }}" class="card bg-white w-full md:w-80 xl:w-1/3 2xl:w-96 max-xl: h-auto shadow-lg drop-shadow cursor-pointer hover:scale-90 transition group">
                         <figure>
                             @if ($product->images->isNotEmpty())
-                                <div class="lg:h-48 lg:w-62">
+                                <div class="lg:h-48 lg:h-62">
                                     <img src="{{ asset('storage/' . $product->images->first()->image_path) }}" alt="Product Image" class="w-full h-full object-cover"/>
                                 </div>
                             @else
-                                <div class="lg:h-48 lg:w-62">
+                                <div class="lg:h-48 lg:h-62">
                                     <img
                                         src="{{ asset('images/produk-icon-dummy.png') }}"
                                         alt="Shoes"
