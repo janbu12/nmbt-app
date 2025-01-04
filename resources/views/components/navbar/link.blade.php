@@ -1,10 +1,14 @@
 @props(['href', 'variant' => 'default'])
 
+@php
+    $isActive = request()->is(trim($href, '/')) || request()->is(trim($href, '/') . '/*');
+@endphp
+
 <a
     href="{{ $href }}"
     {{ $attributes }}
     class="{{
-        request()->fullUrlIs(url($href))
+        $isActive
             ? ($variant === 'transparent'
                 ? 'text-lg text-white font-semibold hover:text-gray-300'
                 : 'text-lg text-secondary1 font-semibold hover:text-tertiery1')

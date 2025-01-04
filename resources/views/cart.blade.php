@@ -13,9 +13,9 @@
                     <div class="text-2xl font-medium">
                         Keranjang ({{ count($cartItems) }} item)
                     </div>
-                    <div class="p-2 bg-secondary3 hover:bg-tertiery3 rounded-lg text-white">
-                        <button id="check">Pilih semua</button>
-                    </div>
+                    <button id="check" class="p-2 bg-secondary3 hover:bg-tertiery3 rounded-lg text-white">
+                        Pilih semua
+                    </button>
                 </div>
                 <hr class="font-bold bg-black">
             {{-- </div> --}}
@@ -23,10 +23,20 @@
                 @foreach ($cartItems as $item)
                     <div class="flex py-4 ">
                         <div class="flex items-center">
-                            <input type="checkbox" name="selected_items[]" id="checkbox" value="{{ $item->id }}" class="mr-2">
+                            <input type="checkbox"
+                                name="selected_items[]"
+                                id="checkbox"
+                                value="{{ $item->id }}"
+                                data-price="{{ $item->product->price }}"
+                                data-quantity="{{ $item->quantity }}"
+                                class="mr-2">
                         </div>
-                        <div class="p-16 border-4 rounded-lg flex flex-col text-center">
-                            <img src="{{ $item['image'] }}" alt="{{ $item['image'] }}">
+                        <div class="h-28 w-36 border-4 rounded-lg flex flex-col text-center">
+                            @if($item->product->images->isNotEmpty())
+                                <img src="{{ asset('storage/' . $item->product->images->first()->image_path) }}" alt="{{ $item->product->name }}" class="w-full h-full object-cover">
+                            @else
+                                <img src="{{ asset('images/produk-icon-dummy.png') }}" alt="icon-dummy.png" class="w-full h-full object-cover">
+                            @endif
                         </div>
 
                         <div class="flex flex-col px-3 w-full">
@@ -104,8 +114,8 @@
                 <hr>
                 <div class="flex py-3 text-2xl flex-row justify-between">
                     Subtotal
-                    <div>
-                        Rp. {{ number_format($subtotal, 0, ',', '.') }}
+                    <div id="subtotal">
+                        Rp. 0
                     </div>
                 </div>
                 <div class="flex py-3 text-2xl flex-row justify-between">
@@ -149,72 +159,82 @@
 </x-app-layout>
 
 <script>
-    const checkAllButton = document.querySelector('#check');
-    const checkboxes = document.querySelectorAll('input[type="checkbox"][name="selected_items[]"]');
-
-    checkAllButton.addEventListener('click', function() {
-        const allChecked = Array.from(checkboxes).every(checkbox => checkbox.checked);
-        checkboxes.forEach(checkbox => {
-            checkbox.checked = !allChecked; // Toggle semua checkbox
-        });
-    });
-
-    document.querySelectorAll('#hapus').forEach(form => {
-        form.addEventListener('submit', function(e) {
-            const confirmed = confirm('Apakah Anda yakin ingin menghapus item ini?');
-            if (!confirmed) {
-                e.preventDefault(); // Batalkan penghapusan
-            }
-        });
-    });
-
     document.addEventListener('DOMContentLoaded', () => {
-        const decreaseButtons = document.querySelectorAll('form[action*="cart/update"] button[type="submit"]');
-
-        decreaseButtons.forEach(button => {
-            button.addEventListener('click', (e) => {
-                const input = e.target.closest('form').querySelector('input[name="quantity"]');
-                if (parseInt(input.value) <= 1) {
-                    e.preventDefault();
-                    alert('Jumlah barang tidak boleh kurang dari 1.');
-                }
-            });
-        });
-
+        const checkAllButton = document.querySelector('#check');
+        const checkboxes = document.querySelectorAll('input[type="checkbox"][name="selected_items[]"]');
+        const subtotalDisplay = document.getElementById('subtotal');
         const startDateInput = document.getElementById('tanggal_awal');
         const endDateInput = document.getElementById('tanggal_akhir');
         const daysDisplay = document.getElementById('jumlah_hari');
         const hargaHari = document.getElementById('harga_hari');
         const totalPajak = document.getElementById('pajak');
+        const totalHargaDisplay = document.getElementById('total');
+        const percentPajak = 0.11;
 
-        // const hargaPajak = 0.11;
-        const hargaPinjam = 5000;
+        // Utility function to format currency
+        const formatCurrency = (value) => `Rp. ${Math.ceil(value).toLocaleString('id-ID')}`;
 
-        function calculateDays() {
+        // Calculate the subtotal of selected items
+        const calculateSubtotal = () => {
+            let subtotal = Array.from(checkboxes)
+                .filter(checkbox => checkbox.checked)
+                .reduce((sum, checkbox) => {
+                    const price = parseFloat(checkbox.getAttribute('data-price'));
+                    const quantity = parseInt(checkbox.getAttribute('data-quantity'));
+                    return sum + (price * quantity);
+                }, 0);
+
+            subtotalDisplay.textContent = formatCurrency(subtotal);
+            return subtotal;
+        };
+
+        // Calculate the total rental cost based on days
+        const calculateDays = () => {
             const startDate = new Date(startDateInput.value);
             const endDate = new Date(endDateInput.value);
+            const subtotal = calculateSubtotal();
 
-            if (!isNaN(startDate) && !isNaN(endDate) && endDate >= startDate) {
-                const difference = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24));
-                const totalHarga = difference * hargaPinjam;
-
-                daysDisplay.textContent = `Lama Pinjam: ${difference} hari`;
-                hargaHari.textContent = `Rp. ${totalHarga.toLocaleString('id-ID')}`;
-        //         totalPajak.textContent = `Rp. ${Math.ceil(totalHarga * hargaPajak).toLocaleString('id-ID')}`;
-            } else if (endDate < startDate) {
-                alert('Tanggal akhir tidak boleh lebih awal dari tanggal awal.');
-            } else {
+            if (isNaN(startDate) || isNaN(endDate) || endDate < startDate) {
                 daysDisplay.textContent = 'Lama Pinjam: 0 hari';
-                hargaHari.value = 'Rp. 0';
-        //         totalPajak.textContent = 'Rp. 0';
+                hargaHari.textContent = formatCurrency(0);
+                totalPajak.textContent = formatCurrency(0);
+                return 0;
             }
-        }
 
-        startDateInput.addEventListener('change', calculateDays);
-        endDateInput.addEventListener('change', calculateDays);
+            const days = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24));
+            const totalHargaHari = days * subtotal;
+            const pajak = totalHargaHari * percentPajak;
 
+            daysDisplay.textContent = `Lama Pinjam: ${days} hari`;
+            hargaHari.textContent = formatCurrency(totalHargaHari);
+            totalPajak.textContent = formatCurrency(pajak);
 
+            return totalHargaHari;
+        };
 
+        // Calculate the final total including tax
+        const calculateTotal = () => {
+            const totalHargaHari = calculateDays();
+            const totalWithTax = totalHargaHari + (totalHargaHari * percentPajak);
+            totalHargaDisplay.textContent = formatCurrency(totalWithTax);
+        };
+
+        // Event listener to toggle all checkboxes
+        checkAllButton.addEventListener('click', () => {
+            const allChecked = Array.from(checkboxes).every(checkbox => checkbox.checked);
+            checkboxes.forEach(checkbox => checkbox.checked = !allChecked);
+
+            calculateTotal();
+        });
+
+        // Event listeners for individual checkbox changes
+        checkboxes.forEach(checkbox => checkbox.addEventListener('change', calculateTotal));
+
+        // Event listeners for date changes
+        [startDateInput, endDateInput].forEach(input => input.addEventListener('change', calculateTotal));
+
+        // Initial calculation
+        calculateTotal();
     });
-
 </script>
+
