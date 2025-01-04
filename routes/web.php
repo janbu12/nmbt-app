@@ -17,7 +17,7 @@ Route::get('/sewa', [App\Http\Controllers\RentsController::class, 'index'])->nam
 Route::middleware(['auth'])->group(function () {
     Route::get('/user/profile', [App\Http\Controllers\ProfileController::class, 'edit'])->name('user.profile.edit');
     Route::put('/user/profile', [App\Http\Controllers\ProfileController::class, 'update'])->name('user.profile.update');
-    Route::post('/products/{id}', [App\Http\Controllers\ProductsRentController::class, 'addToCart'])->name('product.cart');
+    Route::post('/products/{id}', [App\Http\Controllers\CartController::class, 'addToCart'])->name('product.cart');
 
 
     Route::group([

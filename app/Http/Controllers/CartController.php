@@ -111,4 +111,32 @@ class CartController extends Controller
         ]);
     }
 
+    public function addToCart(Request $request, $id){
+        $request->validate([
+            'quantity' => 'required|numeric|min:1',
+        ]);
+
+        $userId = Auth::user()->id;
+
+        $existingCart = Cart::where('user_id', $userId)
+        ->where('product_id', $id)
+        ->first();
+
+        if ($existingCart) {
+            // Jika produk sudah ada, tambahkan quantity baru ke quantity yang ada
+            $existingCart->quantity += $request->quantity;
+            $existingCart->save();
+        } else {
+            // Jika produk belum ada, buat entri baru
+            Cart::create([
+                'user_id' => $userId,
+                'product_id' => $id,
+                'quantity' => $request->quantity,
+            ]);
+        }
+
+        return redirect()->back()->with('success', 'Add To Cart Successfully!');
+        // return dd($cart);
+    }
+
 }
