@@ -56,6 +56,31 @@ class ProductRentModel extends Model
             ->count();
     }
 
+    public function getTopThreeProductsAttribute()
+    {
+        // Ambil produk yang memiliki total sewa dan rata-rata rating
+        return $this->all()
+            ->map(function ($product) {
+                // Mengambil jumlah total disewa dari rent_details
+                $totalSales = $product->rent_details()
+                    ->whereHas('rent', function ($query) {
+                        $query->whereIn('status_rent', ['done', 'renting']);
+                    })
+                    ->sum('quantity');
+
+                // Mengambil rata-rata rating dari reviews
+                $averageRating = $product->reviews()->avg('rating') ?: 0;
+
+                return [
+                    'product' => $product,
+                    'total_sales' => $totalSales,
+                    'average_rating' => $averageRating,
+                ];
+            })
+            ->sortByDesc('total_sales') // Urutkan berdasarkan total penjualan
+            ->take(3); // Ambil 3 produk teratas
+    }
+
     public function ratingsDistribution()
     {
         $ratingsCount = $this->reviews()->groupBy('rating')->selectRaw('rating, count(*) as count')->pluck('count', 'rating')->toArray();

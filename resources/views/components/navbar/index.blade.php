@@ -20,7 +20,7 @@
 
         @if (!auth()->user())
             @if ($variant === "transparent")
-                <x-button as="a" href="/login" variant="tertiery">Login</x-button>
+                <x-button as="a" href="/login" variant="tertiery" id="login-btn">Login</x-button>
             @else
                 <x-button as="a" href="/login">Login</x-button>
             @endif
