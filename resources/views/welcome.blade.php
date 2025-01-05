@@ -6,9 +6,9 @@
             <h1 class="text-bg3 text-3xl font-medium text-center">Nordic Mountain Bound Travelers</h1>
         </div>
     </div>
-    <div class="px-12 flex flex-col text-tertiery1">
+    <div class="flex flex-col text-tertiery1">
 
-        <div class="h-screen flex flex-col items-center justify-center">
+        <div class="px-12 h-screen flex flex-col items-center justify-center">
             {{-- Carousel Section --}}
             <div class="relative w-full lg:w-3/4 overflow-hidden">
                 <!-- Slides Wrapper -->
@@ -53,6 +53,60 @@
             <p class="text-center text-2xl lg:max-w-[500px] mt-20">
                 Menyediakan semua kebutuhan camping yang anda butuhkan kapanpun yang anda inginkan
             </p>
+        </div>
+        <div class="px-12 flex flex-col min-h-screen bg-tertiery3 justify-center items-center gap-8">
+            <h2 class="lg:text-3xl font-medium">Top 3 Products</h2>
+            <div class="flex gap-5">
+                @foreach($topThreeProducts as $product)
+                    <a href="{{ route('products.show', $product['product']->id) }}" class="card bg-white w-full md:w-80 xl:w-1/3 2xl:w-96 max-xl: h-auto shadow-lg drop-shadow cursor-pointer hover:scale-90 transition group">
+                        <figure>
+                            @if ($topThreeProducts[1]['product']->images->isNotEmpty())
+                                <div class="lg:h-48 lg:h-62">
+                                    <img src="{{ asset('storage/' . $topThreeProducts[1]['product']->images->first()->image_path) }}" alt="Product Image" class="w-full h-full object-cover"/>
+                                </div>
+                            @else
+                                <div class="lg:h-48 lg:h-62">
+                                    <img
+                                        src="{{ asset('images/produk-icon-dummy.png') }}"
+                                        alt="Shoes"
+                                        class="w-full h-full object-cover"
+                                    />
+                                </div>
+                            @endif
+                        </figure>
+                        <div class="card-body text-tertiery1">
+                            <h2 class="card-title lg:text-base">{{ $product['product']->name }}</h2>
+                            <p class="lg:text-sm 2xl:text-base">{{ $product['product']->teaser }}</p>
+                            <div class="flex items-center gap-2">
+                                <div class="flex space-x-1 lg:text-xl 2xl:text-3xl">
+                                    @php $averageRatingProduct = round($product['average_rating']); @endphp
+                                    @for ($i = 1; $i <= 5; $i++)
+                                        @if ($i <= $averageRatingProduct)
+                                            <span class="text-yellow-500 }}">&#9733;</span>
+                                        @else
+                                            <span class="text-gray-300 }}">&#9733;</span>
+                                        @endif
+                                    @endfor
+                                </div>
+                                <span class="text-sm">{{number_format($product['average_rating'],1)}}</span>
+                            </div>
+                            <div class="flex flex-col items-end gap-2 mt-2">
+                                <span class="2xl:text-md lg:text-sm">
+                                    Total Sales {{ $product['total_sales'] }}
+                                </span>
+                                <span class="font-medium lg:text-lg 2xl:text-2xl">
+                                    Rp. {{ number_format($product['product']->price ?? 0, 2, ',', '.') }}
+                                </span>
+                                <div class="card-actions justify-end">
+                                    <div class="badge badge-outline 2xl:text-sm lg:text-xs" >
+                                        {{ $product['product']->category->category_name }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                @endforeach
+            </div>
         </div>
     </div>
     <x-slot name="scripts">

@@ -6,13 +6,11 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\RouteGroup;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-})->name('home');
+Route::get('/', [App\Http\Controllers\LandingPageController::class, 'index'])->name('home');
 Route::get('/about', function () {
     return view('about');
 })->name('about');
-Route::get('/sewa', [App\Http\Controllers\RentsController::class, 'index'])->name(name: 'sewa.index');
+Route::get('/sewa', [App\Http\Controllers\RentsController::class, 'index'])->name('sewa.index');
 
 Route::middleware(['auth'])->group(function () {
     Route::get('/user/profile', [App\Http\Controllers\ProfileController::class, 'edit'])->name('user.profile.edit');
