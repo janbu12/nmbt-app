@@ -16,6 +16,8 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id'); // Foreign key ke tabel users
             $table->unsignedBiginteger('product_id'); // Foreign key ke tabel products
             $table->integer('quantity')->default(1); // Jumlah produk
+            $table->date('tanggal_awal')->nullable();
+            $table->date('tanggal_akhir')->nullable();
             $table->timestamps(); // Kolom created_at dan updated_at
 
             // Tambahkan foreign key constraint
