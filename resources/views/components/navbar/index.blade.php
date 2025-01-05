@@ -1,10 +1,11 @@
 <div
+    id="navbar"
     class="flex px-10 py-3 drop-shadow-md w-full justify-between z-50 {{ $variant === "transparent" ? 'bg-transparent text-white fixed' : 'bg-white text-tertiery1'}}">
     <a href="{{Auth::user() && Auth::user()->role === 'admin' ? '/admin/dashboard':'/' }}" class="flex items-center gap-3 {{ $variant === "transparent" ? 'hover:text-gray-300 hover:scale-105' : 'hover:text-secondary1'}}  transition-all duration-300">
         <img src="{{asset('images/Logo.png')}}" alt="logo.png" class="lg:max-w-12">
         <h1 class="font-medium">Nordic Mountain Bound Travelers</h1>
     </a>
-    <div class="flex items-center gap-14">
+    <div id="navbar-links" class="flex items-center gap-14">
         {{-- Navbar Link --}}
         @if (Auth::user() && Auth::user()->role === 'admin')
         <x-navbar.link href="/admin/dashboard">Dasboard</x-navbar.link>
