@@ -7,9 +7,7 @@ use Illuminate\Routing\RouteGroup;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [App\Http\Controllers\LandingPageController::class, 'index'])->name('home');
-Route::get('/about', function () {
-    return view('about');
-})->name('about');
+
 Route::get('/sewa', [App\Http\Controllers\RentsController::class, 'index'])->name('sewa.index');
 
 Route::middleware(['auth'])->group(function () {

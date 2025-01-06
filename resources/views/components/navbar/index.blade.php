@@ -13,8 +13,8 @@
         <x-navbar.link href="/admin/history">Riwayat</x-navbar.link>
         @else
         <x-navbar.link href="/" :variant="$variant">Beranda</x-navbar.link>
+        <x-navbar.link href="/#about" :variant="$variant">Tentang Kami</x-navbar.link>
         <x-navbar.link href="/products" :variant="$variant">Sewa</x-navbar.link>
-        <x-navbar.link href="/about" :variant="$variant">Tentang Kami</x-navbar.link>
 
         @endif
 
