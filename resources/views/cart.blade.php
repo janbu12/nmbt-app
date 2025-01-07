@@ -115,12 +115,15 @@
                 <div class="flex py-3 text-2xl flex-row justify-between">
                     Subtotal
                     <div id="subtotal">
-                        Rp. 0
+                        Rp. {{ $subtotal ?? 0 }}
                     </div>
                 </div>
                 <div class="flex py-3 text-2xl flex-row justify-between">
-                    <div id="jumlah_hari">
-                        Lama pinjam: {{ $days ?? 0 }} hari
+                    <div class="flex-col">
+                        <div id="jumlah_hari">
+                            Lama pinjam: {{ $days ?? 0 }} hari
+                        </div>
+                        <p class="text-sm" id="harga_harian">(Rp. {{ $totalPrice ?? 0 }})</p>
                     </div>
                     <div id="harga_hari">
                         Rp. {{ $totalPrice ?? 0 }}
@@ -139,7 +142,7 @@
                         Rp. 0
                     </div>
                 </div>
-                <div class="flex py-3 text-2xl items-center flex-row justify-between">
+                {{-- <div class="flex py-3 text-2xl items-center flex-row justify-between">
                     Subtotal
                     <div>
                         <select name="" id="" class="border rounded-lg p-2">
@@ -148,7 +151,7 @@
                             <option value="qris">QRIS</option>
                         </select>
                     </div>
-                </div>
+                </div> --}}
 
                 <div class=" h-full items-end flex">
                     <button class="p-2 w-full rounded-lg bg-secondary3 hover:bg-primary3 text-white font-medium">Lanjutkan</button>
@@ -167,6 +170,7 @@
         const endDateInput = document.getElementById('tanggal_akhir');
         const daysDisplay = document.getElementById('jumlah_hari');
         const hargaHari = document.getElementById('harga_hari');
+        const hargaHarian = document.getElementById('harga_harian');
         const totalPajak = document.getElementById('pajak');
         const totalHargaDisplay = document.getElementById('total');
         const percentPajak = 0.11;
@@ -197,16 +201,19 @@
             if (isNaN(startDate) || isNaN(endDate) || endDate < startDate) {
                 daysDisplay.textContent = 'Lama Pinjam: 0 hari';
                 hargaHari.textContent = formatCurrency(0);
+                hargaHarian.textContent = formatCurrency(0);
                 totalPajak.textContent = formatCurrency(0);
                 return 0;
             }
 
             const days = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24));
-            const totalHargaHari = days * subtotal;
+            const hargaPerHari = days * 5000;
+            const totalHargaHari = hargaPerHari + subtotal;
             const pajak = totalHargaHari * percentPajak;
 
             daysDisplay.textContent = `Lama Pinjam: ${days} hari`;
             hargaHari.textContent = formatCurrency(totalHargaHari);
+            hargaHarian.textContent = formatCurrency(hargaPerHari);
             totalPajak.textContent = formatCurrency(pajak);
 
             return totalHargaHari;
