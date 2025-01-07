@@ -2,8 +2,8 @@
     <div id="main-background" class="relative">
         <img src="{{ asset('images/landing-page.png') }}" alt="landing-page.png" class="h-screen w-full object-cover">
         <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-            <h1 class="text-bg3 text-7xl font-medium text-center">NMBT</h1>
-            <h1 class="text-bg3 text-3xl font-medium text-center">Nordic Mountain Bound Travelers</h1>
+            <h1 class="text-bg3 text-5xl md:text-7xl font-medium text-center">NMBT</h1>
+            <h1 class="text-bg3 text-xl md:text-3xl font-medium text-center">Nordic Mountain Bound Travelers</h1>
         </div>
     </div>
     <div class="flex flex-col text-tertiery1">
@@ -135,7 +135,7 @@
         </div>
 
         {{-- Section Kata kata hari ini --}}
-        <div class="px-12 flex min-h-screen lg:min-h-fit lg:py-28 justify-center items-center bg-tertiery3">
+        <div class="px-12 flex min-h-screen lg:min-h-fit py-0 md:py-28 justify-center items-center bg-tertiery3">
             <h2 class="text-center text-lg lg:text-4xl font-medium max-w-2xl lg:max-w-4xl leading-relaxed">"Kami percaya bahwa setiap perjalanan adalah awal dari petualangan yang tak terlupakan. NMBT hadir untuk menyediakan peralatan camping berkualitas, sehingga Anda bisa menikmati keindahan alam dengan nyaman dan aman."</h2>
         </div>
 
@@ -281,6 +281,7 @@
                 const navbarLinks = document.querySelectorAll('.nav-link');
                 const loginBtn = document.getElementById('login-btn');
                 const mainBackground = document.getElementById('main-background');
+                const toggleMenu = document.getElementById('mobile-menu-toggle');
                 const transparentClasses = 'bg-transparent text-white';
                 const blackClasses = 'bg-white text-tertiery1';
                 const transparentLinkClasses = 'text-white hover:text-gray-300';
@@ -301,9 +302,15 @@
                             link.classList.add(...blackLinkClasses.split(' '));
                         });
 
+                        toggleMenu.classList.remove('text-white');
+                        toggleMenu.classList.add('text-tertiery1');
+
                         // Ubah login button
-                        loginBtn.classList.remove('btn-tertiery-custom');
-                        loginBtn.classList.add('btn-secondary-custom');
+                        if(loginBtn){
+                            loginBtn.classList.remove('btn-tertiery-custom');
+                            loginBtn.classList.add('btn-secondary-custom');
+                        }
+
                     } else {
                         // Reset navbar ke transparent
                         navbar.classList.remove(...blackClasses.split(' '));
@@ -315,10 +322,14 @@
                             link.classList.add(...transparentLinkClasses.split(' '));
                         });
 
-                        // Ubah login button
+                        toggleMenu.classList.remove('text-tertiery1');
+                        toggleMenu.classList.add('text-white');
 
-                        loginBtn.classList.remove('btn-secondary-custom');
-                        loginBtn.classList.add('btn-tertiery-custom');
+                        // Ubah login button
+                        if(loginBtn){
+                            loginBtn.classList.remove('btn-secondary-custom');
+                            loginBtn.classList.add('btn-tertiery-custom');
+                        }
                     }
                 }
 
