@@ -9,6 +9,7 @@ use App\Models\Review;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 
 class ProductsRentController extends Controller
 {
@@ -38,6 +39,12 @@ class ProductsRentController extends Controller
                 $query->orderBy('price', 'asc');
             } elseif ($sort == 'Harga Terbesar') {
                 $query->orderBy('price', 'desc');
+            } elseif ($sort == 'Rating') {
+                // Melakukan join dengan tabel reviews dan menghitung rata-rata rating
+                $query->leftJoin('reviews', 'products.id', '=', 'reviews.product_id')
+                ->select('products.*', DB::raw('AVG(reviews.rating) as average_rating'))
+                ->groupBy('products.id') // Mengelompokkan berdasarkan ID produk
+                ->orderBy('average_rating', 'desc'); // Mengurutkan berdasarkan rata-rata rating
             }
             // Filter lain sesuai kebutuhan
         }
