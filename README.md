@@ -13,6 +13,7 @@
       
   ```bash
       composer install
+
   ```
 - Npm Install
   <p> Install JavaScript dependencies using NPM:
