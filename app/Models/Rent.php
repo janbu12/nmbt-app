@@ -15,8 +15,32 @@ class Rent extends Model
     }
 
     public function rent_details()
-{
-    return $this->hasMany(RentDetailsModel::class);
-}
+    {
+        return $this->hasMany(RentDetailsModel::class);
+    }
+
+    public function getTotalIncomeAttribute(){
+        return $this->sum('total_price');
+    }
+
+    public function getTotalAllRentsAttribute()
+    {
+        return $this->count();
+    }
+
+    public function getTotalDoneRentsAttribute()
+    {
+        return $this->where('status_rent', 'done')->count();
+    }
+
+    public function getTotalRentingAttribute()
+    {
+        return $this->where('status_rent', 'renting')->count();
+    }
+
+    public function getTotalOngoingRentsAttribute()
+    {
+        return $this->whereIn('status_rent', ['process', 'ready_pickup'])->count();
+    }
 
 }
