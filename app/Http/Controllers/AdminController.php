@@ -9,7 +9,7 @@ use App\Models\Rent;
 
 class AdminController extends Controller
 {
-    public function index(){
+    public function index(Product $product){
         $totalRents = Rent::first()->total_all_rents;
         $totalDoneRents = Rent::first()->total_done_rents;
         $totalRenting = Rent::first()->total_renting;
@@ -17,6 +17,7 @@ class AdminController extends Controller
         $totalIncome = Rent::first()->total_income;
         $topTenProducts = Product::first()->top_ten_products;
         $topThreeCategories = Category::first()->top_three_categories;
+        $allProduct= $product->getAllQuantityRented();
         return view('admin.dashboard',
             compact(
                 'totalRents',
@@ -25,7 +26,8 @@ class AdminController extends Controller
                 'totalOngoingRents',
                 'totalIncome',
                 'topTenProducts',
-                'topThreeCategories'
+                'topThreeCategories',
+                'allProduct'
             ));
     }
 }
