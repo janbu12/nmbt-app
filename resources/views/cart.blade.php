@@ -5,8 +5,9 @@
         </div>
     @endif
 
-    <div class="py-5 px-10 flex gap-10 h-full">
-        {{-- <div class="p-3 flex flex-col bg-white w-full h-fit rounded-lg drop-shadow-lg text-tertiery1"> --}}
+    <form action="/cart/checkout">
+        <div class="py-5 px-10 flex gap-10 h-full">
+            {{-- <div class="p-3 flex flex-col bg-white w-full h-fit rounded-lg drop-shadow-lg text-tertiery1"> --}}
         <div class="p-3 flex flex-col bg-white w-full h-fit max-h-[564px] overflow-y-auto rounded-lg drop-shadow-lg text-tertiery1">
             {{-- <div class="sticky top-0 bg-red-500 z-10"> --}}
                 <div class="flex flex-row justify-between pb-3">
@@ -90,7 +91,7 @@
                     </div>
                     <hr>
                 @endforeach
-            @else
+                @else
                 <div class="py-4 text-center text-lg font-medium">
                     Keranjang Kosong, Ayo Mendaki!
                 </div>
@@ -106,9 +107,9 @@
                 <div class="flex flex-col py-3">
                     Tanggal Penyewaan
                     <div class="flex flex-row py-2 items-center gap-4">
-                        <input type="date" name="" id="tanggal_awal" class="border-4 rounded-xl p-2 w-full">
+                        <input type="date" name="pickup_date" id="pickup_date" class="border-4 rounded-xl p-2 w-full">
                         -
-                        <input type="date" name="" id="tanggal_akhir" class="border-4 rounded-xl p-2 w-full">
+                        <input type="date" name="return_date" id="return_date" class="border-4 rounded-xl p-2 w-full">
                     </div>
                 </div>
                 <hr>
@@ -159,6 +160,7 @@
             </div>
         </div>
     </div>
+</form>
 </x-app-layout>
 
 <script>
@@ -166,8 +168,8 @@
         const checkAllButton = document.querySelector('#check');
         const checkboxes = document.querySelectorAll('input[type="checkbox"][name="selected_items[]"]');
         const subtotalDisplay = document.getElementById('subtotal');
-        const startDateInput = document.getElementById('tanggal_awal');
-        const endDateInput = document.getElementById('tanggal_akhir');
+        const startDateInput = document.getElementById('pickup_date');
+        const endDateInput = document.getElementById('return_date');
         const daysDisplay = document.getElementById('jumlah_hari');
         const hargaHari = document.getElementById('harga_hari');
         const hargaHarian = document.getElementById('harga_harian');
