@@ -23,6 +23,9 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/', [CartController::class, 'index'])->name('index');
         Route::delete('/{id}', [CartController::class, 'destroy'])->name('destroy');
         Route::patch('/{id}', [CartController::class, 'update'])->name('update');
+        Route::get('/checkout', function() {
+            return view('checkout');
+        });
     });
 
     Route::post('/logout', [App\Http\Controllers\AuthController::class, 'logout'])->name('auth.logout');
