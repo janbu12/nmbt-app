@@ -145,4 +145,14 @@ class ProductRentModel extends Model
     }
     // Function Top Product Stop
 
+    // Function All Quantity Rented Start
+    public function getAllQuantityRented()
+    {
+        return $this->rent_details()
+            ->whereHas('rent', function ($query) {
+                $query->whereIn('status_rent', ['done', 'renting']);
+            })
+            ->sum('quantity');
+    }
+
 }

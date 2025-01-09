@@ -11,7 +11,7 @@
         <div id="navbar-links" class="items-center gap-14 hidden lg:flex">
             {{-- Navbar Link --}}
             @if (Auth::user() && Auth::user()->role === 'admin')
-            <x-navbar.link href="/admin/dashboard">Dasboard</x-navbar.link>
+            <x-navbar.link href="/admin/dashboard">Dashboard</x-navbar.link>
             <x-navbar.link href="/admin/item">Item</x-navbar.link>
             <x-navbar.link href="/admin/history">Riwayat</x-navbar.link>
             @else
@@ -57,7 +57,7 @@
                 </div>
                 <ul
                     tabindex="0"
-                    class="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-4 w-52 p-3 shadow text-tertiery1">
+                    class="menu menu-sm dropdown-content bg-base-100 rounded-box z-[50] mt-14 w-52 p-3 shadow text-tertiery1">
                     @if (Auth::user()->role !== 'admin')
                         <li>
                             <a href="/user/profile" class="block px-4 py-2 hover:bg-gray-100">Profile</a>
