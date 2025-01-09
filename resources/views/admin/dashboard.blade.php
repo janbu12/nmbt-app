@@ -8,6 +8,8 @@
     @dump($topTenProducts)
     @dump($allProduct) --}}
     {{-- @dump($topThreeCategories) --}}
+    {{-- @dump($monthlyIncome)
+    @dump($totalsIncome) --}}
 
 {{-- </x-app-layout> --}}
 
@@ -121,30 +123,92 @@
         <div class="bg-white p-8 mt-8 rounded-xl">
             <canvas id="myChart"></canvas>
         </div>
+        <div class="bg-white p-8 mt-8 rounded-xl">
+            <canvas id="incomeChart"></canvas>
+        </div>
     </div>
 
     <x-slot name="scripts">
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <script>
             const ctx = document.getElementById('myChart');
+            const ctx2 = document.getElementById('incomeChart');
+
 
             new Chart(ctx, {
-              type: 'bar',
-              data: {
-                labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
-                datasets: [{
-                  label: '# of Votes',
-                  data: [12, 19, 3, 5, 2, 3],
-                  borderWidth: 1
-                }]
-              },
-              options: {
-                scales: {
-                  y: {
-                    beginAtZero: true
-                  }
+                type: 'line', // Mengubah tipe grafik menjadi line
+                data: {
+                    labels: @json($months), // Menggunakan data bulan dari controller
+                    datasets: [{
+                        label: 'Total Transactions',
+                        data: @json($totals), // Menggunakan data total transaksi dari controller
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderWidth: 2,
+                        fill: true, // Mengisi area di bawah garis
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            labels: {
+                                font: {
+                                    size: 16,
+                                }
+                            },
+                        },
+                        title: {
+                            display: true,
+                            text: 'Rental amount by time of month',
+                            font: {
+                                size: 24,
+                            }
+                        }
+                    },
                 }
-              }
+            });
+
+            new Chart(ctx2, {
+                type: 'line', // Mengubah tipe grafik menjadi line
+                data: {
+                    labels: @json($monthsIncome), // Menggunakan data bulan dari controller
+                    datasets: [{
+                        label: 'Total Income',
+                        data: @json($totalsIncome), // Menggunakan data total transaksi dari controller
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderWidth: 2,
+                        fill: true, // Mengisi area di bawah garis
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            labels: {
+                                font: {
+                                    size: 16,
+                                }
+                            },
+                        },
+                        title: {
+                            display: true,
+                            text: 'Income amount by time of month',
+                            font: {
+                                size: 24,
+                            }
+                        }
+                    },
+                }
             });
         </script>
     </x-slot>

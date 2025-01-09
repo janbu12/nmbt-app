@@ -21,16 +21,17 @@ class RentFactory extends Factory
     {
         $user = User::inRandomOrder()->first();
         $pickupDate = $this->faker->dateTimeBetween('-1 month', 'now');
+        $createdAt = $this->faker->dateTimeBetween('-365 days', 'now');
 
         return [
             'user_id' => $user->id,
-            'pickup_date' => $pickupDate,
-            'return_date' => $pickupDate->modify('+2 days'),
+            'pickup_date' => $createdAt,
+            'return_date' => $createdAt->modify('+2 days'),
             'status_rent' => $this->faker->randomElement(['process', 'ready_pickup', 'renting', 'done']),
             'total_price' => 0,
             'payment_method' => 'qris',
-            'created_at' => now(),
-            'updated_at' => now(),
+            'created_at' => $createdAt,
+            'updated_at' => $createdAt,
         ];
     }
 }
