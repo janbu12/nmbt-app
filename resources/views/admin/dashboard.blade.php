@@ -118,12 +118,12 @@
             </div>
         </div>
 
-        <div>
+        <div class="bg-white p-8 mt-8 rounded-xl">
             <canvas id="myChart"></canvas>
         </div>
     </div>
 
-    {{-- <x-slot name="scripts">
+    <x-slot name="scripts">
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <script>
             const ctx = document.getElementById('myChart');
@@ -147,5 +147,5 @@
               }
             });
         </script>
-    </x-slot> --}}
+    </x-slot>
 </x-app-layout>
