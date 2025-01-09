@@ -30,7 +30,6 @@ class AdminController extends Controller
         $months = $monthlyTransactions->pluck('month');
         $totals = $monthlyTransactions->pluck('total_transactions');
 
-
         $totalRents = Rent::first()->total_all_rents;
         $totalDoneRents = Rent::first()->total_done_rents;
         $totalRenting = Rent::first()->total_renting;

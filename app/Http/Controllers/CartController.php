@@ -63,8 +63,8 @@ class CartController extends Controller
 
     public function calculatePrice(Request $request)
     {
-        $startDate = Carbon::parse($request->input('start_date'));
-        $endDate = Carbon::parse($request->input('end_date'));
+        $startDate = Carbon::parse($request->input('pickup_date'));
+        $endDate = Carbon::parse($request->input('return_date'));
         $pricePerDay = 5000;
 
         if ($endDate->gte($startDate)) {
