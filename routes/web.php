@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\CheckoutController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 use Illuminate\Routing\RouteGroup;
@@ -18,14 +19,11 @@ Route::middleware(['auth'])->group(function () {
 
     Route::group([
         'prefix' => 'cart',
-        'as' => 'cart.',
     ], function () {
-        Route::get('/', [CartController::class, 'index'])->name('index');
-        Route::delete('/{id}', [CartController::class, 'destroy'])->name('destroy');
-        Route::patch('/{id}', [CartController::class, 'update'])->name('update');
-        Route::get('/checkout', function() {
-            return view('checkout');
-        });
+        Route::get('/', [CartController::class, 'index'])->name('cart.index');
+        Route::delete('/{id}', [CartController::class, 'destroy'])->name('cart.destroy');
+        Route::patch('/{id}', [CartController::class, 'update'])->name('cart.update');
+        Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
     });
 
     Route::post('/logout', [App\Http\Controllers\AuthController::class, 'logout'])->name('auth.logout');
