@@ -57,6 +57,7 @@ class CheckoutController extends Controller
             'pickup' => $pickupDateFormatted,
             'return' => $returnDateFormatted,
             'days' => $days,
+            'totalDays' => $totalDays,
             'userName' => $userName,
             'total' => $total,
             'subtotal' => $subtotal,
