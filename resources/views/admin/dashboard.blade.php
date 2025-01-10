@@ -120,11 +120,16 @@
             </div>
         </div>
 
-        <div class="bg-white p-8 mt-8 rounded-xl">
-            <canvas id="myChart"></canvas>
+        <div class="flex gap-5">
+            <div class="bg-white p-8 mt-8 rounded-xl w-full">
+                <canvas id="myChart"></canvas>
+            </div>
+            <div class="bg-white p-8 mt-8 rounded-xl w-full">
+                <canvas id="incomeChart"></canvas>
+            </div>
         </div>
         <div class="bg-white p-8 mt-8 rounded-xl">
-            <canvas id="incomeChart"></canvas>
+            <canvas id="topTenProductChart"></canvas>
         </div>
     </div>
 
@@ -133,6 +138,7 @@
         <script>
             const ctx = document.getElementById('myChart');
             const ctx2 = document.getElementById('incomeChart');
+            const ctx3 = document.getElementById('topTenProductChart');
 
 
             new Chart(ctx, {
@@ -203,6 +209,56 @@
                         title: {
                             display: true,
                             text: 'Income amount by time of month',
+                            font: {
+                                size: 24,
+                            }
+                        }
+                    },
+                }
+            });
+
+            new Chart(ctx3, {
+                type: 'pie',
+                data: {
+                    labels: @json($topTenProducts->pluck('product.name')), // Menggunakan data bulan dari controller
+                    datasets: [{
+                        label: 'Total Income',
+                        data: @json($topTenProducts->pluck('total_sales')), // Menggunakan data total transaksi dari controller
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        backgroundColor: [
+                            'rgba(255, 179, 186, 1)', // Pastel Merah Muda
+                            'rgba(186, 255, 179, 1)', // Pastel Hijau
+                            'rgba(179, 224, 255, 1)', // Pastel Biru
+                            'rgba(255, 255, 179, 1)', // Pastel Kuning
+                            'rgba(255, 179, 255, 1)', // Pastel Ungu
+                            'rgba(179, 255, 255, 1)', // Pastel Cyan
+                            'rgba(255, 204, 204, 1)', // Pastel Coral
+                            'rgba(204, 204, 255, 1)', // Pastel Lavender
+                            'rgba(255, 255, 204, 1)', // Pastel Lemon
+                            'rgba(204, 255, 204, 1)', // Pastel Mint
+                        ],
+                        hoverOffset: 4,
+                        borderWidth: 2,
+                        fill: true, // Mengisi area di bawah garis
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            labels: {
+                                font: {
+                                    size: 16,
+                                }
+                            },
+                        },
+                        title: {
+                            display: true,
+                            text: 'Top Ten Products',
                             font: {
                                 size: 24,
                             }
