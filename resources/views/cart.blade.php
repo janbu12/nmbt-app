@@ -1,16 +1,16 @@
 <x-app-layout title="Cart" bodyClass="bg-tertiery3 gap-1 h-screen">
     @if (session('error'))
-        <div class="bg-red-500 text-white p-2 rounded-lg mb-4">
+        <div class="w-full text-center bg-red-500 text-white p-2 rounded-lg">
             {{ session('error') }}
         </div>
     @endif
 
-    <form action="/cart/checkout">
+    <form action="{{ route('checkout.index') }}">
         <div class="py-5 px-10 flex gap-10 h-full">
             {{-- <div class="p-3 flex flex-col bg-white w-full h-fit rounded-lg drop-shadow-lg text-tertiery1"> --}}
-        <div class="p-3 flex flex-col bg-white w-full h-fit max-h-[564px] overflow-y-auto rounded-lg drop-shadow-lg text-tertiery1">
+        <div class="flex flex-col bg-white w-full h-fit max-h-[500px] overflow-y-auto rounded-lg drop-shadow-lg text-tertiery1">
             {{-- <div class="sticky top-0 bg-red-500 z-10"> --}}
-                <div class="flex flex-row justify-between pb-3">
+                <div class="p-3 flex flex-row justify-between pb-3 sticky top-0 bg-white">
                     <div class="text-2xl font-medium">
                         Keranjang ({{ count($cartItems) }} item)
                     </div>
@@ -22,7 +22,7 @@
             {{-- </div> --}}
             @if ($cartItems->count() > 0)
                 @foreach ($cartItems as $item)
-                    <div class="flex py-4 ">
+                    <div class="p-3 flex py-4 ">
                         <div class="flex items-center">
                             <input type="checkbox"
                                 name="selected_items[]"

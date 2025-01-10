@@ -6,38 +6,38 @@
     {{-- Invoice card --}}
     <div class="bg-white rounded-lg shadow-md p-4 h-screen w-3/6 flex flex-col justify-between">
         <div class="gap-3">
-            <div class="flex flex-row justify-between">
+            {{-- <div class="flex flex-row justify-between">
                 ID Pesanan
                 <div>
                     XXXX
                 </div>
-            </div>
+            </div> --}}
 
             <div class="flex flex-row justify-between">
                 Nama Pemesan
                 <div>
-                    Yani
+                    {{ $userName }}
                 </div>
             </div>
 
             <div class="flex flex-row justify-between">
                 Tanggal Mulai
                 <div>
-                    31/08/2025
+                    {{ $pickup }}
                 </div>
             </div>
             
             <div class="flex flex-row justify-between">
                 Tanggal Selesai
                 <div>
-                    10/09/2025
+                    {{ $return }}
                 </div>
             </div>
 
             <div class="flex flex-row justify-between">
                 Jumlah hari
                 <div>
-                    11 hari
+                    {{ $days ?? 0 }} hari
                 </div>
             </div>
 
@@ -53,11 +53,21 @@
                         </tr>
                     </thead>
                     <tbody>
+                        @foreach ($items as $item)
                         <tr>
-                            <td class="border border-gray-300 p-2">Barang 1</td>
-                            <td class="border border-gray-300 p-2">2</td>
-                            <td class="border border-gray-300 p-2">Rp. 10,000</td>
+                            
+                            <td class="border border-gray-300 p-2">{{ $item->product->name }}</td>
+                            
+                            
+                            <td class="border border-gray-300 p-2">{{ $item->quantity }}</td>
+                            
+                            
+                            
+                            <td class="border border-gray-300 p-2">Rp. {{ number_format($item->total, 0, ',', '.') }}</td>
+                            
+                            
                         </tr>
+                        @endforeach
                     </tbody>
                 </table>
         </div>
@@ -66,15 +76,16 @@
             <div class="flex flex-row justify-between items-center mt-4">
                 Total + Pajak
                 <div>
-                    Rp. XX,XXX
+                    {{-- Rp. {{ number_format($subtotal, 0, ',', '.') }} --}}
+                    Rp. {{ number_format($grandtotal, 0, ',', '.') }}
                 </div>
             </div>
-            <div class="flex flex-row justify-between mt-2">
+            {{-- <div class="flex flex-row justify-between mt-2">
                 Keterangan
                 <div>
                     Lunas
                 </div>
-            </div>
+            </div> --}}
         </div>
     </div>
 
