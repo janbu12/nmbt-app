@@ -1,18 +1,11 @@
 <x-app-layout title="Invoice" bodyClass="bg-tertiery3 gap-1 h-screen items-center">
     <div class="pt-3 text-4xl font-semibold text-secondary2">
-        Invoice
+        Pesanan
     </div>
 
     {{-- Invoice card --}}
     <div class="bg-white rounded-lg shadow-md p-4 h-screen w-3/6 flex flex-col justify-between">
         <div class="gap-3">
-            {{-- <div class="flex flex-row justify-between">
-                ID Pesanan
-                <div>
-                    XXXX
-                </div>
-            </div> --}}
-
             <div class="flex flex-row justify-between">
                 Nama Pemesan
                 <div>
@@ -37,7 +30,7 @@
             <div class="flex flex-row justify-between">
                 Jumlah hari
                 <div>
-                    {{ $days ?? 0 }} hari
+                    {{ $days ?? 0 }} hari - Rp. {{ number_format($totalDays, 0, ',', '.') }}
                 </div>
             </div>
 
@@ -55,17 +48,9 @@
                     <tbody>
                         @foreach ($items as $item)
                         <tr>
-                            
                             <td class="border border-gray-300 p-2">{{ $item->product->name }}</td>
-                            
-                            
                             <td class="border border-gray-300 p-2">{{ $item->quantity }}</td>
-                            
-                            
-                            
                             <td class="border border-gray-300 p-2">Rp. {{ number_format($item->total, 0, ',', '.') }}</td>
-                            
-                            
                         </tr>
                         @endforeach
                     </tbody>
@@ -74,7 +59,7 @@
 
         <div>
             <div class="flex flex-row justify-between items-center mt-4">
-                Total + Pajak
+                Total + Pajak (11%)
                 <div>
                     {{-- Rp. {{ number_format($subtotal, 0, ',', '.') }} --}}
                     Rp. {{ number_format($grandtotal, 0, ',', '.') }}
@@ -90,7 +75,9 @@
     </div>
 
     {{-- Button --}}
-    <div class="w-3/6">
-        <button class="bg-secondary2 py-2 w-full text-white rounded-lg my-3">Kembali</button>
+    <div class="w-3/6 flex flex-row gap-5">
+        {{-- <button class="bg-secondary2 py-2 w-full text-white rounded-lg my-3">Bayar!</button> --}}
+        <x-button as="a" href="{{ route('cart.index') }}" variant="danger" class="py-2 text-center w-full text-white rounded-lg my-3">Kembali</x-button>
+        <x-button variant='secondary' class="py-2 w-full text-white rounded-lg my-3">Bayar!</x-button>
     </div>
 </x-app-layout>
