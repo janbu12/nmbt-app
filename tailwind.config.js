@@ -14,7 +14,7 @@ export default {
         extend: {
             colors: {
                 bg1: '#DDF2FD',
-                primary1: "#    427D9D",
+                primary1: "#427D9D",
                 secondary1: "#9BBEC8",
                 tertiery1: '#164863',
                 bg2: "#DCF2F1",

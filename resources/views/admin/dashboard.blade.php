@@ -24,7 +24,7 @@
                     <div class="flex justify-between items-center">
                         <div>
                             <h2 class="text-lg font-semibold">Total Rents</h2>
-                            <p class="text-xl font-bold">{{ $totalRents }}</p>
+                            <p class="text-xl md:text-3xl font-bold">{{ $totalRents }}</p>
                         </div>
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-12">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 0 0 2.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 0 0-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75 2.25 2.25 0 0 0-.1-.664m-5.8 0A2.251 2.251 0 0 1 13.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25ZM6.75 12h.008v.008H6.75V12Zm0 3h.008v.008H6.75V15Zm0 3h.008v.008H6.75V18Z" />
@@ -87,39 +87,6 @@
         </div>
 
 
-        <!-- Top Ten Products -->
-        <div class="mt-8 bg-white p-6 rounded-xl">
-            <h2 class="text-xl font-bold mb-4">Top Ten Products</h2>
-            <div class="overflow-x-auto">
-                <table class="table w-full">
-                    <thead>
-                        <tr>
-                            <th>No</th>
-                            <th>Product Name</th>
-                            <th>Total Sales</th>
-                            <th>Average Rating</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @php
-                            $index = 0;
-                        @endphp
-                        @foreach($topTenProducts as $product)
-                            <tr>
-                                <td>{{ $index + 1 }}</td>
-                                <td>{{ $product['product']->name }}</td>
-                                <td>{{ $product['total_sales'] }}</td>
-                                <td>{{ number_format($product['average_rating'], 2) }}</td>
-                            </tr>
-                            @php
-                                $index++;
-                            @endphp
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
         <div class="flex gap-5">
             <div class="bg-white p-8 mt-8 rounded-xl w-full">
                 <canvas id="myChart"></canvas>
@@ -128,8 +95,11 @@
                 <canvas id="incomeChart"></canvas>
             </div>
         </div>
-        <div class="bg-white p-8 mt-8 rounded-xl">
-            <canvas id="topTenProductChart"></canvas>
+        <!-- Top Ten Products -->
+        <div class="flex w-full justify-center items-center">
+            <div class="bg-white p-8 mt-8 rounded-xl w-1/2">
+                <canvas id="topTenProductChart"></canvas>
+            </div>
         </div>
     </div>
 
@@ -148,8 +118,8 @@
                     datasets: [{
                         label: 'Total Transactions',
                         data: @json($totals), // Menggunakan data total transaksi dari controller
-                        borderColor: 'rgba(75, 192, 192, 1)',
-                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderColor: 'rgba(96, 139, 193, 1)',
+                        backgroundColor: 'rgba(96, 139, 193, 0.3)',
                         borderWidth: 2,
                         fill: true, // Mengisi area di bawah garis
                     }]
@@ -186,8 +156,8 @@
                     datasets: [{
                         label: 'Total Income',
                         data: @json($totalsIncome), // Menggunakan data total transaksi dari controller
-                        borderColor: 'rgba(75, 192, 192, 1)',
-                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderColor: 'rgba(96, 139, 193, 1)',
+                        backgroundColor: 'rgba(96, 139, 193, 0.3)',
                         borderWidth: 2,
                         fill: true, // Mengisi area di bawah garis
                     }]
@@ -226,16 +196,16 @@
                         data: @json($topTenProducts->pluck('total_sales')), // Menggunakan data total transaksi dari controller
                         borderColor: 'rgba(75, 192, 192, 1)',
                         backgroundColor: [
-                            'rgba(255, 179, 186, 1)', // Pastel Merah Muda
-                            'rgba(186, 255, 179, 1)', // Pastel Hijau
-                            'rgba(179, 224, 255, 1)', // Pastel Biru
-                            'rgba(255, 255, 179, 1)', // Pastel Kuning
-                            'rgba(255, 179, 255, 1)', // Pastel Ungu
-                            'rgba(179, 255, 255, 1)', // Pastel Cyan
-                            'rgba(255, 204, 204, 1)', // Pastel Coral
-                            'rgba(204, 204, 255, 1)', // Pastel Lavender
-                            'rgba(255, 255, 204, 1)', // Pastel Lemon
-                            'rgba(204, 255, 204, 1)', // Pastel Mint
+                            'rgba(96, 139, 193, 1)', // Pastel Merah Muda
+                            'rgba(96, 139, 193, 0.9)', // Pastel Hijau
+                            'rgba(96, 139, 193, 0.8)', // Pastel Biru
+                            'rgba(96, 139, 193, 0.7)', // Pastel Kuning
+                            'rgba(96, 139, 193, 0.6)', // Pastel Ungu
+                            'rgba(96, 139, 193, 0.5)', // Pastel Cyan
+                            'rgba(96, 139, 193, 0.4)', // Pastel Coral
+                            'rgba(96, 139, 193, 0.3)', // Pastel Lavender
+                            'rgba(96, 139, 193, 0.2)', // Pastel Lemon
+                            'rgba(96, 139, 193, 0.1)', // Pastel Mint
                         ],
                         hoverOffset: 4,
                         borderWidth: 2,
