@@ -131,6 +131,19 @@
                                     </div>
                                 </div>
                             </div>
+                            @if (auth()->user() && (auth()->user()->role == "admin"))
+                                <div class="w-full flex gap-2">
+                                    <form action="{{ route('products.edit', $product->id) }}" class="w-full">
+                                        @csrf
+                                        <x-button type="submit" variant="secondary" class="w-full">Edit</x-button>
+                                    </form>
+                                    <form action="{{ route('products.destroy', $product->id) }}" method="POST" class="w-full" onsubmit="return confirm('Apakah Anda yakin ingin menghapus produk ini?');">
+                                        @csrf
+                                        @method('DELETE')
+                                        <x-button type="submit" variant="danger" class="w-full">Hapus</x-button>
+                                    </form>
+                                </div>
+                            @endif
                         </div>
                     </a>
                 @endforeach
@@ -141,4 +154,19 @@
         {{-- Main Content End--}}
 
     </div>
+    <x-slot name="scripts">
+        <script>
+            @if (session('delete'))
+                document.addEventListener('DOMContentLoaded', function () {
+                    Swal.fire({
+                        position: "center",
+                        icon: "success",
+                        title: "{{ session('delete') }}",
+                        showConfirmButton: false,
+                        timer: 2000,
+                    });
+                });
+            @endif
+        </script>
+    </x-slot>
 </x-app-layout>

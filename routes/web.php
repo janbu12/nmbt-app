@@ -11,11 +11,13 @@ Route::get('/', [App\Http\Controllers\LandingPageController::class, 'index'])->n
 
 Route::get('/sewa', [App\Http\Controllers\RentsController::class, 'index'])->name('sewa.index');
 
+Route::get('/products', [App\Http\Controllers\ProductsRentController::class, 'index'])->name('products.index');
+
 Route::middleware(['auth'])->group(function () {
     Route::get('/user/profile', [App\Http\Controllers\ProfileController::class, 'edit'])->name('user.profile.edit');
     Route::put('/user/profile', [App\Http\Controllers\ProfileController::class, 'update'])->name('user.profile.update');
     Route::post('/products/{id}', [App\Http\Controllers\CartController::class, 'addToCart'])->name('product.cart');
-
+    Route::get('/products/{id}', [App\Http\Controllers\ProductsRentController::class, 'show'])->name('products.show');
 
     Route::group([
         'prefix' => 'cart',
@@ -36,12 +38,12 @@ Route::middleware('guest')->group(function () {
     Route::post('/register', [App\Http\Controllers\AuthController::class, 'registerAction'])->name('auth.register.action');
 });
 
-Route::resource('products', App\Http\Controllers\ProductsRentController::class);
 
 
 Route::middleware(['auth','role:admin'])->group(function () {
     Route::get('/admin/dashboard', [App\Http\Controllers\AdminController::class, 'index'])->name('admin.dashboard');
     Route::get('/admin/item',[App\Http\Controllers\ProductsRentController::class, 'index'])->name('admin.item');
+    Route::resource('products', App\Http\Controllers\ProductsRentController::class)->except(['index', 'show']);
     Route::get('/admin/history', function() {
         return view('admin.history');
     });
