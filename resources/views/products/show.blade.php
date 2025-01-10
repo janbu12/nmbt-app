@@ -91,26 +91,39 @@
                         <span class="font-medium text-3xl">
                             Rp. {{ number_format($product->price ?? 0, 2, ',', '.') }}
                         </span>
-                        <div class="flex items-center space-x-2 h-9 lg:h-auto">
-                            <button type="button" id="decrease" class="bg-base-100 px-3 border border-secondary3 h-full rounded-md hover:bg-secondary3 hover:text-bg3 transition">
-                                -
-                            </button>
-                            <input
-                                id="quantity"
-                                name="quantity"
-                                type="text"
-                                value="1"
-                                class="w-10 h-full focus:outline-none text-center border border-secondary3 rounded-md"
-                                readonly
-                                >
-                            <button type="button" id="increase" class="bg-base-100 px-3 rounded-md border border-secondary3 h-full hover:bg-secondary3 hover:text-bg3 transition">
-                                +
-                            </button>
+                        @if (auth()->user()->role != "admin")
+                            <div class="flex items-center space-x-2 h-9 lg:h-auto">
+                                <button type="button" id="decrease" class="bg-base-100 px-3 border border-secondary3 h-full rounded-md hover:bg-secondary3 hover:text-bg3 transition">
+                                    -
+                                </button>
+                                <input
+                                    id="quantity"
+                                    name="quantity"
+                                    type="text"
+                                    value="1"
+                                    class="w-10 h-full focus:outline-none text-center border border-secondary3 rounded-md"
+                                    readonly
+                                    >
+                                <button type="button" id="increase" class="bg-base-100 px-3 rounded-md border border-secondary3 h-full hover:bg-secondary3 hover:text-bg3 transition">
+                                    +
+                                </button>
+                            </div>
+                        @else
+                            <div class="flex gap-2">
+                                <x-button variant="secondary" as="a" href="{{ route('products.edit', $product->id) }}">Edit</x-button>
+                                <form action="{{ route('products.destroy', $product->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus produk ini?');">
+                                    @csrf
+                                    @method('DELETE')
+                                    <x-button type="submit" variant="danger">Hapus</x-button>
+                                </form>
+                            </div>
+                        @endif
+                    </div>
+                    @if (auth()->user()->role != "admin")
+                        <div class="w-full flex justify-start md:justify-end mt-5">
+                            <x-button type="submit" variant="secondary">Add To Cart</x-button>
                         </div>
-                    </div>
-                    <div class="w-full flex justify-start md:justify-end mt-5">
-                        <x-button type="submit" variant="secondary">Add To Cart</x-button>
-                    </div>
+                    @endif
                 </form>
                 {{-- Description Content End--}}
 

@@ -152,6 +152,27 @@ class ProductsRentController extends Controller
         return redirect()->back()->with('success', 'Product edit successfully!');
     }
 
+    public function destroy($id)
+    {
+        Gate::authorize('isAdmin');
+        $product = Product::findOrFail($id);
+
+        // Hapus gambar lama dari penyimpanan dan database
+        if($product->images)
+        {
+            foreach ($product->images as $image) {
+                Storage::disk('public')->delete($image->image_path);
+                    $image->delete();
+            }
+        }
+
+        // Hapus produk dan ulasan
+        $product->delete();
+        $product->reviews()->delete();
+
+        return redirect()->back()->with('delete', 'Product deleted successfully!');
+    }
+
 
     public function show($id)
     {
