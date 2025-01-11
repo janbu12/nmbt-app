@@ -32,9 +32,8 @@
     </div>
 
     <!-- Modal -->
-    <div id="transactionModal" class="fixed inset-0 items-center justify-center bg-black bg-opacity-50 hidden">
-        <div class="bg-white rounded-lg p-6 w-11/12 md:w-1/3">
-            <h2 class="text-xl font-bold mb-4">Transaction History</h2>
+    <div id="transactionModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden z-50" onclick="closeModal(event)">
+        <div class="bg-white rounded-lg p-6 w-auto h-[70%] overflow-y-auto" onclick="event.stopPropagation()"> <!-- Menghentikan propagasi klik -->
             <div id="modalContent">
                 <!-- Konten riwayat transaksi akan dimuat di sini -->
             </div>
@@ -42,31 +41,83 @@
         </div>
     </div>
 
-    <script>
-        // Mengonversi data pengguna menjadi array JSON
-        const users = @json($users->items()); // Mengambil data pengguna yang ditampilkan di halaman
+    <x-slot name="scripts">
+        <script>
+            // Mengonversi data pengguna menjadi array JSON
+            const users = @json($users->items()); // Mengambil data pengguna yang ditampilkan di halaman
 
-        function openModal(userId) {
-            const selectedUser = users.find(u => u.id === userId); // Mencari pengguna berdasarkan ID
+            function openModal(userId) {
+                const selectedUser = users.find(u => u.id === userId); // Mencari pengguna berdasarkan ID
 
-            const modalContent = document.getElementById('modalContent');
-            modalContent.innerHTML = ''; // Kosongkan konten sebelumnya
+                const modalContent = document.getElementById('modalContent');
+                modalContent.innerHTML = ''; // Kosongkan konten sebelumnya
 
-            // Menampilkan riwayat transaksi
-            if (selectedUser && selectedUser.rent) {
-                selectedUser.rent.forEach(transaction => {
-                    modalContent.innerHTML += `<p>${transaction.status_rent}</p>`; // Ganti dengan detail transaksi yang sesuai
-                });
-            } else {
-                modalContent.innerHTML = '<p>No transactions found.</p>'; // Jika tidak ada transaksi
+                // Menampilkan nama lengkap pengguna
+                const fullName = selectedUser.firstname + ' ' + selectedUser.lastname;
+                modalContent.innerHTML += `<h2 class="text-xl font-bold mb-2">Transactions History ${fullName}</h2>`;
+
+                // Menampilkan riwayat transaksi
+                if (selectedUser && selectedUser.rent && selectedUser.rent.length > 0) {
+                    let tableHTML = `
+                        <table class="table w-full">
+                            <thead>
+                                <tr>
+                                    <th>Pickup Date</th>
+                                    <th>Return Date</th>
+                                    <th>Status Rent</th>
+                                    <th>Total Price</th>
+                                    <th>Payment Method</th>
+                                    <th>Created At</th>
+                                    <th>Updated At</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                    `;
+
+                    selectedUser.rent.forEach(transaction => {
+                        tableHTML += `
+                            <tr class="hover:bg-gray-200">
+                                <td>${transaction.pickup_date}</td>
+                                <td>${transaction.return_date}</td>
+                                <td>${transaction.status_rent}</td>
+                                <td>${transaction.total_price}</td>
+                                <td>${transaction.payment_method}</td>
+                                <td>${formatDate(transaction.created_at)}</td>
+                                <td>${formatDate(transaction.updated_at)}</td>
+                            </tr>
+                        `;
+                    });
+
+                    tableHTML += `
+                            </tbody>
+                        </table>
+                    `;
+
+                    modalContent.innerHTML += tableHTML;
+                } else {
+                    modalContent.innerHTML += '<p>No transactions found.</p>'; // Jika tidak ada transaksi
+                }
+
+                // Tampilkan modal
+                document.getElementById('transactionModal').classList.remove('hidden');
             }
 
-            // Tampilkan modal
-            document.getElementById('transactionModal').classList.remove('hidden');
-        }
+            function closeModal(event) {
+                // Hanya menutup modal jika klik terjadi di luar konten modal
+                if (event) {
+                    const modal = document.getElementById('transactionModal');
+                    if (event.target === modal) {
+                        modal.classList.add('hidden');
+                    }
+                } else {
+                    document.getElementById('transactionModal').classList.add('hidden');
+                }
+            }
 
-        function closeModal() {
-            document.getElementById('transactionModal').classList.add('hidden');
-        }
-    </script>
+            function formatDate(dateString) {
+                const options = { year: 'numeric', month: 'long', day: 'numeric' };
+                return new Date(dateString).toLocaleDateString(undefined, options);
+            }
+        </script>
+    </x-slot>
 </x-app-layout>
