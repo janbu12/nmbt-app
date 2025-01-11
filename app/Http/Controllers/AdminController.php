@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\ProductRentModel as Product;
 use App\Models\CategoryModel as Category;
 use App\Models\Rent;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
 
 class AdminController extends Controller
@@ -65,5 +66,14 @@ class AdminController extends Controller
                 'totalsIncome',
                 'transactions'
             ));
+    }
+
+    public function users() {
+        // Ambil data user
+        $users = User::with('rent') // Memuat relasi rent
+        ->select('id', 'email', 'firstname', 'lastname', 'address', 'birthdate', 'gender') // Sertakan kolom id
+        ->paginate(8);
+
+        return view('admin.users', compact('users'));
     }
 }
