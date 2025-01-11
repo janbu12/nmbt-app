@@ -13,6 +13,7 @@
             @if (Auth::user() && Auth::user()->role === 'admin')
             <x-navbar.link href="/admin/dashboard">Dashboard</x-navbar.link>
             <x-navbar.link href="/admin/item">Item</x-navbar.link>
+            <x-navbar.link href="/admin/users">Users</x-navbar.link>
             <x-navbar.link href="/admin/history">Riwayat</x-navbar.link>
             @else
             <x-navbar.link href="/" :variant="$variant">Beranda</x-navbar.link>

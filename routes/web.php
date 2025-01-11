@@ -46,6 +46,7 @@ Route::middleware('guest')->group(function () {
 Route::middleware(['auth','role:admin'])->group(function () {
     Route::get('/admin/dashboard', [App\Http\Controllers\AdminController::class, 'index'])->name('admin.dashboard');
     Route::get('/admin/item',[App\Http\Controllers\ProductsRentController::class, 'index'])->name('admin.item');
+    Route::get('/admin/users', [App\Http\Controllers\AdminController::class, 'users'])->name('admin.users');
     Route::resource('products', App\Http\Controllers\ProductsRentController::class)->except(['index', 'show']);
     Route::get('/admin/history', function() {
         return view('admin.history');
