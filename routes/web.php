@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\UserHistoryController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 use Illuminate\Routing\RouteGroup;
@@ -16,6 +17,7 @@ Route::get('/products', [App\Http\Controllers\ProductsRentController::class, 'in
 Route::middleware(['auth'])->group(function () {
     Route::get('/user/profile', [App\Http\Controllers\ProfileController::class, 'edit'])->name('user.profile.edit');
     Route::put('/user/profile', [App\Http\Controllers\ProfileController::class, 'update'])->name('user.profile.update');
+    Route::get('/user/history', [UserHistoryController::class, 'index'])->name('history.index');
     Route::post('/products/{id}', [App\Http\Controllers\CartController::class, 'addToCart'])->name('product.cart');
     Route::get('/products/{id}', [App\Http\Controllers\ProductsRentController::class, 'show'])->name('products.show');
 

@@ -10,7 +10,7 @@ class Rent extends Model
     use HasFactory;
     protected $fillable = ['user_id','pickup_date', 'return_date', 'status_rent', 'total_price','payment_method', 'created_at', 'updated_at'];
 
-    public function customer(){
+    public function user(){
         return $this->belongsTo(User::class);
     }
 
