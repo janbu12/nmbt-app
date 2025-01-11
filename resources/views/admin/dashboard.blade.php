@@ -7,7 +7,7 @@
     @dump($topTenProducts) --}}
     {{-- @dump($quantityRentTotal) --}}
     {{-- @dump($topThreeCategories) --}}
-    @dump($transactions)
+    {{-- @dump($transactions) --}}
 
 
 {{-- </x-app-layout> --}}
