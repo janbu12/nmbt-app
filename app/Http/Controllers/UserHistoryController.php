@@ -28,4 +28,16 @@ class UserHistoryController extends Controller
             'rents' => $rents,
         ]);
     }
+
+    public function show ($id) {
+        $rent = Rent::with(['user', 'rent_details.product'])->find($id);
+
+        $user = $rent->user;
+        $userName = $user ? $user->firstname . ' ' . $user->lastname : 'Guest';
+
+        return view('invoice', [
+            'rent' => $rent,
+            'user' => $userName,
+        ]);
+    }
 }
