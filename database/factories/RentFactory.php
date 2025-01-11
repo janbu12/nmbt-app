@@ -26,7 +26,7 @@ class RentFactory extends Factory
         return [
             'user_id' => $user->id,
             'pickup_date' => $createdAt,
-            'return_date' => $createdAt->modify('+2 days'),
+            'return_date' => (clone $createdAt )->modify('+2 days'),
             'status_rent' => $this->faker->randomElement(['process', 'ready_pickup', 'renting', 'done']),
             'total_price' => 0,
             'payment_method' => 'qris',
