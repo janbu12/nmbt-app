@@ -69,7 +69,7 @@
                             </a>
                         </li>
                         <li>
-                            <a href="/history" class="block px-4 py-2 hover:bg-gray-100">History</a>
+                            <a href="/user/history" class="block px-4 py-2 hover:bg-gray-100">History</a>
                         </li>
                     @endif
                     <form method="POST" action="{{ route('auth.logout') }}" class="block">
