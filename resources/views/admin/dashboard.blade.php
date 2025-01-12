@@ -1,15 +1,14 @@
 {{-- <x-app-layout> --}}
-    {{-- Admin
-    @dump($totalRents)
+    {{-- @dump($totalRents)
     @dump($totalDoneRents)
     @dump($totalRenting)
     @dump($totalOngoingRents)
     @dump($totalIncome)
-    @dump($topTenProducts)
-    @dump($allProduct) --}}
+    @dump($topTenProducts) --}}
+    {{-- @dump($quantityRentTotal) --}}
     {{-- @dump($topThreeCategories) --}}
-    {{-- @dump($monthlyIncome)
-    @dump($totalsIncome) --}}
+    {{-- @dump($transactions) --}}
+
 
 {{-- </x-app-layout> --}}
 
@@ -83,11 +82,26 @@
                         </svg>
                     </div>
                 </div>
+
+                <!-- Total Quantity Rented -->
+                <div class="card bg-base-100 drop-shadow p-4">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <h2 class="text-lg font-semibold">Total Quantity Rented</h2>
+                            <p class="text-xl md:text-3xl font-bold">{{ $quantityRentTotal }}</p>
+                        </div>
+                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" class="size-12 fill-tertiery1" viewBox="0 0 50 50" version="1.1">
+                            <g id="surface1">
+                                <path style="stroke:none;fill-rule:nonzero;fill-opacity:1;" d="M 24.707031 3.9375 C 24.675781 3.945313 24.648438 3.957031 24.617188 3.96875 L 10.914063 3.96875 C 10.882813 3.96875 10.851563 3.96875 10.820313 3.96875 C 10.789063 3.96875 10.757813 3.96875 10.726563 3.96875 C 10.566406 4.003906 10.417969 4.078125 10.292969 4.183594 L 4.433594 9.082031 L 4.339844 9.144531 C 4.296875 9.171875 4.253906 9.203125 4.214844 9.238281 C 4.203125 9.25 4.195313 9.257813 4.183594 9.269531 C 4.183594 9.28125 4.183594 9.289063 4.183594 9.300781 C 4.171875 9.300781 4.164063 9.300781 4.152344 9.300781 C 4.152344 9.320313 4.152344 9.34375 4.152344 9.363281 C 4.132813 9.394531 4.113281 9.425781 4.09375 9.457031 C 4.054688 9.515625 4.023438 9.574219 4 9.640625 C 3.984375 9.703125 3.972656 9.765625 3.96875 9.828125 C 3.960938 9.890625 3.960938 9.953125 3.96875 10.011719 L 3.96875 44.644531 C 3.96875 45.1875 4.414063 45.636719 4.960938 45.636719 L 44.644531 45.636719 C 45.1875 45.636719 45.636719 45.1875 45.636719 44.644531 L 45.636719 10.074219 C 45.640625 10.023438 45.640625 9.972656 45.636719 9.921875 C 45.636719 9.902344 45.636719 9.878906 45.636719 9.859375 C 45.636719 9.847656 45.636719 9.839844 45.636719 9.828125 C 45.636719 9.808594 45.636719 9.785156 45.636719 9.765625 C 45.625 9.753906 45.617188 9.746094 45.605469 9.734375 C 45.605469 9.714844 45.605469 9.691406 45.605469 9.671875 C 45.605469 9.660156 45.605469 9.652344 45.605469 9.640625 C 45.597656 9.621094 45.585938 9.597656 45.574219 9.578125 C 45.5625 9.566406 45.554688 9.558594 45.542969 9.546875 C 45.542969 9.527344 45.542969 9.507813 45.542969 9.488281 C 45.53125 9.476563 45.523438 9.46875 45.511719 9.457031 C 45.503906 9.4375 45.492188 9.414063 45.480469 9.394531 C 45.46875 9.382813 45.460938 9.375 45.449219 9.363281 C 45.4375 9.351563 45.429688 9.34375 45.417969 9.332031 C 45.410156 9.3125 45.398438 9.289063 45.386719 9.269531 C 45.375 9.257813 45.367188 9.25 45.355469 9.238281 C 45.34375 9.226563 45.335938 9.21875 45.324219 9.207031 C 45.3125 9.195313 45.304688 9.1875 45.292969 9.175781 C 45.28125 9.164063 45.273438 9.15625 45.261719 9.144531 L 45.167969 9.082031 C 45.152344 9.058594 45.132813 9.039063 45.109375 9.023438 L 39.308594 4.183594 C 39.136719 4.046875 38.914063 3.96875 38.691406 3.96875 L 25.019531 3.96875 C 24.917969 3.941406 24.8125 3.929688 24.707031 3.9375 Z M 11.285156 5.953125 L 23.808594 5.953125 L 23.808594 8.929688 L 7.71875 8.929688 Z M 25.792969 5.953125 L 38.320313 5.953125 L 41.882813 8.929688 L 25.792969 8.929688 Z M 5.953125 10.914063 L 43.652344 10.914063 L 43.652344 43.652344 L 5.953125 43.652344 Z M 21.328125 14.882813 C 19.957031 14.882813 18.847656 15.988281 18.847656 17.359375 C 18.847656 18.734375 19.957031 19.839844 21.328125 19.839844 L 28.273438 19.839844 C 29.644531 19.839844 30.753906 18.734375 30.753906 17.359375 C 30.753906 15.988281 29.644531 14.882813 28.273438 14.882813 Z M 21.328125 16.863281 L 28.273438 16.863281 C 28.488281 16.863281 28.769531 17.148438 28.769531 17.359375 C 28.769531 17.574219 28.488281 17.855469 28.273438 17.855469 L 21.328125 17.855469 C 21.117188 17.855469 20.832031 17.574219 20.832031 17.359375 C 20.832031 17.148438 21.117188 16.863281 21.328125 16.863281 Z M 30.753906 30.753906 L 27.777344 33.730469 L 29.761719 33.730469 L 29.761719 37.699219 L 31.746094 37.699219 L 31.746094 33.730469 L 33.730469 33.730469 Z M 37.699219 30.753906 L 34.722656 33.730469 L 36.707031 33.730469 L 36.707031 37.699219 L 38.691406 37.699219 L 38.691406 33.730469 L 40.675781 33.730469 Z M 27.777344 38.691406 L 27.777344 40.675781 L 40.675781 40.675781 L 40.675781 38.691406 Z "/>
+                            </g>
+                        </svg>
+                    </div>
+                </div>
             </div>
         </div>
 
 
-        <div class="flex gap-5">
+        <div class="flex gap-5 flex-wrap lg:flex-nowrap w-full">
             <div class="bg-white p-8 mt-8 rounded-xl w-full">
                 <canvas id="myChart"></canvas>
             </div>
@@ -96,19 +110,24 @@
             </div>
         </div>
         <!-- Top Ten Products -->
-        <div class="flex w-full justify-center items-center">
-            <div class="bg-white p-8 mt-8 rounded-xl w-1/2">
+        <div class="flex gap-5 flex-wrap lg:flex-nowrap w-full">
+            <div class="bg-white p-8 mt-8 rounded-xl w-full">
                 <canvas id="topTenProductChart"></canvas>
+            </div>
+            <div class="bg-white p-8 mt-8 rounded-xl w-full">
+                <canvas id="categoriesChart"></canvas>
             </div>
         </div>
     </div>
 
     <x-slot name="scripts">
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
         <script>
             const ctx = document.getElementById('myChart');
             const ctx2 = document.getElementById('incomeChart');
             const ctx3 = document.getElementById('topTenProductChart');
+            const ctx4 = document.getElementById('categoriesChart');
 
 
             new Chart(ctx, {
@@ -125,6 +144,7 @@
                     }]
                 },
                 options: {
+                    responsive: true,
                     scales: {
                         y: {
                             beginAtZero: true
@@ -163,6 +183,7 @@
                     }]
                 },
                 options: {
+                    responsive: true,
                     scales: {
                         y: {
                             beginAtZero: true
@@ -190,34 +211,29 @@
             new Chart(ctx3, {
                 type: 'pie',
                 data: {
-                    labels: @json($topTenProducts->pluck('product.name')), // Menggunakan data bulan dari controller
+                    labels: @json($topTenProducts->pluck('product.name')),
                     datasets: [{
-                        label: 'Total Income',
-                        data: @json($topTenProducts->pluck('total_sales')), // Menggunakan data total transaksi dari controller
-                        borderColor: 'rgba(75, 192, 192, 1)',
+                        data: @json($topTenProducts->pluck('total_sales')),
+                        // borderColor: 'rgba(75, 192, 192, 1)',
                         backgroundColor: [
-                            'rgba(96, 139, 193, 1)', // Pastel Merah Muda
-                            'rgba(96, 139, 193, 0.9)', // Pastel Hijau
-                            'rgba(96, 139, 193, 0.8)', // Pastel Biru
-                            'rgba(96, 139, 193, 0.7)', // Pastel Kuning
-                            'rgba(96, 139, 193, 0.6)', // Pastel Ungu
-                            'rgba(96, 139, 193, 0.5)', // Pastel Cyan
-                            'rgba(96, 139, 193, 0.4)', // Pastel Coral
-                            'rgba(96, 139, 193, 0.3)', // Pastel Lavender
-                            'rgba(96, 139, 193, 0.2)', // Pastel Lemon
-                            'rgba(96, 139, 193, 0.1)', // Pastel Mint
+                            'rgba(96, 139, 193, 1)',
+                            'rgba(96, 139, 193, 0.9)',
+                            'rgba(96, 139, 193, 0.8)',
+                            'rgba(96, 139, 193, 0.7)',
+                            'rgba(96, 139, 193, 0.6)',
+                            'rgba(96, 139, 193, 0.5)',
+                            'rgba(96, 139, 193, 0.4)',
+                            'rgba(96, 139, 193, 0.3)',
+                            'rgba(96, 139, 193, 0.2)',
+                            'rgba(96, 139, 193, 0.1)',
                         ],
                         hoverOffset: 4,
                         borderWidth: 2,
-                        fill: true, // Mengisi area di bawah garis
+                        fill: true,
                     }]
                 },
                 options: {
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
-                    },
+                    responsive: true,
                     plugins: {
                         legend: {
                             labels: {
@@ -232,9 +248,71 @@
                             font: {
                                 size: 24,
                             }
+                        },
+                        datalabels: {
+                            color: 'black', // Warna label
+                            anchor: 'center', // Posisi label
+                            align: 'end', // Penempatan label
+                            formatter: (value, context) => {
+                                return value; // Menampilkan nilai
+                            }
                         }
                     },
-                }
+                },
+                plugins: [ChartDataLabels] // Menambahkan plugin datalabels
+            });
+
+
+            new Chart(ctx4, {
+                type: 'pie',
+                data: {
+                    labels: @json($transactions->pluck('category_name')), // Menggunakan data bulan dari controller
+                    datasets: [{
+                        data: @json($transactions->pluck('total_transactions')), // Menggunakan data total transaksi dari controller
+                        // borderColor: 'rgba(75, 192, 192, 1)',
+                        backgroundColor: [
+                            'rgba(96, 139, 193, 1)', // Pastel Merah Muda
+                            'rgba(96, 139, 193, 0.9)', // Pastel Hijau
+                            'rgba(96, 139, 193, 0.8)', // Pastel Biru
+                            'rgba(96, 139, 193, 0.7)', // Pastel Kuning
+                            'rgba(96, 139, 193, 0.6)', // Pastel Ungu
+                            'rgba(96, 139, 193, 0.5)', // Pastel Cyan
+                            'rgba(96, 139, 193, 0.4)', // Pastel Coral
+                            'rgba(96, 139, 193, 0.3)', // Pastel Lavender
+                        ],
+                        hoverOffset: 4,
+                        borderWidth: 2,
+                        fill: true,
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            labels: {
+                                font: {
+                                    size: 16,
+                                },
+                            },
+                        },
+                        title: {
+                            display: true,
+                            text: 'Top Categories Products',
+                            font: {
+                                size: 24,
+                            }
+                        },
+                        datalabels: {
+                            color: 'black', // Warna label
+                            anchor: 'center', // Posisi label
+                            align: 'end', // Penempatan label
+                            formatter: (value, context) => {
+                                return value; // Menampilkan nilai
+                            }
+                        }
+                    },
+                },
+                plugins: [ChartDataLabels]
             });
         </script>
     </x-slot>

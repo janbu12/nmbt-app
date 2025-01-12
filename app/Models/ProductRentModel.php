@@ -144,15 +144,4 @@ class ProductRentModel extends Model
             ->take(10); // Ambil 10 produk teratas
     }
     // Function Top Product Stop
-
-    // Function All Quantity Rented Start
-    public function getAllQuantityRented()
-    {
-        return $this->rent_details()
-            ->whereHas('rent', function ($query) {
-                $query->whereIn('status_rent', ['done', 'renting']);
-            })
-            ->sum('quantity');
-    }
-
 }

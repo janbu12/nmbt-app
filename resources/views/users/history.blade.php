@@ -42,9 +42,9 @@
                         <td class="px-4 py-2">Rp. {{ number_format($rent->total_price, 0, ',', '.') }}</td>
                         <td class="px-4 py-2">{{ $rent->status_rent }}</td>
                         <td class="px-4 py-2 text-center">
-                            <x-button variant="secondary" class="p-2 hover:bg-secondary1 hover:text-white">
+                            <a href="{{ route('history.show', $rent->id) }}" class="p-2 rounded-md bg-secondary3 text-bg3 hover:bg-bg1 hover:text-secondary3 hover:border-bg1">
                                 Detail
-                            </x-button>
+                            </a>
                         </td>
                     </tr>
                     @empty
@@ -55,11 +55,6 @@
                 </tbody>
             </table>
         </div>          
-        
-        <!-- Pagination -->
-        {{-- <div class="mt-4 flex justify-between">
-            {{ $rents->links() }}
-        </div> --}}
         
         <div class="border-b px-14 py-4">
             {{ $rents->appends(request()->query())->links('pagination::custom-pagination') }}
