@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminHistoryController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\UserHistoryController;
@@ -48,9 +49,8 @@ Route::middleware(['auth','role:admin'])->group(function () {
     Route::get('/admin/item',[App\Http\Controllers\ProductsRentController::class, 'index'])->name('admin.item');
     Route::get('/admin/users', [App\Http\Controllers\AdminController::class, 'users'])->name('admin.users');
     Route::resource('products', App\Http\Controllers\ProductsRentController::class)->except(['index', 'show']);
-    Route::get('/admin/history', function() {
-        return view('admin.history');
-    });
+    Route::get('/admin/history', [AdminHistoryController::class, 'index'])->name('admin.history');
+    Route::get('/admin/history/{id}', [AdminHistoryController::class, 'show'])->name('admin.show');
 });
 
 
