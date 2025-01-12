@@ -2,53 +2,84 @@
     <div class="flex w-full px-10 h-screen overflow-hidden flex-col">
 
         {{-- Sidebar Component --}}
-        <div class="w-full text-center mt-3 font-bold text-4xl text-secondary2 p-3">
-            Riwayat Transaksi
+        <div class="flex flow-row mt-2">
+            <div class="w-full text-start font-bold text-4xl text-secondary2 p-3">
+                Riwayat Transaksi
+            </div>
+
+            <form id="filter-form" method="GET" action="{{ route('admin.history') }}" class="h-full mb-4 flex items-center gap-4">
+                <!-- Filter Status -->
+                <select name="status" class="p-2 rounded-lg border border-gray-300" onchange="document.getElementById('filter-form').submit()">
+                    <option value="">Semua Status</option>
+                    <option value="renting" {{ request('status') == 'renting' ? 'selected' : '' }}>Renting</option>
+                    <option value="done" {{ request('status') == 'done' ? 'selected' : '' }}>Done</option>
+                    <option value="process" {{ request('status') == 'process' ? 'selected' : '' }}>Process</option>
+                    <option value="ready_pickup" {{ request('status') == 'ready_pickup' ? 'selected' : '' }}>Pickup Ready</option>
+                </select>
+            
+                <!-- Input Pencarian -->
+                <input
+                    type="text"
+                    name="search"
+                    value="{{ request('search') }}"
+                    placeholder="Cari nama atau ID"
+                    class="p-2 rounded-lg border border-gray-300 focus"
+                    oninput="filterDelay()"
+                >
+            </form> 
         </div>
         
-        <div class="border-tertiery1">
-            <input type="text" name="" id="" class="rounded-lg bg-white w-3/12 p-3 border-tertiery2" placeholder="Search">
-        </div>
-        
-        <div class="bg-white mr-8 my-8 rounded-3xl drop-shadow-md py-8 px-6 flex-col w-full">
-            <table class="table-auto w-full text-left">
+        <div class="bg-white mr-8 my-4 rounded-3xl drop-shadow-md py-8 px-6 flex-col w-full h-full overflow-y-auto">
+            <table class="table-auto w-full h-full text-left bg-white">
                 <thead class="bg-blue-200 text-center">
                     <tr>
-                        {{-- <th class="px-4 py-2">NO</th> --}}
-                        <th class="px-4 py-2">NO Pesanan</th>
-                        <th class="px-4 py-2">Tanggal</th>
-                        <th class="px-4 py-2">ID Pelanggan</th>
+                        <th class="px-4 py-2">No Pesanan</th>
+                        <th class="px-4 py-2">Tanggal Ambil</th>
+                        <th class="px-4 py-2">Tanggal Kembali</th>
                         <th class="px-4 py-2">Nama Pelanggan</th>
                         <th class="px-4 py-2">Total</th>
-                        <th class="px-4 py-2">Pembayaran</th>
+                        <th class="px-4 py-2">Status</th>
                         <th class="px-4 py-2">Detail</th>
                     </tr>
                 </thead>
 
                 <tbody>
+                    @forelse ($rents as $rent)
                     <tr class="bg-gray-50 hover:bg-blue-100 text-center">
-                        {{-- <td class="px-4 py-2">1</td> --}}
-                        <td class="px-4 py-2">001</td>
-                        <td class="px-4 py-2">2022-01-01</td>
-                        <td class="px-4 py-2">010101</td>
-                        <td class="px-4 py-2">Siregar</td>
-                        <td class="px-4 py-2">1.000.000</td>
-                        <td class="px-4 py-2">Transfer</td>
+                        <td class="px-4 py-2">{{ $rent->id }}</td>
+                        <td class="px-4 py-2">{{ $rent->pickup_date }}</td>
+                        <td class="px-4 py-2">{{ $rent->return_date }}</td>
+                        <td class="px-4 py-2">{{ $rent->full_name }}</td>
+                        <td class="px-4 py-2">Rp. {{ number_format($rent->total_price, 0, ',', '.') }}</td>
+                        <td class="px-4 py-2">{{ $rent->status_rent }}</td>
                         <td class="px-4 py-2 text-center">
-                            <button class="p-2 text-white rounded-lg bg-secondary2 hover:bg-secondary1">
+                            <a href="{{ route('admin.show', $rent->id) }}" class="p-2 rounded-md bg-secondary3 text-bg3 hover:bg-bg1 hover:text-secondary3 hover:border-bg1">
                                 Detail
-                            </button>
+                            </a>
                         </td>
                     </tr>
+                    @empty
+                    <tr>
+                        <td colspan="7" class="px-4 py-2 text-center">Tidak ada data ditemukan</td>
+                    </tr>
+                    @endforelse
                 </tbody>
             </table>
-        </div>
-
-        <!-- Pagination -->
-        <div class="mt-auto flex justify-center py-3">
-            <button class="mx-2 px-3 py-1 bg-blue-500 text-white rounded-lg">1</button>
-            <button class="mx-2 px-3 py-1 bg-gray-300 text-gray-700 rounded-lg">2</button>
-            <button class="mx-2 px-3 py-1 bg-gray-300 text-gray-700 rounded-lg">3</button>
+        </div>          
+        
+        <div class="border-b px-14 py-4">
+            {{ $rents->appends(request()->query())->links('pagination::custom-pagination') }}
         </div>
     </div>
 </x-app-layout>
+
+<script>
+    let timeout = null;
+
+    function filterDelay() {
+        clearTimeout(timeout);
+        timeout = setTimeout(() => {
+            document.getElementById('filter-form').submit();
+        }, 300);
+    }
+</script>
