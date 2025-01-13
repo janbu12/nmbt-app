@@ -43,8 +43,13 @@ class CartController extends Controller
         return redirect()->route('cart.index')->with('error', 'Item tidak ditemukan.');
     }
 
-    public function update(Request $request,$id)
+    public function update(Request $request, $id)
     {
+        // Simpan selected_items ke dalam session
+        if ($request->has('selected_items')) {
+            session(['selected_items' => $request->input('selected_items', [])]);
+        }
+
         $cartItem = Cart::find($id);
 
         if ($cartItem) {
@@ -60,6 +65,7 @@ class CartController extends Controller
 
         return redirect()->route('cart.index')->with('error', 'Item tidak ditemukan.');
     }
+
 
     public function calculatePrice(Request $request)
     {
