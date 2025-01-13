@@ -70,7 +70,10 @@
                             </a>
                         </li>
                         <li>
-                            <a href="/user/history" class="block px-4 py-2 hover:bg-gray-100">History</a>
+                            <a href="/user/history?status=done" class="flex px-4 py-2 hover:bg-gray-100 justify-between">
+                                Your Orders
+                                <span class="badge bg-secondary3 text-bg3">{{ auth()->user()->rent->count() }}</span>
+                            </a>
                         </li>
                     @endif
                     <form method="POST" action="{{ route('auth.logout') }}" class="block">

@@ -10,14 +10,21 @@ class UserHistoryController extends Controller
 {
     public function index(Request $request)
     {
+        if (!$request->has('status')) {
+            return redirect()->route('history.index', ['status' => 'done']);
+        }
+
         $userId = Auth::user()->id;
         $search = $request->input('search');
+        $status = $request->input('status');
 
         $rents = Rent::with('user')
             ->where('user_id', $userId)
+            ->when($status, function($query, $status) {
+                $query->where('status_rent', $status);
+            })
             ->when($search, function($query, $search) {
-                $query->where('id', 'like', "%$search%")
-                ->orWhere('status_rent', 'like', "%$search%")
+                $query->where('id', '=', "$search")
                 ->orWhere('pickup_date', 'like', "%$search%");
             })
             ->orderBy('id', 'desc') // Urutkan berdasarkan kolom ID secara descending
