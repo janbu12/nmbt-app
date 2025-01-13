@@ -1,4 +1,4 @@
-<x-app-layout title="Invoice" bodyClass="bg-tertiery3 gap-1 h-screen items-center">
+<x-app-layout title="Invoice" bodyClass="bg-tertiery3 gap-4 h-screen items-center">
     <div class="pt-3 text-4xl font-semibold text-secondary2">
         Pesanan
     </div>
