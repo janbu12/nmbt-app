@@ -51,6 +51,8 @@ Route::middleware(['auth','role:admin'])->group(function () {
     Route::resource('products', App\Http\Controllers\ProductsRentController::class)->except(['index', 'show']);
     Route::get('/admin/history', [AdminHistoryController::class, 'index'])->name('admin.history');
     Route::get('/admin/history/{id}', [AdminHistoryController::class, 'show'])->name('admin.show');
+    Route::get('/admin/history/{id}/change-status', [AdminHistoryController::class, 'status'])->name('admin.status');
+
 });
 
 
