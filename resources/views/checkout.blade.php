@@ -3,6 +3,8 @@
         Pesanan
     </div>
 
+    {{-- @dump($pickup); --}}
+
     {{-- Invoice card --}}
     <div class="bg-white rounded-lg shadow-md p-4 h-screen w-3/6 flex flex-col justify-between">
         <div class="gap-3">
@@ -19,7 +21,7 @@
                     {{ $pickup }}
                 </div>
             </div>
-            
+
             <div class="flex flex-row justify-between">
                 Tanggal Selesai
                 <div>
