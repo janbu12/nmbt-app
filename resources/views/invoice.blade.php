@@ -37,7 +37,7 @@
             <div class="flex flex-row justify-between">
                 Jumlah hari
                 <div>
-                    11 hari
+                    {{ $rent->days }} hari
                 </div>
             </div>
 
@@ -83,9 +83,37 @@
     </div>
 
     {{-- Button --}}
-    <div class="w-3/6 text-center pt-5">
+    @if (Auth::user() && Auth::user()->role == 'admin')
+        <div class="w-3/6 text-center gap-10 flex flex-row">
+            <x-button variant="secondary" class="py-2 my-3 w-full text-center" 
+            as="a" 
+            href="{{ route('admin.status', ['id' => $rent->id]) }}">
+            @switch($rent->status_rent)
+                @case('process')
+                    Ubah ke process
+                    @break
+                @case('ready_pickup')
+                    Ubah ke renting
+                    @break
+                @case('renting')
+                    Ubah ke done
+                    @break
+                @case('done')
+                    Pesanan Selesai
+                    @break
+                @default
+                    Status Tidak Diketahui
+            @endswitch
+        </x-button>
+            <x-button variant="secondary" class="py-2 my-3 w-full text-center" as="a" href="{{ route('admin.history') }}">
+                Kembali
+            </x-button>
+        </div>
+    @else
+        <div class="w-3/6 text-center pt-5">
         <x-button variant="secondary" class="py-2 my-3 w-full" as="a" href="{{ route('history.index') }}">
             Kembali
         </x-button>
-    </div>
+        </div>
+    @endif
 </x-app-layout>

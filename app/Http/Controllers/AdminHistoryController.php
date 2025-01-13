@@ -34,4 +34,42 @@ class AdminHistoryController extends Controller
 
         return view('admin.history', compact('rents', 'search', 'status'));
     }
+
+    public function show($id)
+    {
+        $rent = Rent::with(['user', 'rent_details.product'])->find($id);
+
+        $user = $rent->user;
+        $userName = $user ? $user->firstname . ' ' . $user->lastname : 'Guest';
+
+        return view('invoice', [
+            'rent' => $rent,
+            'user' => $userName,
+        ]);
+    }
+
+    public function status(Request $request, $id)
+{
+    $rent = Rent::findOrFail($id);
+
+    // Logika untuk mengubah status berdasarkan status saat ini
+    switch ($rent->status_rent) {
+        case 'process':
+            $rent->status_rent = 'ready_pickup';
+            break;
+        case 'ready_pickup':
+            $rent->status_rent = 'renting';
+            break;
+        case 'renting':
+            $rent->status_rent = 'done';
+            break;
+        default:
+            return redirect()->back()->with('error', 'Status tidak valid.');
+    }
+
+    $rent->save();
+
+    return redirect()->route('admin.history')->with('success', 'Status berhasil diubah.');
+}
+
 }
