@@ -1,10 +1,12 @@
 <?php
 
+use App\Http\Middleware\CheckPostMethod;
 use App\Http\Middleware\RoleMiddleware;
 use App\Http\Middleware\RoleRedirect;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Psy\VersionUpdater\Checker;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -15,6 +17,7 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->alias([
             'role' => RoleMiddleware::class,
+            'post' => CheckPostMethod::class,
         ]);
         $middleware->redirectGuestsTo('/login');
     })

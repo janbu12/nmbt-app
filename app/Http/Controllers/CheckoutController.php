@@ -15,17 +15,18 @@ class CheckoutController extends Controller
     public function index(Request $request)
     {
         // dd($request);
-        if(!$request->input('selected_items', [])){
-            return back()->with('error', 'Anda belum memilih barang.');
-        }
-
-        if(!$request->input('pickup_date')){
-            return back()->with('error', 'Tanggal awal harus diisi.');
-        }
-
-        if(!$request->input('return_date')){
-            return back()->with('error', 'Tanggal akhir harus diisi.');
-        }
+        $request->validate(
+            [
+                 'pickup_date' => 'required',
+                'return_date' => 'required',
+                'selected_items' => 'required|array|min:1',
+            ],
+            [
+                'pickup_date.required' => 'Tanggal awal harus diisi.',
+                'return_date.required' => 'Tanggal akhir harus diisi.',
+                'selected_items.required' => 'Anda harus memilih minimal satu barang.',
+            ]
+        );
 
         setlocale(LC_TIME, 'id_ID.UTF-8');
         Carbon::setLocale('id');

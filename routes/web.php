@@ -29,10 +29,12 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/', [CartController::class, 'index'])->name('cart.index');
         Route::delete('/{id}', [CartController::class, 'destroy'])->name('cart.destroy');
         Route::patch('/{id}', [CartController::class, 'update'])->name('cart.update');
-        Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
+        Route::post('/invoice', [CheckoutController::class, 'index'])->name('cart.invoice.index');
+        Route::get('/invoice')->middleware('post');
     });
 
     Route::post('/payment', [CheckoutController::class, 'pay'])->name('payment');
+    Route::get('/payment')->middleware('post');
     Route::post('/orders/cancel/{id}', [CheckoutController::class, 'cancel'])->name('orders.cancel');
     Route::post('/orders/payment/{id}', [CheckoutController::class, 'getPaymentToken'])->name('orders.payment');
     Route::patch('/orders/payment/{id}', [CheckoutController::class, 'updatePaymentMethod'])->name('orders.payment.update');
