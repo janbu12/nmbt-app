@@ -1,4 +1,4 @@
-<x-app-layout title="Cart" bodyClass="bg-tertiery3 gap-1 h-screen">
+<x-app-layout title="Cart" bodyClass="bg-tertiery3 gap-1 min-h-screen">
     @if (session('error'))
         <div class="w-full text-center bg-red-500 text-white p-2 rounded-lg">
             {{ session('error') }}
@@ -161,190 +161,204 @@
         </div>
     </div>
 
-    <form id="checkoutForm" action="{{ route('checkout.index') }}" method="POST" style="display: none;">
+    <form id="checkoutForm" action="{{ route('checkout.index') }}" method="GET" style="display: none;">
         @csrf
         <input type="hidden" name="pickup_date" id="checkoutPickupDate">
         <input type="hidden" name="return_date" id="checkoutReturnDate">
         <input type="hidden" name="selected_items[]" id="checkoutSelectedItems">
         <input type="hidden" name="quantities[]" id="checkoutQuantities">
     </form>
+
+    <x-slot name="scripts">
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                const checkAllButton = document.querySelector('#check');
+                const checkboxes = document.querySelectorAll('input[type="checkbox"][name="selected_items[]"]');
+                const subtotalDisplay = document.getElementById('subtotal');
+                const startDateInput = document.getElementById('pickup_date');
+                const endDateInput = document.getElementById('return_date');
+                const daysDisplay = document.getElementById('jumlah_hari');
+                const hargaHari = document.getElementById('harga_hari');
+                const hargaHarian = document.getElementById('harga_harian');
+                const totalPajak = document.getElementById('pajak');
+                const totalHargaDisplay = document.getElementById('total');
+                const percentPajak = 0.11;
+
+                const savedCheckboxes = JSON.parse(localStorage.getItem('selectedItems')) || [];
+                checkboxes.forEach(checkbox => {
+                    if (savedCheckboxes.includes(checkbox.value)) {
+                        checkbox.checked = true;
+                    }
+                });
+
+                checkboxes.forEach(checkbox => {
+                    checkbox.addEventListener('change', () => {
+                        const selectedItems = Array.from(checkboxes)
+                            .filter(checkbox => checkbox.checked)
+                            .map(checkbox => checkbox.value);
+                        localStorage.setItem('selectedItems', JSON.stringify(selectedItems));
+                    });
+                });
+
+                checkAllButton.addEventListener('click', () => {
+                    const allChecked = Array.from(checkboxes).every(checkbox => checkbox.checked);
+                    checkboxes.forEach(checkbox => checkbox.checked = !allChecked);
+
+                    // Update local storage based on the current state of checkboxes
+                    if (allChecked) {
+                        // If all were checked, clear local storage
+                        localStorage.removeItem('selectedItems');
+                    } else {
+                        // If not all were checked, save the current state
+                        const selectedItems = Array.from(checkboxes)
+                            .filter(checkbox => checkbox.checked)
+                            .map(checkbox => checkbox.value);
+                        localStorage.setItem('selectedItems', JSON.stringify(selectedItems));
+                    }
+
+                    // Recalculate total
+                    calculateTotal();
+                });
+
+                // Utility function to format currency
+                const formatCurrency = (value) => `Rp. ${Math.ceil(value).toLocaleString('id-ID')}`;
+
+                // Calculate the subtotal of selected items
+                const calculateSubtotal = () => {
+                    let subtotal = Array.from(checkboxes)
+                        .filter(checkbox => checkbox.checked)
+                        .reduce((sum, checkbox) => {
+                            const price = parseFloat(checkbox.getAttribute('data-price'));
+                            const quantity = parseInt(checkbox.getAttribute('data-quantity'));
+                            return sum + (price * quantity);
+                        }, 0);
+
+                    subtotalDisplay.textContent = formatCurrency(subtotal);
+                    return subtotal;
+                };
+
+                // Calculate the total rental cost based on days
+                const calculateDays = () => {
+                    const startDate = new Date(startDateInput.value);
+                    const endDate = new Date(endDateInput.value);
+                    const subtotal = calculateSubtotal();
+
+                    if (isNaN(startDate) || isNaN(endDate) || endDate < startDate) {
+                        daysDisplay.textContent = 'Lama Pinjam: 0 hari';
+                        hargaHari.textContent = formatCurrency(0);
+                        hargaHarian.textContent = formatCurrency(0);
+                        totalPajak.textContent = formatCurrency(0);
+                        return 0;
+                    }
+
+                    const days = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24));
+                    const hargaPerHari = days * 5000;
+                    const totalHargaHari = hargaPerHari + subtotal;
+                    const pajak = totalHargaHari * percentPajak;
+
+                    daysDisplay.textContent = `Lama Pinjam: ${days} hari`;
+                    hargaHari.textContent = formatCurrency(totalHargaHari);
+                    hargaHarian.textContent = formatCurrency(hargaPerHari);
+                    totalPajak.textContent = formatCurrency(pajak);
+
+                    return totalHargaHari;
+                };
+
+                // Calculate the final total including tax
+                const calculateTotal = () => {
+                    const totalHargaHari = calculateDays();
+                    const totalWithTax = totalHargaHari + (totalHargaHari * percentPajak);
+                    totalHargaDisplay.textContent = formatCurrency(totalWithTax);
+                };
+
+                // Validate dates on change of end date
+                endDateInput.addEventListener('change', () => {
+                    const startDate = new Date(startDateInput.value);
+                    const endDate = new Date(endDateInput.value);
+
+                    // Validate end date
+                    if (endDate < startDate) {
+                        Swal.fire({
+                            position: "center",
+                            icon: "error",
+                            title: "Tanggal akhir tidak boleh kurang dari tanggal awal.",
+                            showConfirmButton: false,
+                            timer: 2000,
+                        });
+                        endDateInput.value = ''; // Reset end date
+                    } else {
+                        const days = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24));
+                        if (days < 2) {
+                            Swal.fire({
+                                position: "center",
+                                icon: "error",
+                                title: "Tanggal akhir minimal 2 hari dari tanggal awal",
+                                showConfirmButton: false,
+                                timer: 2000,
+                            });
+                            endDateInput.value = ''; // Reset end date
+                        }
+                    }
+                });
+
+                // Event listeners for individual checkbox changes
+                checkboxes.forEach(checkbox => checkbox.addEventListener('change', calculateTotal));
+
+                // Event listeners for date changes
+                [startDateInput, endDateInput].forEach(input => input.addEventListener('change', calculateTotal));
+
+                // Initial calculation
+                calculateTotal();
+            });
+
+            document.addEventListener('DOMContentLoaded', () => {
+                const checkoutButton = document.getElementById('checkoutButton');
+                const checkboxes = document.querySelectorAll('input[type="checkbox"][name="selected_items[]"]');
+                const startDateInput = document.getElementById('pickup_date');
+                const endDateInput = document.getElementById('return_date');
+
+                checkoutButton.addEventListener('click', () => {
+                    const selectedItems = [];
+                    const quantities = [];
+
+                    checkboxes.forEach(checkbox => {
+                        if (checkbox.checked) {
+                            selectedItems.push(checkbox.value);
+                            quantities.push(checkbox.getAttribute('data-quantity'));
+                        }
+                    });
+
+                    // Clear previous values
+                    document.getElementById('checkoutSelectedItems').value = '';
+                    document.getElementById('checkoutQuantities').value = '';
+
+                    // Create hidden inputs for each selected item and quantity
+                    selectedItems.forEach(item => {
+                        const input = document.createElement('input');
+                        input.type = 'hidden';
+                        input.name = 'selected_items[]';
+                        input.value = item;
+                        document.getElementById('checkoutForm').appendChild(input);
+                    });
+
+                    quantities.forEach(quantity => {
+                        const input = document.createElement('input');
+                        input.type = 'hidden';
+                        input.name = 'quantities[]';
+                        input.value = quantity;
+                        document.getElementById('checkoutForm').appendChild(input);
+                    });
+
+                    // Set values to hidden inputs for dates
+                    document.getElementById('checkoutPickupDate').value = startDateInput.value;
+                    document.getElementById('checkoutReturnDate').value = endDateInput.value;
+
+                    // Submit the form
+                    document.getElementById('checkoutForm').submit();
+                });
+            });
+        </script>
+    </x-slot>
 </x-app-layout>
 
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const checkAllButton = document.querySelector('#check');
-        const checkboxes = document.querySelectorAll('input[type="checkbox"][name="selected_items[]"]');
-        const subtotalDisplay = document.getElementById('subtotal');
-        const startDateInput = document.getElementById('pickup_date');
-        const endDateInput = document.getElementById('return_date');
-        const daysDisplay = document.getElementById('jumlah_hari');
-        const hargaHari = document.getElementById('harga_hari');
-        const hargaHarian = document.getElementById('harga_harian');
-        const totalPajak = document.getElementById('pajak');
-        const totalHargaDisplay = document.getElementById('total');
-        const percentPajak = 0.11;
-
-        const savedCheckboxes = JSON.parse(localStorage.getItem('selectedItems')) || [];
-        checkboxes.forEach(checkbox => {
-            if (savedCheckboxes.includes(checkbox.value)) {
-                checkbox.checked = true;
-            }
-        });
-
-        checkboxes.forEach(checkbox => {
-            checkbox.addEventListener('change', () => {
-                const selectedItems = Array.from(checkboxes)
-                    .filter(checkbox => checkbox.checked)
-                    .map(checkbox => checkbox.value);
-                localStorage.setItem('selectedItems', JSON.stringify(selectedItems));
-            });
-        });
-
-        checkAllButton.addEventListener('click', () => {
-            const allChecked = Array.from(checkboxes).every(checkbox => checkbox.checked);
-            checkboxes.forEach(checkbox => checkbox.checked = !allChecked);
-
-            // Update local storage based on the current state of checkboxes
-            if (allChecked) {
-                // If all were checked, clear local storage
-                localStorage.removeItem('selectedItems');
-            } else {
-                // If not all were checked, save the current state
-                const selectedItems = Array.from(checkboxes)
-                    .filter(checkbox => checkbox.checked)
-                    .map(checkbox => checkbox.value);
-                localStorage.setItem('selectedItems', JSON.stringify(selectedItems));
-            }
-
-            // Recalculate total
-            calculateTotal();
-        });
-
-        // Utility function to format currency
-        const formatCurrency = (value) => `Rp. ${Math.ceil(value).toLocaleString('id-ID')}`;
-
-        // Calculate the subtotal of selected items
-        const calculateSubtotal = () => {
-            let subtotal = Array.from(checkboxes)
-                .filter(checkbox => checkbox.checked)
-                .reduce((sum, checkbox) => {
-                    const price = parseFloat(checkbox.getAttribute('data-price'));
-                    const quantity = parseInt(checkbox.getAttribute('data-quantity'));
-                    return sum + (price * quantity);
-                }, 0);
-
-            subtotalDisplay.textContent = formatCurrency(subtotal);
-            return subtotal;
-        };
-
-        // Calculate the total rental cost based on days
-        const calculateDays = () => {
-            const startDate = new Date(startDateInput.value);
-            const endDate = new Date(endDateInput.value);
-            const subtotal = calculateSubtotal();
-
-            if (isNaN(startDate) || isNaN(endDate) || endDate < startDate) {
-                daysDisplay.textContent = 'Lama Pinjam: 0 hari';
-                hargaHari.textContent = formatCurrency(0);
-                hargaHarian.textContent = formatCurrency(0);
-                totalPajak.textContent = formatCurrency(0);
-                return 0;
-            }
-
-            const days = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24));
-            const hargaPerHari = days * 5000;
-            const totalHargaHari = hargaPerHari + subtotal;
-            const pajak = totalHargaHari * percentPajak;
-
-            daysDisplay.textContent = `Lama Pinjam: ${days} hari`;
-            hargaHari.textContent = formatCurrency(totalHargaHari);
-            hargaHarian.textContent = formatCurrency(hargaPerHari);
-            totalPajak.textContent = formatCurrency(pajak);
-
-            return totalHargaHari;
-        };
-
-        // Calculate the final total including tax
-        const calculateTotal = () => {
-            const totalHargaHari = calculateDays();
-            const totalWithTax = totalHargaHari + (totalHargaHari * percentPajak);
-            totalHargaDisplay.textContent = formatCurrency(totalWithTax);
-        };
-
-        // Event listener to toggle all checkboxes
-        // checkAllButton.addEventListener('click', () => {
-        //     calculateTotal();
-        // });
-
-        // Event listeners for individual checkbox changes
-        checkboxes.forEach(checkbox => checkbox.addEventListener('change', calculateTotal));
-
-        // Event listeners for date changes
-        [startDateInput, endDateInput].forEach(input => input.addEventListener('change', calculateTotal));
-
-        // Initial calculation
-        calculateTotal();
-    });
-
-    document.addEventListener('DOMContentLoaded', () => {
-        const checkoutButton = document.getElementById('checkoutButton');
-        const checkboxes = document.querySelectorAll('input[type="checkbox"][name="selected_items[]"]');
-        const startDateInput = document.getElementById('pickup_date');
-        const endDateInput = document.getElementById('return_date');
-
-        checkoutButton.addEventListener('click', () => {
-            const selectedItems = [];
-            const quantities = [];
-
-            checkboxes.forEach(checkbox => {
-                if (checkbox.checked) {
-                    selectedItems.push(checkbox.value);
-                    quantities.push(checkbox.getAttribute('data-quantity'));
-                }
-            });
-
-            // Clear previous values
-            document.getElementById('checkoutSelectedItems').value = '';
-            document.getElementById('checkoutQuantities').value = '';
-
-            // Create hidden inputs for each selected item and quantity
-            selectedItems.forEach(item => {
-                const input = document.createElement('input');
-                input.type = 'hidden';
-                input.name = 'selected_items[]';
-                input.value = item;
-                document.getElementById('checkoutForm').appendChild(input);
-            });
-
-            quantities.forEach(quantity => {
-                const input = document.createElement('input');
-                input.type = 'hidden';
-                input.name = 'quantities[]';
-                input.value = quantity;
-                document.getElementById('checkoutForm').appendChild(input);
-            });
-
-            // Set values to hidden inputs for dates
-            document.getElementById('checkoutPickupDate').value = startDateInput.value;
-            document.getElementById('checkoutReturnDate').value = endDateInput.value;
-
-            // Submit the form
-            document.getElementById('checkoutForm').submit();
-        });
-    });
-
-    document.addEventListener('DOMContentLoaded', () => {
-
-
-        // Load saved checkbox states from local storage
-
-
-        // Save checkbox states to local storage on change
-
-
-        // Event listener to toggle all checkboxes
-
-    });
-
-</script>
 

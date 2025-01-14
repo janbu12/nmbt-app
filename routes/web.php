@@ -29,9 +29,10 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/', [CartController::class, 'index'])->name('cart.index');
         Route::delete('/{id}', [CartController::class, 'destroy'])->name('cart.destroy');
         Route::patch('/{id}', [CartController::class, 'update'])->name('cart.update');
-        Route::post('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
+        Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
     });
 
+    Route::post('/payment', [CheckoutController::class, 'pay'])->name('payment');
     Route::post('/logout', [App\Http\Controllers\AuthController::class, 'logout'])->name('auth.logout');
 });
 

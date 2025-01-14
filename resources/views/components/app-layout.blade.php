@@ -24,7 +24,7 @@
 
     </head>
     <body class="flex flex-col {{$bodyClass ?? ''}}">
-        @if(!request()->is('login') && !request()->is('register'))
+        @if(!request()->is('login') && !request()->is('register') && !request()->is('cart/checkout'))
             @include('components.navbar.index', ['variant' => $navbarVariant ?? 'default'])
         @endif
 
