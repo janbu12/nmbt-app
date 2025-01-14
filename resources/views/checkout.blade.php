@@ -131,8 +131,30 @@
                             },
                             onPending: function(result) {
                                 console.log(result);
-                                window.location.href = '/user/history?status=unpaid';
-                                // Handle pending
+                                fetch(`/orders/payment/${result.order_id}`, {
+                                    method: 'PATCH',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                                    },
+                                    body: JSON.stringify({
+                                        payment_method: result.payment_type
+                                    })
+                                })
+                                .then(response => {
+                                    if (!response.ok) {
+                                        throw new Error('Failed to update payment method');
+                                    }
+                                    return response.json();
+                                })
+                                .then(data => {
+                                    console.log('Payment method updated:', data);
+                                    window.location.href = '/user/history?status=unpaid';
+                                })
+                                .catch(error => {
+                                    console.error('Error updating payment method:', error);
+                                    alert('Failed to update payment method.');
+                                });
                             },
                             onError: function(result) {
                                 console.log(result);

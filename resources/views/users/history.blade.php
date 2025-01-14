@@ -172,15 +172,40 @@
                             onPending: function(result) {
                                 console.log(result);
                                 // Handle pending
+                                fetch(`/orders/payment/${result.order_id}`, {
+                                    method: 'PATCH',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                                    },
+                                    body: JSON.stringify({
+                                        payment_method: result.payment_type
+                                    })
+                                })
+                                .then(response => {
+                                    if (!response.ok) {
+                                        throw new Error('Failed to update payment method');
+                                    }
+                                    return response.json();
+                                })
+                                .then(data => {
+                                    console.log('Payment method updated:', data);
+                                })
+                                .catch(error => {
+                                    console.error('Error updating payment method:', error);
+                                    alert('Failed to update payment method.');
+                                });
                             },
                             onError: function(result) {
                                 console.log(result);
-                                // Handle error
+                                if(result.status_code === 407){
+                                    alert('token expired');
+                                }
                             },
-                            onClose: function(){
+                            onClose: function(result){
                                 alert('You closed the popup without finishing the payment');
-                            }
-                        });
+                            },
+                        })
                     } else {
                         alert('Terjadi kesalahan: ' + data.message);
                     }
@@ -216,6 +241,7 @@
                     return response.json();
                 })
                 .then(data => {
+                    console.log('Data yang diterima dari server:', data);
                     if (data.status === 'success') {
                         // Refresh halaman atau lakukan tindakan lain
                         location.reload();
