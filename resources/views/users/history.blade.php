@@ -59,8 +59,8 @@
                 <x-button
                     type="submit"
                     name="status"
-                    value="cancel"
-                    variant="{{ request()->get('status') == 'cancel' ? 'secondary' : 'tertiery' }}"
+                    value="cancelled"
+                    variant="{{ request()->get('status') == 'cancelled' ? 'secondary' : 'tertiery' }}"
                     class="flex px-4 gap-1"
                 >
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
@@ -101,11 +101,19 @@
                         <td >Rp. {{ number_format($rent->total_price, 0, ',', '.') }}</td>
                         <td >{{ ($rent->status_rent == "done" ? 'Done' :
                                 ($rent->status_rent == 'ready_pickup' ? 'Ready Pickup':
-                                ($rent->status_rent == 'process' ? 'Process': 'else')))}}</td>
+                                ($rent->status_rent == 'process' ? 'Process':
+                                ($rent->status_rent == 'unpaid' ? 'Unpaid': 'Cancel'))))}}</td>
                         <td class="px-4 py-2 text-center">
-                            <a href="{{ route('history.show', $rent->id) }}" class="p-2 rounded-md bg-secondary3 text-bg3 hover:bg-bg1 hover:text-secondary3 hover:border-bg1">
-                                Detail
-                            </a>
+                            @if (request()->get('status') == 'unpaid')
+                                <div class="flex gap-2">
+                                    <button class="p-2 rounded-md bg-secondary3 text-bg3 hover:bg-bg1 hover:text-secondary3 hover:border-bg1" onclick="payOrder('{{ $rent->id }}')">Bayar</button>
+                                    <button class="p-2 rounded-md bg-red-600 text-bg3 hover:bg-bg1 hover:text-secondary3 hover:border-red-300" onclick="confirmCancel('{{ $rent->id }}')">Cancel</button>
+                                </div>
+                            @else
+                                <a href="{{ route('history.show', $rent->id) }}" class="p-2 rounded-md bg-secondary3 text-bg3 hover:bg-bg1 hover:text-secondary3 hover:border-bg1">
+                                    Detail
+                                </a>
+                            @endif
                         </td>
                     </tr>
                     @empty
@@ -117,8 +125,109 @@
             </table>
         </div>
 
+        {{-- Modal Konfirmasi Pembatalan --}}
+        <div id="cancelModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden z-50">
+            <div class="bg-white rounded-lg p-6 w-1/3">
+                <h2 class="text-xl font-semibold mb-4">Konfirmasi Pembatalan</h2>
+                <p>Apakah Anda yakin ingin membatalkan pesanan ini?</p>
+                <div class="flex justify-end mt-4">
+                    <button id="confirmCancelButton" class="bg-secondary2 text-white px-4 py-2 rounded-lg">Ya, Batalkan</button>
+                    <button id="cancelCancelButton" class="ml-2 bg-gray-300 text-black px-4 py-2 rounded-lg" onclick="closeCancelModal()">Batal</button>
+                </div>
+            </div>
+        </div>
+
         <div class="border-b px-14 py-4">
             {{ $rents->appends(request()->query())->links('pagination::custom-pagination') }}
         </div>
     </div>
+
+    <x-slot name="scripts">
+        <script type="text/javascript" src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="{{ config('midtrans.client_key') }}"></script>
+        <script>
+            let orderIdToCancel = null;
+
+            function payOrder(orderId) {
+                fetch(`/orders/payment/${orderId}`, { // Ganti dengan route yang sesuai
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    }
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        return response.text().then(text => { throw new Error(text); });
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Data yang diterima dari server:', data);
+                    if (data.status === 'success') {
+                        // Lakukan pembayaran dengan snapToken yang sudah ada
+                        window.snap.pay(data.snapToken, {
+                            onSuccess: function(result) {
+                                console.log(result);
+                                // Handle success
+                            },
+                            onPending: function(result) {
+                                console.log(result);
+                                // Handle pending
+                            },
+                            onError: function(result) {
+                                console.log(result);
+                                // Handle error
+                            },
+                            onClose: function(){
+                                alert('You closed the popup without finishing the payment');
+                            }
+                        });
+                    } else {
+                        alert('Terjadi kesalahan: ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Terjadi kesalahan saat memproses pembayaran: ' + error.message);
+                });
+            }
+
+            function confirmCancel(orderId) {
+                orderIdToCancel = orderId; // Simpan ID pesanan yang akan dibatalkan
+                document.getElementById('cancelModal').classList.remove('hidden'); // Tampilkan modal konfirmasi
+            }
+
+            function closeCancelModal() {
+                document.getElementById('cancelModal').classList.add('hidden'); // Sembunyikan modal konfirmasi
+            }
+
+            document.getElementById('confirmCancelButton').onclick = function() {
+                // Kirim permintaan untuk membatalkan pesanan
+                fetch(`/orders/cancel/${orderIdToCancel}`, { // Ganti dengan route yang sesuai
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.status === 'success') {
+                        // Refresh halaman atau lakukan tindakan lain
+                        location.reload();
+                    } else {
+                        alert('Terjadi kesalahan: ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Terjadi kesalahan saat membatalkan pesanan.');
+                });
+            };
+        </script>
+    </x-slot>
 </x-app-layout>

@@ -17,9 +17,10 @@ return new class extends Migration
             $table->date('pickup_date');
             $table->date('return_date');
             $table->integer('days')->nullable();
-            $table->enum('status_rent', ['process', 'ready_pickup', 'renting', 'done', 'cancelled']);
+            $table->enum('status_rent', ['unpaid','process', 'ready_pickup', 'renting', 'done', 'cancelled']);
             $table->double('total_price');
-            $table->string('payment_method');
+            $table->string('payment_method')->nullable();
+            $table->string('snap_token')->nullable();
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users');
         });

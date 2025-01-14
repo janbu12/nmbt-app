@@ -33,6 +33,8 @@ Route::middleware(['auth'])->group(function () {
     });
 
     Route::post('/payment', [CheckoutController::class, 'pay'])->name('payment');
+    Route::post('/orders/cancel/{id}', [CheckoutController::class, 'cancel'])->name('orders.cancel');
+    Route::post('/orders/payment/{id}', [CheckoutController::class, 'getPaymentToken'])->name('orders.payment');
     Route::post('/logout', [App\Http\Controllers\AuthController::class, 'logout'])->name('auth.logout');
 });
 

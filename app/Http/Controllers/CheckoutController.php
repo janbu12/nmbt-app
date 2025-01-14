@@ -103,7 +103,6 @@ class CheckoutController extends Controller
             'return_date' => $request->return_date,
             'total_price' => $request->grandtotal,
             'status' => 'unpaid',
-            'payment_method' => 'qris'
         ]);
 
         foreach ($request->selected_items as $itemId) {
@@ -116,13 +115,11 @@ class CheckoutController extends Controller
             ]);
         }
 
-        // Set your Merchant Server Key
+        Cart::where('user_id', Auth::id())->whereIn('id', $request->selected_items)->delete();
+
         \Midtrans\Config::$serverKey = env('MIDTRANS_SERVER_KEY');
-        // Set to Development/Sandbox Environment (default). Set to true for Production Environment (accept real transaction).
         \Midtrans\Config::$isProduction = false;
-        // Set sanitization on (default)
         \Midtrans\Config::$isSanitized = true;
-        // Set 3DS transaction for credit card to true
         \Midtrans\Config::$is3ds = true;
 
         $grossAmount = intval(round($request->grandtotal));
@@ -131,7 +128,7 @@ class CheckoutController extends Controller
 
         $params = [
             'transaction_details' => [
-                'order_id' => 'order-' . $rent->id,
+                'order_id' => 'order-' . $rent->id . '-' . time(),
                 'gross_amount' => $grossAmount,
             ],
             'customer_details' => [
@@ -144,16 +141,38 @@ class CheckoutController extends Controller
 
         Log::info('Params to Midtrans:', $params);
 
-        // $snapToken = \Midtrans\Snap::getSnapToken($params);
-        // return view('payment', compact('snapToken', 'rent'));
-
         try {
             // Dapatkan token pembayaran
             $snapToken = \Midtrans\Snap::getSnapToken($params);
-            return response()->json(['status' => 'success', 'snapToken' => $snapToken]);
+
+            $rent->snap_token = $snapToken;
+            $rent->save();
+
+            return response()->json(['status' => 'success', 'snapToken' => $snapToken, 'rent' => $rent]);
         } catch (\Exception $e) {
             // Tangani kesalahan dan kembalikan pesan kesalahan
             return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
         }
     }
+
+    public function getPaymentToken($id)
+    {
+        $rent = Rent::findOrFail($id);
+
+        if ($rent->status_rent !== 'unpaid') {
+            return response()->json(['status' => 'error', 'message' => 'Transaksi tidak dapat dibayar.'], 400);
+        }
+
+        return response()->json(['status' => 'success', 'snapToken' => $rent->snap_token]);
+    }
+
+    public function cancel($id)
+    {
+        $rent = Rent::findOrFail($id);
+        $rent->status_rent = 'cancelled';
+        $rent->save();
+
+        return response()->json(['status' => 'success', 'message' => 'Pesanan berhasil dibatalkan.']);
+    }
+
 }
