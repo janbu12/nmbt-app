@@ -32,6 +32,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
     });
 
+    Route::post('/payment', [CheckoutController::class, 'pay'])->name('payment');
     Route::post('/logout', [App\Http\Controllers\AuthController::class, 'logout'])->name('auth.logout');
 });
 

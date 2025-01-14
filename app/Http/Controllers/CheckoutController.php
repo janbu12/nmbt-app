@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cart;
+use App\Models\Rent;
+use App\Models\RentDetailsModel;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class CheckoutController extends Controller
 {
@@ -72,8 +75,8 @@ class CheckoutController extends Controller
 
         return view('checkout', [
             'items' => $items,
-            'pickup' => $pickupDateFormatted,
-            'return' => $returnDateFormatted,
+            'pickup' => Carbon::parse($pickupDate)->format('Y-m-d'),
+            'return' => Carbon::parse($returnDate)->format('Y-m-d'),
             'days' => $days,
             'totalDays' => $totalDays,
             'userName' => $userName,
@@ -81,5 +84,67 @@ class CheckoutController extends Controller
             'subtotal' => $subtotal,
             'grandtotal' => $grandtotal,
         ]);
+    }
+
+    public function pay (Request $request)
+    {
+        // dd($request);
+
+        $request->validate([
+            'pickup_date' => 'required|date',
+            'return_date' => 'required|date',
+            'selected_items' => 'required|array',
+            'grandtotal' => 'required|numeric',
+        ]);
+
+        $rent = Rent::create([
+            'user_id' => Auth::id(),
+            'pickup_date' => $request->pickup_date,
+            'return_date' => $request->return_date,
+            'total_price' => $request->grandtotal,
+            'status' => 'unpaid',
+            'payment_method' => 'qris'
+        ]);
+
+        foreach ($request->selected_items as $itemId) {
+            $item = Cart::find($itemId);
+            RentDetailsModel::create([
+                'rent_id' => $rent->id,
+                'product_id' => $item->product_id,
+                'quantity' => $item->quantity,
+                'subtotal' => $item->product->price,
+            ]);
+        }
+
+        // Set your Merchant Server Key
+        \Midtrans\Config::$serverKey = env('MIDTRANS_SERVER_KEY');
+        // Set to Development/Sandbox Environment (default). Set to true for Production Environment (accept real transaction).
+        \Midtrans\Config::$isProduction = false;
+        // Set sanitization on (default)
+        \Midtrans\Config::$isSanitized = true;
+        // Set 3DS transaction for credit card to true
+        \Midtrans\Config::$is3ds = true;
+
+        $grossAmount = round($request->grandtotal);
+
+        Log::info('Gross Amount: ' . $grossAmount);
+
+        $params = [
+            'transaction_details' => [
+                'order_id' => 'order-' . $rent->id,
+                'gross_amount' => $grossAmount,
+            ],
+            'customer_details' => [
+                'first_name' => $request->user()->firstname,
+                'last_name' => $request->user()->lastname,
+                'email' => $request->user()->email,
+                'phone' => $request->user()->phone,
+            ],
+        ];
+
+        Log::info('Params to Midtrans:', $params);
+
+        $snapToken = \Midtrans\Snap::getSnapToken($params);
+        return view('payment', compact('snapToken', 'rent'));
     }
 }
