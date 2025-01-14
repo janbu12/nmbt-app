@@ -4,17 +4,17 @@
         {{-- Sidebar Component --}}
         <div class="flex flow-row mt-2">
             <div class="w-full text-start font-bold text-4xl text-secondary2 p-3">
-                Riwayat Transaksi
+                Transaction History
             </div>
 
             <form id="filter-form" method="GET" action="{{ route('admin.history') }}" class="h-full mb-4 flex items-center gap-4">
                 <!-- Filter Status -->
                 <select name="status" class="p-2 rounded-lg border border-gray-300" onchange="document.getElementById('filter-form').submit()">
-                    <option value="">Semua Status</option>
-                    <option value="renting" {{ request('status') == 'renting' ? 'selected' : '' }}>Renting</option>
-                    <option value="done" {{ request('status') == 'done' ? 'selected' : '' }}>Done</option>
+                    <option value="">All Status</option>
                     <option value="process" {{ request('status') == 'process' ? 'selected' : '' }}>Process</option>
                     <option value="ready_pickup" {{ request('status') == 'ready_pickup' ? 'selected' : '' }}>Pickup Ready</option>
+                    <option value="renting" {{ request('status') == 'renting' ? 'selected' : '' }}>Renting</option>
+                    <option value="done" {{ request('status') == 'done' ? 'selected' : '' }}>Done</option>
                 </select>
             
                 <!-- Input Pencarian -->
@@ -22,7 +22,7 @@
                     type="text"
                     name="search"
                     value="{{ request('search') }}"
-                    placeholder="Cari nama atau ID"
+                    placeholder="Search by name or ID"
                     class="p-2 rounded-lg border border-gray-300 focus"
                     oninput="filterDelay()"
                 >
@@ -33,10 +33,10 @@
             <table class="table-auto w-full h-full text-left bg-white">
                 <thead class="bg-blue-200 text-center">
                     <tr>
-                        <th class="px-4 py-2">No Pesanan</th>
-                        <th class="px-4 py-2">Tanggal Ambil</th>
-                        <th class="px-4 py-2">Tanggal Kembali</th>
-                        <th class="px-4 py-2">Nama Pelanggan</th>
+                        <th class="px-4 py-2">Order Num.</th>
+                        <th class="px-4 py-2">Pickup Date</th>
+                        <th class="px-4 py-2">Return Date</th>
+                        <th class="px-4 py-2">Customer Name</th>
                         <th class="px-4 py-2">Total</th>
                         <th class="px-4 py-2">Status</th>
                         <th class="px-4 py-2">Detail</th>

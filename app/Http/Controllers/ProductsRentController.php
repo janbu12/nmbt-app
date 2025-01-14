@@ -35,9 +35,9 @@ class ProductsRentController extends Controller
         if ($request->has('sort')) {
             $sort = $request->input('sort');
             // Menambahkan logika pengurutan berdasarkan 'sort'
-            if ($sort == 'Harga Terkecil') {
+            if ($sort == 'Lowest Price') {
                 $query->orderBy('price', 'asc');
-            } elseif ($sort == 'Harga Terbesar') {
+            } elseif ($sort == 'Highest Price') {
                 $query->orderBy('price', 'desc');
             } elseif ($sort == 'Rating') {
                 // Melakukan join dengan tabel reviews dan menghitung rata-rata rating
@@ -52,7 +52,7 @@ class ProductsRentController extends Controller
         $products = $query->paginate(6);
 
         $categories = Category::all();
-        $filters = ['Rating', 'Harga Terkecil', 'Harga Terbesar'];
+        $filters = ['Rating', 'Lowest Price', 'Highest Price'];
         $totalProducts = Product::count();
 
         return view('products.index', compact('products', 'categories', 'filters', 'totalProducts'));

@@ -24,7 +24,7 @@
 
             {{-- Kategori Bar --}}
             <div class="flex flex-col items-center mt-8 gap-5">
-                <h1 class="text-tertiery1 font-medium text-2xl">Kategori</h1>
+                <h1 class="text-tertiery1 font-medium text-2xl">Category</h1>
                 <div class="flex flex-wrap gap-2 items-center justify-center">
                     @foreach ($categories as $category)
                         @php
@@ -54,7 +54,7 @@
                 </div>
             </div>
             <div class="flex flex-col items-center mt-8 gap-5">
-                <h1 class="text-tertiery1 font-medium text-2xl">Urutkan Berdasarkan</h1>
+                <h1 class="text-tertiery1 font-medium text-2xl">Sort By</h1>
                 <div class="flex flex-wrap gap-2 items-center justify-center">
                     @foreach ($filters as $filter)
                         <a href="{{ route('products.index', array_merge(request()->query(), ['sort' => $filter])) }}">
