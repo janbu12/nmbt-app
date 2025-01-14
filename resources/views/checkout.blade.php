@@ -97,7 +97,7 @@
                     <input type="hidden" name="selected_items[]" value="{{ $item->id }}">
                 @endforeach
                 <div class="flex justify-end mt-4">
-                    <button type="submit" class="bg-secondary2 text-white px-4 py-2 rounded-lg">Ya, Bayar</button>
+                    <button type="button" id="confirmPayment" class="bg-secondary2 text-white px-4 py-2 rounded-lg">Ya, Bayar</button>
                     <button id="cancelPayment" type="button" class="ml-2 bg-gray-300 text-black px-4 py-2 rounded-lg">Batal</button>
                 </div>
             </form>
@@ -105,6 +105,7 @@
     </div>
 
     <x-slot name="scripts">
+        <script type="text/javascript" src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="{{ config('midtrans.client_key') }}"></script>
         <script>
             document.getElementById('payButton').onclick = function () {
                 // Tampilkan modal konfirmasi
@@ -115,6 +116,73 @@
                 // Sembunyikan modal konfirmasi
                 document.getElementById('paymentModal').classList.add('hidden');
             };
+
+            document.getElementById('confirmPayment').onclick = function () {
+    // Ambil data yang diperlukan
+    const pickupDate = '{{ $pickup }}';
+    const returnDate = '{{ $return }}';
+    const selectedItems = @json($items->pluck('id'));
+    const grandtotal = Math.round({{ $grandtotal }}); // Pastikan grandtotal dibulatkan
+
+    console.log('Data yang akan dikirim:', {
+        pickup_date: pickupDate,
+        return_date: returnDate,
+        selected_items: selectedItems,
+        grandtotal: grandtotal
+    });
+
+    // Kirim permintaan untuk mendapatkan snapToken
+    fetch('{{ route('payment') }}', { // Pastikan route ini benar
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+        },
+        body: JSON.stringify({
+            pickup_date: pickupDate,
+            return_date: returnDate,
+            selected_items: selectedItems,
+            grandtotal: grandtotal
+        })
+    })
+    .then(response => {
+        if (!response.ok) {
+            return response.text().then(text => { throw new Error(text); });
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log('Data yang diterima dari server:', data);
+        if (data.status === 'success') {
+            // Lakukan pembayaran dengan snapToken
+            window.snap.pay(data.snapToken, {
+                onSuccess: function(result) {
+                    console.log(result);
+                    // Handle success
+                },
+                onPending: function(result) {
+                    console.log(result);
+                    // Handle pending
+                },
+                onError: function(result) {
+                    console.log(result);
+                    // Handle error
+                },
+                onClose: function(){
+                    /* You may add your own implementation here */
+                    alert('you closed the popup without finishing the payment');
+                }
+            });
+        } else {
+            alert('Terjadi kesalahan: ' + data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Terjadi kesalahan saat memproses pembayaran: ' + error.message);
+    });
+};
+
         </script>
     </x-slot>
 </x-app-layout>
