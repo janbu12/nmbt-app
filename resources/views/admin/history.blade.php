@@ -51,7 +51,11 @@
                         <td class="px-4 py-2">{{ $rent->return_date }}</td>
                         <td class="px-4 py-2">{{ $rent->full_name }}</td>
                         <td class="px-4 py-2">Rp. {{ number_format($rent->total_price, 0, ',', '.') }}</td>
-                        <td class="px-4 py-2">{{ $rent->status_rent }}</td>
+                        <td class="px-4 py-2">
+                            {{  ($rent->status_rent == "done" ? 'Done' :
+                                ($rent->status_rent == 'ready_pickup' ? 'Ready Pickup':
+                                ($rent->status_rent == 'renting' ? 'Renting':
+                                ($rent->status_rent == 'process' ? 'Process': 'else'))))}}</td>
                         <td class="px-4 py-2 text-center">
                             <a href="{{ route('admin.show', $rent->id) }}" class="p-2 rounded-md bg-secondary3 text-bg3 hover:bg-bg1 hover:text-secondary3 hover:border-bg1">
                                 Detail
