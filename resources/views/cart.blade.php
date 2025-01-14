@@ -3,6 +3,25 @@
         <div class="w-full text-center bg-red-500 text-white p-2 rounded-lg">
             {{ session('error') }}
         </div>
+    @elseif ($errors->any())
+        <div x-data="{ show: true }" x-init="setTimeout(() => show = false, 3000)" x-show="show" class="toast toast-end z-50">
+            @foreach ($errors->all() as $error)
+                <div class="alert alert-error">
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="h-6 w-6 shrink-0 stroke-current"
+                        fill="none"
+                        viewBox="0 0 24 24">
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <span>{{ $error }}</span>
+                </div>
+            @endforeach
+        </div>
     @endif
 
         <div class="py-5 px-10 flex gap-10 h-full">
@@ -161,7 +180,7 @@
         </div>
     </div>
 
-    <form id="checkoutForm" action="{{ route('checkout.index') }}" method="GET" style="display: none;">
+    <form id="checkoutForm" action="{{ route('cart.invoice.index') }}" method="POST" style="display: none;">
         @csrf
         <input type="hidden" name="pickup_date" id="checkoutPickupDate">
         <input type="hidden" name="return_date" id="checkoutReturnDate">
@@ -271,6 +290,35 @@
                     totalHargaDisplay.textContent = formatCurrency(totalWithTax);
                 };
 
+                startDateInput.addEventListener('change', () => {
+                    const startDate = new Date(startDateInput.value);
+                    const endDate = new Date(endDateInput.value);
+                    const nowDate = new Date();
+
+                    if ( startDate < nowDate) {
+                        Swal.fire({
+                            position: "center",
+                            icon: "error",
+                            title: "Tanggal awal tidak boleh kurang dari tanggal hari ini.",
+                            showConfirmButton: false,
+                            timer: 2000,
+                        });
+                        startDateInput.value = '';
+                    } else {
+                        const days = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24));
+                        if (days < 2) {
+                            Swal.fire({
+                                position: "center",
+                                icon: "error",
+                                title: "Tanggal akhir minimal 2 hari dari tanggal awal",
+                                showConfirmButton: false,
+                                timer: 2000,
+                            });
+                            endDateInput.value = ''; // Reset end date
+                        }
+                    }
+                });
+
                 // Validate dates on change of end date
                 endDateInput.addEventListener('change', () => {
                     const startDate = new Date(startDateInput.value);
@@ -332,13 +380,19 @@
                     document.getElementById('checkoutSelectedItems').value = '';
                     document.getElementById('checkoutQuantities').value = '';
 
+                    // Hapus semua input tersembunyi sebelumnya
+                    const checkoutForm = document.getElementById('checkoutForm');
+                    checkoutForm.querySelectorAll('input[name="selected_items[]"], input[name="quantities[]"]').forEach(input => {
+                        input.remove();
+                    });
+
                     // Create hidden inputs for each selected item and quantity
                     selectedItems.forEach(item => {
                         const input = document.createElement('input');
                         input.type = 'hidden';
                         input.name = 'selected_items[]';
                         input.value = item;
-                        document.getElementById('checkoutForm').appendChild(input);
+                        checkoutForm.appendChild(input);
                     });
 
                     quantities.forEach(quantity => {
@@ -346,7 +400,7 @@
                         input.type = 'hidden';
                         input.name = 'quantities[]';
                         input.value = quantity;
-                        document.getElementById('checkoutForm').appendChild(input);
+                        checkoutForm.appendChild(input);
                     });
 
                     // Set values to hidden inputs for dates
@@ -354,7 +408,7 @@
                     document.getElementById('checkoutReturnDate').value = endDateInput.value;
 
                     // Submit the form
-                    document.getElementById('checkoutForm').submit();
+                    checkoutForm.submit();
                 });
             });
         </script>
