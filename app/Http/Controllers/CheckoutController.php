@@ -128,7 +128,7 @@ class CheckoutController extends Controller
 
         $params = [
             'transaction_details' => [
-                'order_id' => 'order-' . $rent->id . '-' . time(),
+                'order_id' => $rent->id,
                 'gross_amount' => $grossAmount,
             ],
             'customer_details' => [
@@ -173,6 +173,19 @@ class CheckoutController extends Controller
         $rent->save();
 
         return response()->json(['status' => 'success', 'message' => 'Pesanan berhasil dibatalkan.']);
+    }
+
+    public function updatePaymentMethod(Request $request, $id)
+    {
+        $request->validate([
+            'payment_method' => 'required|string',
+        ]);
+
+        $rent = Rent::findOrFail($id);
+        $rent->payment_method = $request->payment_method;
+        $rent->save();
+
+        return response()->json(['status' => 'success', 'message' => 'Payment method updated successfully.']);
     }
 
 }
