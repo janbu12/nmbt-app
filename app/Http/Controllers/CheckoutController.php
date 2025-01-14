@@ -125,7 +125,7 @@ class CheckoutController extends Controller
         // Set 3DS transaction for credit card to true
         \Midtrans\Config::$is3ds = true;
 
-        $grossAmount = round($request->grandtotal);
+        $grossAmount = intval(round($request->grandtotal));
 
         Log::info('Gross Amount: ' . $grossAmount);
 
@@ -144,7 +144,16 @@ class CheckoutController extends Controller
 
         Log::info('Params to Midtrans:', $params);
 
-        $snapToken = \Midtrans\Snap::getSnapToken($params);
-        return view('payment', compact('snapToken', 'rent'));
+        // $snapToken = \Midtrans\Snap::getSnapToken($params);
+        // return view('payment', compact('snapToken', 'rent'));
+
+        try {
+            // Dapatkan token pembayaran
+            $snapToken = \Midtrans\Snap::getSnapToken($params);
+            return response()->json(['status' => 'success', 'snapToken' => $snapToken]);
+        } catch (\Exception $e) {
+            // Tangani kesalahan dan kembalikan pesan kesalahan
+            return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
+        }
     }
 }
