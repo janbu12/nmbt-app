@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\InvoiceMail;
 use App\Models\Cart;
 use App\Models\Rent;
 use App\Models\RentDetailsModel;
@@ -9,8 +10,9 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
-class CheckoutController extends Controller
+class InvoiceController extends Controller
 {
     public function index(Request $request)
     {
@@ -74,7 +76,7 @@ class CheckoutController extends Controller
         }
 
 
-        return view('checkout', [
+        return view('cart.invoice', [
             'items' => $items,
             'pickup' => Carbon::parse($pickupDate)->format('Y-m-d'),
             'return' => Carbon::parse($returnDate)->format('Y-m-d'),
@@ -84,6 +86,7 @@ class CheckoutController extends Controller
             'total' => $total,
             'subtotal' => $subtotal,
             'grandtotal' => $grandtotal,
+            'email' => Auth::User()->email,
         ]);
     }
 
@@ -187,6 +190,35 @@ class CheckoutController extends Controller
         $rent->save();
 
         return response()->json(['status' => 'success', 'message' => 'Payment method updated successfully.']);
+    }
+
+    public function sendToEmail(Request $request)
+    {
+        $request->validate([
+            'user_name' =>'required|string',
+            'pickup_date' =>'required',
+            'return_date' =>'required',
+            'items' =>'required|array',
+            'grandtotal' =>'required|numeric',
+        ]);
+
+        $userName = $request->input('user_name');
+        $pickup = $request->input('pickup_date');
+        $return = $request->input('return_date');
+        $grandtotal = $request->input('grandtotal');
+        $orderId = $request->input('order_id');
+
+        // Ambil detail sewa berdasarkan order_id
+        $rentDetails = RentDetailsModel::where('rent_id', $orderId)->with('product')->get();
+
+        // Hitung total untuk setiap item
+        foreach ($rentDetails as $detail) {
+            $detail->total = $detail->quantity * $detail->product->price; // Hitung total berdasarkan kuantitas dan harga produk
+        }
+
+        Mail::to($request->input('email'))->send(new InvoiceMail($userName, $pickup, $return, $rentDetails, $grandtotal));
+
+        return response()->json(['status' => 'success']);
     }
 
 }

@@ -25,7 +25,7 @@ class CartController extends Controller
         });
 
 
-        return view('cart', [
+        return view('cart.index', [
             'cartItems' => $carts,
             'subtotal' => $subtotal,
         ]);

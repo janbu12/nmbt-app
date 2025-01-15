@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\AdminHistoryController;
 use App\Http\Controllers\CartController;
-use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\UserHistoryController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
@@ -29,15 +29,18 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/', [CartController::class, 'index'])->name('cart.index');
         Route::delete('/{id}', [CartController::class, 'destroy'])->name('cart.destroy');
         Route::patch('/{id}', [CartController::class, 'update'])->name('cart.update');
-        Route::post('/invoice', [CheckoutController::class, 'index'])->name('cart.invoice.index');
+        Route::post('/invoice', [InvoiceController::class, 'index'])->name('cart.invoice.index')->middleware('verified');
         Route::get('/invoice')->middleware('post');
     });
 
-    Route::post('/payment', [CheckoutController::class, 'pay'])->name('payment');
+    Route::post('/payment', [InvoiceController::class, 'pay'])->name('payment')->middleware('verified');
     Route::get('/payment')->middleware('post');
-    Route::post('/orders/cancel/{id}', [CheckoutController::class, 'cancel'])->name('orders.cancel');
-    Route::post('/orders/payment/{id}', [CheckoutController::class, 'getPaymentToken'])->name('orders.payment');
-    Route::patch('/orders/payment/{id}', [CheckoutController::class, 'updatePaymentMethod'])->name('orders.payment.update');
+    Route::post('/orders/cancel/{id}', [InvoiceController::class, 'cancel'])->name('orders.cancel')->middleware('verified');
+    Route::post('/orders/payment/{id}', [InvoiceController::class, 'getPaymentToken'])->name('orders.payment')->middleware('verified');
+    Route::patch('/orders/payment/{id}', [InvoiceController::class, 'updatePaymentMethod'])->name('orders.payment.update')->middleware('verified');
+
+    Route::post('/send-invoice', [InvoiceController::class, 'sendToEmail'])->name('invoice.send');
+
     Route::post('/logout', [App\Http\Controllers\AuthController::class, 'logout'])->name('auth.logout');
 });
 
@@ -65,9 +68,9 @@ Route::middleware(['auth','role:admin'])->group(function () {
 
 
 // Route Email
-Route::get('/email/verify', function () {
+Route::get('/email/verify', function (Request $request) {
     return view('auth.verify-email');
-})->middleware('auth')->name('verification.notice');
+})->middleware(['auth', 'unverified'])->name('verification.notice');
 
 Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
     $request->fulfill();
@@ -76,7 +79,7 @@ Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $requ
 
 Route::post('/email/verification-notification', function (Request $request) {
     $request->user()->sendEmailVerificationNotification();
-    return back()->with('message', 'Verification link sent!');
+    return redirect()->back()->with('message', 'Verification link sent!');
 })->middleware(['auth', 'throttle:6,1'])->name('verification.send');
 
 Route::get('/invoice', function() {

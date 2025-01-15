@@ -1,5 +1,5 @@
-<x-app-layout title="Edit Profile" bodyClass="bg-tertiery3 items-center gap-4">
-    <div class="py-8 gap-3 bg-white w-full lg:max-w-2xl flex flex-col items-center rounded-lg drop-shadow-md">
+<x-app-layout title="Edit Profile" bodyClass="bg-tertiery3 items-center">
+    <div class="py-8 gap-3 bg-white w-full lg:max-w-2xl flex flex-col items-center rounded-lg drop-shadow-md my-4">
         <h1 class=" text-xl font-semibold w-full text-center">Edit Profile</h1>
         <form action="{{route('user.profile.update')}}" method="POST" class="w-full px-6" enctype="multipart/form-data">
             @csrf
@@ -86,11 +86,27 @@
                         x-init="setTimeout(() => show = false, 2000)"
                         class="text-sm bg-green-500 text-white hover:bg-green-600 p-2 rounded-md"
                     >{{session('success')}}</p>
+                @elseif (session('message'))
+                    <div class="alert alert-success"
+                        x-data="{ show: true }"
+                        x-show="show"
+                        x-transition
+                        x-init="setTimeout(() => show = false, 2000)"
+                    >
+                        <span>{{session('message')}}</span>
+                    </div>
                 @endif
 
                 <x-button type="submit">Update Profile</x-button>
             </div>
         </form>
+        {{-- Form untuk Verifikasi Email --}}
+        @if (!auth()->user()->hasVerifiedEmail())
+            <form method="POST" action="{{ route('verification.send') }}" class="mt-4">
+                @csrf
+                <x-button type="submit" variant="secondary">Send Verification Email</x-button>
+            </form>
+        @endif
     </div>
 
     <x-slot name="scripts">

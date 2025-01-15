@@ -3,8 +3,6 @@
         Pesanan
     </div>
 
-    {{-- @dump($pickup); --}}
-
     {{-- Invoice card --}}
     <div class="bg-white rounded-lg shadow-md p-4 h-screen w-3/6 flex flex-col justify-between">
         <div class="gap-3">
@@ -86,6 +84,30 @@
     <x-slot name="scripts">
         <script type="text/javascript" src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="{{ config('midtrans.client_key') }}"></script>
         <script>
+            function sendToEmail(userName, pickupDate, returnDate, items, grandtotal, email, orderId) {
+                fetch('{{ route("invoice.send") }}', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        },
+                        body: JSON.stringify({
+                            user_name: userName,
+                            pickup_date: pickupDate,
+                            return_date: returnDate,
+                            items: items,
+                            grandtotal: grandtotal,
+                            email: email,
+                            order_id: orderId,
+                        })
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Failed to send invoice email');
+                        }
+                    })
+            }
+
             document.getElementById('payButton').onclick = function () {
                 // Ambil data yang diperlukan
                 const pickupDate = '{{ $pickup }}';
@@ -123,7 +145,6 @@
                 .then(data => {
                     console.log('Data yang diterima dari server:', data);
                     if (data.status === 'success') {
-                        // Lakukan pembayaran dengan snapToken
                         window.snap.pay(data.snapToken, {
                             onSuccess: function(result) {
                                 console.log(result);
@@ -167,6 +188,8 @@
                                 // document.getElementById('paymentModal').classList.add('hidden');
                             }
                         });
+                        // Kirim invoice email ke pengguna
+                        sendToEmail('{{ $userName }}', pickupDate, returnDate, selectedItems, grandtotal, '{{ $email }}', data.rent.id);
                     } else {
                         alert('Terjadi kesalahan: ' + data.message);
                     }

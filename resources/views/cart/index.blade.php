@@ -295,6 +295,11 @@
                     const endDate = new Date(endDateInput.value);
                     const nowDate = new Date();
 
+                    startDate.setHours(23, 59, 59, 59);
+                    endDate.setHours(23, 59, 59, 59);
+
+                    // console.log(nowDate, startDate)
+
                     if ( startDate < nowDate) {
                         Swal.fire({
                             position: "center",
@@ -323,6 +328,9 @@
                 endDateInput.addEventListener('change', () => {
                     const startDate = new Date(startDateInput.value);
                     const endDate = new Date(endDateInput.value);
+
+                    startDate.setHours(23, 59, 59, 59);
+                    endDate.setHours(23, 59, 59, 59);
 
                     // Validate end date
                     if (endDate < startDate) {
