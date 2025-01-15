@@ -5,9 +5,9 @@
         <div class="bg-white mr-8 my-8 rounded-3xl drop-shadow-md py-8 px-6 max-w-sm">
 
             {{-- Search Bar --}}
-            <form action="{{ route('products.index') }}" method="GET">
+            <form action="{{ route('products.index') }}" method="GET" >
                 <label class="border py-2.5 px-4 rounded-lg border-tertiery1 flex items-center gap-2 hover:cursor-text text-tertiery1 group">
-                    <input class="w-full focus:outline-none group/Focus:" name="search" value="{{ request('search') }}" placeholder="Search" />
+                    <input @keydown.enter="Alpine.store('loadingState').showLoading();" class="w-full focus:outline-none group/Focus:" name="search" value="{{ request('search') }}" placeholder="Search" />
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 16 16"
@@ -59,7 +59,7 @@
                         $query['category'] = $newCategories;
                         @endphp
 
-                        <a href="{{ route('products.index', $query) }}">
+                        <a href="{{ route('products.index', $query) }}" @click="Alpine.store('loadingState').showLoading();">
                             <button class="px-3 text-sm p-2 rounded-lg {{ $isSelected ? 'bg-tertiery3 text-secondary3' : 'bg-secondary3 text-bg3 hover:bg-tertiery3 hover:text-secondary3' }}">
                                 {{ $category->category_name }}
                             </button>
@@ -71,7 +71,7 @@
                 <h1 class="text-tertiery1 font-medium text-2xl">Sort By</h1>
                 <div class="flex flex-wrap gap-2 items-center justify-center">
                     @foreach ($filters as $filter)
-                        <a href="{{ route('products.index', array_merge(request()->query(), ['sort' => $filter])) }}">
+                        <a href="{{ route('products.index', array_merge(request()->query(), ['sort' => $filter])) }}" @click="Alpine.store('loadingState').showLoading();">
                             <button class="px-3 text-sm p-2 rounded-lg {{ request('sort') == $filter ? 'bg-tertiery3 text-secondary3' : 'bg-secondary3 text-bg3 hover:bg-tertiery3 hover:text-secondary3' }}">
                                 {{ $filter}}
                             </button>
@@ -103,7 +103,7 @@
                         :price="$product->price"
                         :category="$product->category->category_name ?? 'Tidak Ada Kategori'"
                     /> --}}
-                    <a href="{{ route('products.show', $product->id) }}" class="card bg-white w-full md:w-80 xl:w-1/3 2xl:w-96 max-xl: h-auto shadow-lg drop-shadow cursor-pointer hover:scale-90 transition group">
+                    <a @click="Alpine.store('loadingState').showLoading();" href="{{ route('products.show', $product->id) }}" class="card bg-white w-full md:w-80 xl:w-1/3 2xl:w-96 max-xl: h-auto shadow-lg drop-shadow cursor-pointer hover:scale-90 transition group">
                         <figure>
                             @if ($product->images->isNotEmpty())
                                 <div class="lg:h-48 lg:h-62">

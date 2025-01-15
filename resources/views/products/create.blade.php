@@ -1,5 +1,5 @@
 <x-app-layout title="{{$page_meta['title']}}" bodyClass="bg-tertiery3 items-center">
-    <form action="{{ $page_meta['url'] }}" method="POST" enctype="multipart/form-data" class="flex flex-col">
+    <form id="createForm" action="{{ $page_meta['url'] }}" method="POST" enctype="multipart/form-data" class="flex flex-col">
         @csrf
 
         {{-- Main Product Info --}}
@@ -81,7 +81,7 @@
 
             {{-- Submit Button --}}
             <div class="m-auto">
-                <x-button variant="secondary" type="submit" class="max-w-fit">Submit</x-button>
+                <x-button variant="secondary" type="submit" class="max-w-fit" loading="none">Submit</x-button>
             </div>
         </div>
     </form>
@@ -156,6 +156,12 @@
                     });
                 });
             @endif
+
+            document.getElementById('createForm').addEventListener('submit', function (event) {
+                event.preventDefault();
+                Alpine.store('loadingState').showLoading();
+                this.submit();
+            })
         </script>
     </x-slot>
 </x-app-layout>

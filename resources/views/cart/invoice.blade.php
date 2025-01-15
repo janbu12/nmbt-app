@@ -1,4 +1,4 @@
-<x-app-layout title="Invoice" bodyClass="bg-tertiery3 gap-4 h-screen items-center">
+<x-app-layout title="Invoice" bodyClass="bg-tertiery3 gap-4 h-screen items-center" x-data="{ isLoading: false }">
     <div class="pt-3 text-4xl font-semibold text-secondary2">
         Pesanan
     </div>
@@ -122,6 +122,8 @@
                     grandtotal: grandtotal
                 });
 
+                Alpine.store('loadingState').showLoading();
+
                 // Kirim permintaan untuk mendapatkan snapToken
                 fetch('{{ route('payment') }}', { // Pastikan route ini benar
                     method: 'POST',
@@ -145,6 +147,7 @@
                 .then(data => {
                     console.log('Data yang diterima dari server:', data);
                     if (data.status === 'success') {
+                        sendToEmail('{{ $userName }}', pickupDate, returnDate, selectedItems, grandtotal, '{{ $email }}', data.rent.id);
                         window.snap.pay(data.snapToken, {
                             onSuccess: function(result) {
                                 console.log(result);
@@ -152,6 +155,7 @@
                             },
                             onPending: function(result) {
                                 console.log(result);
+                                 Alpine.store('loadingState').showLoading();
                                 fetch(`/orders/payment/${result.order_id}`, {
                                     method: 'PATCH',
                                     headers: {
@@ -184,12 +188,11 @@
                             onClose: function(){
                                 /* You may add your own implementation here */
                                 alert('you closed the popup without finishing the payment');
+                                Alpine.store('loadingState').showLoading();
                                 window.location.href = '/user/history?status=unpaid';
                                 // document.getElementById('paymentModal').classList.add('hidden');
                             }
                         });
-                        // Kirim invoice email ke pengguna
-                        sendToEmail('{{ $userName }}', pickupDate, returnDate, selectedItems, grandtotal, '{{ $email }}', data.rent.id);
                     } else {
                         alert('Terjadi kesalahan: ' + data.message);
                     }
@@ -197,6 +200,9 @@
                 .catch(error => {
                     console.error('Error:', error);
                     alert('Terjadi kesalahan saat memproses pembayaran: ' + error.message);
+                })
+                .finally(() => {
+                    Alpine.store('loadingState').hideLoading();
                 });
             };
 

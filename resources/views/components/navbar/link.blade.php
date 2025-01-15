@@ -1,4 +1,4 @@
-@props(['href', 'variant' => 'default'])
+@props(['href', 'variant' => 'default','loading' => 'default'])
 
 @php
     $isActive = request()->is(trim($href, '/')) || request()->is(trim($href, '/') . '/*');
@@ -16,6 +16,9 @@
                 ? 'text-white hover:text-gray-300'
                 : 'text-tertiery1 hover:text-secondary1')
     }} hover:scale-110  transition-all duration-300 nav-link"
+    @if ($loading !== 'none')
+        @click="Alpine.store('loadingState').showLoading();"
+    @endif
 >
     {{ $slot }}
 </a>

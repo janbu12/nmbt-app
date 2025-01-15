@@ -2,8 +2,8 @@
     <div class="w-full px-10 ">
         <div class="breadcrumbs text-sm text-tertiery1 mt-4">
             <ul>
-                <li><a href="/products">NMBT</a></li>
-                <li><a href="/products?category[0]={{ $product->category->id }}">{{ $product->category->category_name }}</a></li>
+                <li @click="Alpine.store('loadingState').showLoading();"><a href="/products">NMBT</a></li>
+                <li @click="Alpine.store('loadingState').showLoading();"><a href="/products?category[0]={{ $product->category->id }}">{{ $product->category->category_name }}</a></li>
                 <li>{{ $product->name }}</li>
             </ul>
         </div>
@@ -168,6 +168,7 @@
                             <div class="flex gap-2">
                                 @foreach (range(1, 5) as $star)
                                     <button
+                                        @click="Alpine.store('loadingState').showLoading();"
                                         type="submit"
                                         name="rating"
                                         value="{{ $star }}"

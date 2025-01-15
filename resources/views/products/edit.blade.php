@@ -1,5 +1,5 @@
 <x-app-layout title="{{ $page_meta['title'] }}" bodyClass="bg-tertiery3 items-center">
-    <form action="{{ $page_meta['url'] }}" method="POST" enctype="multipart/form-data" class="flex flex-col">
+    <form id="editForm" action="{{ $page_meta['url'] }}" method="POST" enctype="multipart/form-data" class="flex flex-col">
         @csrf
         @method('PUT')
 
@@ -80,7 +80,7 @@
 
             {{-- Submit Button --}}
             <div class="m-auto">
-                <x-button variant="secondary" type="submit" class="max-w-fit">Update</x-button>
+                <x-button variant="secondary" type="submit" class="max-w-fit" loading="none">Update</x-button>
             </div>
         </div>
     </form>
@@ -153,6 +153,12 @@
                     });
                 });
             @endif
+
+            document.getElementById('editForm').addEventListener('submit', function (event) {
+                event.preventDefault();
+                Alpine.store('loadingState').showLoading();
+                this.submit();
+            })
         </script>
     </x-slot>
 </x-app-layout>

@@ -1,7 +1,7 @@
 <x-app-layout title="Edit Profile" bodyClass="bg-tertiery3 items-center">
     <div class="py-8 gap-3 bg-white w-full lg:max-w-2xl flex flex-col items-center rounded-lg drop-shadow-md my-4">
         <h1 class=" text-xl font-semibold w-full text-center">Edit Profile</h1>
-        <form action="{{route('user.profile.update')}}" method="POST" class="w-full px-6" enctype="multipart/form-data">
+        <form id="editProfileForm" action="{{route('user.profile.update')}}" method="POST" class="w-full px-6" enctype="multipart/form-data">
             @csrf
             @method('PUT')
             <div class="flex flex-col gap-4">
@@ -97,7 +97,7 @@
                     </div>
                 @endif
 
-                <x-button type="submit">Update Profile</x-button>
+                <x-button type="submit" loading="none">Update Profile</x-button>
             </div>
         </form>
         {{-- Form untuk Verifikasi Email --}}
@@ -112,11 +112,17 @@
     <x-slot name="scripts">
         <script>
             document.getElementById('imageUser').addEventListener('change', function(event) {
-            const [file] = event.target.files;
-            if (file) {
-                document.getElementById('imagePreview').src = URL.createObjectURL(file);
-            }
-        });
+                const [file] = event.target.files;
+                if (file) {
+                    document.getElementById('imagePreview').src = URL.createObjectURL(file);
+                }
+            });
+
+            document.getElementById('editProfileForm').addEventListener('submit', function(event) {
+                event.preventDefault();
+                Alpine.store('loadingState').showLoading();
+                this.submit();
+            })
         </script>
     </x-slot>
 
