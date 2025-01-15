@@ -14,15 +14,6 @@ use Illuminate\Support\Facades\DB;
 class ProductsRentController extends Controller
 {
     public function index(Request $request){
-
-        // $search = $request->get('search');
-
-        // $products = Product::with('images')
-        // ->when($search, function($query, $search) {
-        //     return $query->where('name', 'like', '%'.$search.'%');
-        // })
-        // ->paginate(9);
-
         $query = Product::query();
 
         // Filter berdasarkan kategori
@@ -58,7 +49,8 @@ class ProductsRentController extends Controller
         return view('products.index', compact('products', 'categories', 'filters', 'totalProducts'));
     }
 
-    public function create() {
+    public function create()
+    {
         Gate::authorize('isAdmin');
         $categories = Category::all();
         return view('products.create',[
@@ -73,6 +65,7 @@ class ProductsRentController extends Controller
 
     public function store(Request $request)
     {
+        Gate::authorize('isAdmin');
         $request->validate([
             'name' => 'required|string',
             'category_id' => 'required|exists:categories,id',
@@ -101,6 +94,7 @@ class ProductsRentController extends Controller
 
     public function edit($id)
     {
+        Gate::authorize('isAdmin');
         $product = Product::findOrFail($id);
         $categories = Category::all();
 
@@ -116,6 +110,7 @@ class ProductsRentController extends Controller
 
     public function update(Request $request, $id)
     {
+        Gate::authorize('isAdmin');
         $request->validate([
             'name' => 'required|string',
             'category_id' => 'required|exists:categories,id',

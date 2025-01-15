@@ -20,8 +20,8 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/user/profile', [App\Http\Controllers\ProfileController::class, 'update'])->name('user.profile.update');
     Route::get('/user/history', [UserHistoryController::class, 'index'])->name('history.index');
     Route::get('/user/history/{id}', [UserHistoryController::class, 'show'])->name('history.show');
-    Route::post('/products/{id}', [App\Http\Controllers\CartController::class, 'addToCart'])->name('product.cart');
-    Route::get('/products/{id}', [App\Http\Controllers\ProductsRentController::class, 'show'])->name('products.show');
+    Route::post('/products/{id}/add', [App\Http\Controllers\CartController::class, 'addToCart'])->name('product.cart');
+    Route::resource('products', App\Http\Controllers\ProductsRentController::class)->except(['index']);
 
     Route::group([
         'prefix' => 'cart',
@@ -57,14 +57,11 @@ Route::middleware(['auth','role:admin'])->group(function () {
     Route::get('/admin/dashboard', [App\Http\Controllers\AdminController::class, 'index'])->name('admin.dashboard');
     // Route::get('/admin/item',[App\Http\Controllers\ProductsRentController::class, 'index'])->name('admin.item');
     Route::get('/admin/users', [App\Http\Controllers\AdminController::class, 'users'])->name('admin.users');
-    Route::resource('products', App\Http\Controllers\ProductsRentController::class)->except(['index', 'show']);
     Route::get('/admin/history', [AdminHistoryController::class, 'index'])->name('admin.history');
     Route::get('/admin/history/{id}', [AdminHistoryController::class, 'show'])->name('admin.show');
     Route::get('/admin/history/{id}/change-status', [AdminHistoryController::class, 'status'])->name('admin.status');
 
 });
-
-
 
 
 // Route Email

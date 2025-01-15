@@ -21,17 +21,20 @@
                 </label>
             </form>
             {{-- Search Bar End--}}
-
-            <a href="{{ route('products.create') }}">
-                <x-button variant='secondary' class="w-full px-2 mt-2 flex flex-row justify-between">
-                    <div>
-                        Add Item
-                    </div>
-                    <div>
-                        +
-                    </div>
-                </x-button>
-            </a>
+            @auth
+                @if (Auth::check() && Auth::user()->role == 'admin')
+                    <a href="{{ route('products.create') }}">
+                        <x-button variant='secondary' class="w-full px-2 mt-2 flex flex-row justify-between">
+                            <div>
+                                Add Item
+                            </div>
+                            <div>
+                                +
+                            </div>
+                        </x-button>
+                    </a>
+                @endif
+            @endauth
 
             {{-- Kategori Bar --}}
             <div class="flex flex-col items-center mt-8 gap-5">
