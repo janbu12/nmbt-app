@@ -82,3 +82,11 @@ Route::post('/email/verification-notification', function (Request $request) {
 Route::get('/invoice', function() {
     return view('invoice');
 });
+
+Route::get('/test', function() {
+    return view('test');
+});
+
+Route::get('/test/response', function() {
+    return response()->json(['message'=>'success']);
+});

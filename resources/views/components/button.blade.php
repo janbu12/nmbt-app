@@ -1,6 +1,7 @@
 @props([
     'variant' => 'primary',
-    'as' => 'button'
+    'as' => 'button',
+    'loading' => 'default'
     ])
 
 @php
@@ -16,11 +17,15 @@
 @endphp
 
 @if($as == "a")
-    <a {{ $attributes->merge(['class' => "$baseClass $variantClass"]) }}>
+    <a {{ $attributes->merge(['class' => "$baseClass $variantClass"]) }} @click="Alpine.store('loadingState').showLoading();">
         {{ $slot }}
     </a>
 @else
-    <button {{ $attributes->merge(['class' => "$baseClass $variantClass"]) }}>
+    <button {{ $attributes->merge(['class' => "$baseClass $variantClass"]) }}
+        @if ($loading !== 'none')
+            @click="Alpine.store('loadingState').showLoading();"
+        @endif
+    >
         {{ $slot }}
     </button>
 @endif

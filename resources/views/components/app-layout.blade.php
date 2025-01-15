@@ -22,16 +22,41 @@
             @vite(['resources/css/app.css', 'resources/js/app.js'])
         @endif
 
+        <style>
+            .loader {
+                border-top-color: transparent; /* Warna bagian atas spinner */
+            }
+        </style>
+
     </head>
-    <body class="flex flex-col {{$bodyClass ?? ''}}">
+    <body class="flex flex-col {{$bodyClass ?? ''}}" x-data>
         @if(!request()->is('login') && !request()->is('register') && !request()->is('cart/invoice'))
             @include('components.navbar.index', ['variant' => $navbarVariant ?? 'default'])
         @endif
 
+        <div x-show="$store.loadingState.isLoading" class="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50 z-[999]">
+            <div class="loader border-t-transparent border-solid rounded-full w-16 h-16 border-4 border-blue-500 animate-spin"></div>
+        </div>
+
         {{$slot}}
+
+        <script>
+            document.addEventListener('alpine:init', () => {
+                Alpine.store('loadingState', {
+                    isLoading: false,
+                    showLoading() {
+                        this.isLoading = true;
+                    },
+                    hideLoading() {
+                        this.isLoading = false;
+                    },
+                });
+            });
+        </script>
+
+        @isset($scripts)
+            {{ $scripts }}
+        @endisset
     </body>
 
-    @isset($scripts)
-        {{ $scripts }}
-    @endisset
 </html>

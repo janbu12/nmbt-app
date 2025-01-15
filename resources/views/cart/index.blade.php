@@ -68,7 +68,7 @@
                                         Rp. {{ number_format($item->product->price, 0, ',', '.') }}
                                     </div>
                                     <div class="flex flex-row gap-2">
-                                        <form action="{{ route('cart.update', $item->id) }}" method="POST" class="inline">
+                                        <form id="decreaseForm" action="{{ route('cart.update', $item->id) }}" method="POST" class="inline">
                                             @csrf
                                             @method('patch')
                                             <input type="hidden" name="quantity" value="{{ $item->quantity- 1 }}">
@@ -81,7 +81,7 @@
                                             {{ $item->quantity }}
                                         </div>
 
-                                        <form action="{{ route('cart.update', $item->id) }}" method="POST" class="inline">
+                                        <form id="increaseForm" action="{{ route('cart.update', $item->id) }}" method="POST" class="inline">
                                             @csrf
                                             @method('patch')
                                             <input type="hidden" name="quantity" value="{{ $item->quantity + 1 }}">
@@ -97,7 +97,7 @@
                                     Rp. {{ number_format($item->product->price * $item->quantity, 0, ',', '.') }}
                                 </div>
 
-                                <form action="{{  route('cart.destroy', $item->id) }}" method="POST" class="inline">
+                                <form id="deleteForm" action="{{  route('cart.destroy', $item->id) }}" method="POST" class="inline">
                                     @csrf
                                     @method('delete')
                                     <div>
@@ -415,10 +415,30 @@
                     document.getElementById('checkoutPickupDate').value = startDateInput.value;
                     document.getElementById('checkoutReturnDate').value = endDateInput.value;
 
+                     Alpine.store('loadingState').showLoading();
                     // Submit the form
                     checkoutForm.submit();
                 });
+
+                document.getElementById('deleteForm').addEventListener('submit', function (event) {
+                    event.preventDefault();
+                    Alpine.store('loadingState').showLoading();
+                    this.submit();
+                })
+
+                document.getElementById('increaseForm').addEventListener('submit', function (event) {
+                    event.preventDefault();
+                    Alpine.store('loadingState').showLoading();
+                    this.submit();
+                })
+
+                document.getElementById('decreaseForm').addEventListener('submit', function (event) {
+                    event.preventDefault();
+                    Alpine.store('loadingState').showLoading();
+                    this.submit();
+                })
             });
+
         </script>
     </x-slot>
 </x-app-layout>

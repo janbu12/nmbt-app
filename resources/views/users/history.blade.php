@@ -71,6 +71,7 @@
             </form>
             <form action="{{ route('history.index') }}" method="GET">
                 <input
+                @keydown.enter="Alpine.store('loadingState').showLoading();"
                 type="text"
                 value="{{ request('search') }}"
                 class="p-2 w-full rounded-lg drop-shadow-lg border hover:border-primary"
@@ -94,7 +95,7 @@
                 </thead>
                 <tbody>
                     @forelse ($rents as $rent)
-                    <tr class="bg-gray-50 hover:bg-blue-100">
+                    <tr class="bg-white hover:bg-blue-100">
                         <td >{{ $rent->id }}</td>
                         <td >{{ $rent->pickup_date }}</td>
                         <td >{{ $rent->return_date }}</td>
@@ -103,16 +104,16 @@
                                 ($rent->status_rent == 'ready_pickup' ? 'Ready Pickup':
                                 ($rent->status_rent == 'process' ? 'Process':
                                 ($rent->status_rent == 'unpaid' ? 'Unpaid': 'Cancel'))))}}</td>
-                        <td class="px-4 py-2 text-center">
+                        <td class="px-4 py-2">
                             @if (request()->get('status') == 'unpaid')
                                 <div class="flex gap-2">
                                     <button class="p-2 rounded-md bg-secondary3 text-bg3 hover:bg-bg1 hover:text-secondary3 hover:border-bg1" onclick="payOrder('{{ $rent->id }}')">Bayar</button>
                                     <button class="p-2 rounded-md bg-red-600 text-bg3 hover:bg-bg1 hover:text-secondary3 hover:border-red-300" onclick="confirmCancel('{{ $rent->id }}')">Cancel</button>
                                 </div>
                             @else
-                                <a href="{{ route('history.show', $rent->id) }}" class="p-2 rounded-md bg-secondary3 text-bg3 hover:bg-bg1 hover:text-secondary3 hover:border-bg1">
+                                <x-button as="a" variant="secondary" href="{{ route('history.show', $rent->id) }}">
                                     Detail
-                                </a>
+                                </x-button>
                             @endif
                         </td>
                     </tr>
@@ -148,6 +149,7 @@
             let orderIdToCancel = null;
 
             function payOrder(orderId) {
+                Alpine.store('loadingState').showLoading();
                 fetch(`/orders/payment/${orderId}`, { // Ganti dengan route yang sesuai
                     method: 'POST',
                     headers: {
@@ -187,6 +189,7 @@
                                         throw new Error('Failed to update payment method');
                                     }
                                     return response.json();
+                                    Alpine.store('loadingState').hideLoading();
                                 })
                                 .then(data => {
                                     console.log('Payment method updated:', data);
@@ -213,6 +216,9 @@
                 .catch(error => {
                     console.error('Error:', error);
                     alert('Terjadi kesalahan saat memproses pembayaran: ' + error.message);
+                })
+                .finally(()=>{
+                    Alpine.store('loadingState').hideLoading();
                 });
             }
 
@@ -227,6 +233,7 @@
 
             document.getElementById('confirmCancelButton').onclick = function() {
                 // Kirim permintaan untuk membatalkan pesanan
+                Alpine.store('loadingState').showLoading();
                 fetch(`/orders/cancel/${orderIdToCancel}`, { // Ganti dengan route yang sesuai
                     method: 'POST',
                     headers: {
@@ -252,6 +259,10 @@
                 .catch(error => {
                     console.error('Error:', error);
                     alert('Terjadi kesalahan saat membatalkan pesanan.');
+                })
+                .finally(() => {
+                    Alpine.store('loadingState').hideLoading();
+                    closeCancelModal();
                 });
             };
         </script>

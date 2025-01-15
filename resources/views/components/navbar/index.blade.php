@@ -16,8 +16,8 @@
             <x-navbar.link href="/admin/users">Users</x-navbar.link>
             <x-navbar.link href="/admin/history">Riwayat</x-navbar.link>
             @else
-            <x-navbar.link href="/" :variant="$variant">Beranda</x-navbar.link>
-            <x-navbar.link href="/#about" :variant="$variant">Tentang Kami</x-navbar.link>
+            <x-navbar.link href="/" :variant="$variant" loading="none">Beranda</x-navbar.link>
+            <x-navbar.link href="/#about" :variant="$variant" loading="none">Tentang Kami</x-navbar.link>
             <x-navbar.link href="/products" :variant="$variant">Sewa</x-navbar.link>
 
             @endif
@@ -61,16 +61,29 @@
                     class="menu menu-sm dropdown-content bg-base-100 rounded-box z-[50] mt-14 w-52 p-3 shadow text-tertiery1">
                     @if (Auth::user()->role !== 'admin')
                         <li>
-                            <a href="/user/profile" class="block px-4 py-2 hover:bg-gray-100">Profile</a>
+                            <a
+                                href="/user/profile" class="block px-4 py-2 hover:bg-gray-100"
+                                @click="Alpine.store('loadingState').showLoading();"
+                            >
+                                Profile
+                            </a>
                         </li>
                         <li>
-                            <a href="/cart" class="flex px-4 py-2 hover:bg-gray-100 justify-between">
+                            <a
+                                href="/cart"
+                                class="flex px-4 py-2 hover:bg-gray-100 justify-between"
+                                @click="Alpine.store('loadingState').showLoading();"
+                            >
                                 Cart
                                 <span class="badge bg-secondary3 text-bg3">{{ auth()->user()->cart->count() }}</span>
                             </a>
                         </li>
                         <li>
-                            <a href="/user/history?status=done" class="flex px-4 py-2 hover:bg-gray-100 justify-between">
+                            <a
+                                href="/user/history?status=done"
+                                class="flex px-4 py-2 hover:bg-gray-100 justify-between"
+                                @click="Alpine.store('loadingState').showLoading();"
+                            >
                                 Your Orders
                                 <span class="badge bg-secondary3 text-bg3">{{ auth()->user()->rent->count() }}</span>
                             </a>
@@ -78,7 +91,7 @@
                     @endif
                     <form method="POST" action="{{ route('auth.logout') }}" class="block">
                         @csrf
-                        <button type="submit" class="w-full text-start  px-4 py-2 hover:bg-gray-100 rounded-lg">Logout</button>
+                        <button @click="Alpine.store('loadingState').showLoading();" type="submit" class="w-full text-start  px-4 py-2 hover:bg-gray-100 rounded-lg">Logout</button>
                     </form>
                 </ul>
             </div>
@@ -93,9 +106,9 @@
                 <x-navbar.link href="/admin/item">Item</x-navbar.link>
                 <x-navbar.link href="/admin/history">Riwayat</x-navbar.link>
             @else
-                <x-navbar.link href="/" :variant="$variant">Beranda</x-navbar.link>
-                <x-navbar.link href="/#about" :variant="$variant">Tentang Kami</x-navbar.link>
-                <x-navbar.link href="/products" :variant="$variant">Sewa</x-navbar.link>
+                <x-navbar.link href="/" :variant="$variant" loading="none">Beranda</x-navbar.link>
+                <x-navbar.link href="/#about" :variant="$variant" loading="none">Tentang Kami</x-navbar.link>
+                <x-navbar.link href="/products" :variant="$variant" loading="none">Sewa</x-navbar.link>
             @endif
 
             @if (!auth()->user())
@@ -129,7 +142,7 @@
                 </a>
                 <form method="POST" action="{{ route('auth.logout') }}" class="block">
                     @csrf
-                    <x-button type="submit" variant="tertiery">Logout</x-button>
+                    <x-button type="submit" variant="tertiery" @click="Alpine.store('loadingState').showLoading();">Logout</x-button>
                 </form>
             @endauth
         </div>

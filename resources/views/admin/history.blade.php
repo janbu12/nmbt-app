@@ -8,7 +8,7 @@
 
             <form id="filter-form" method="GET" action="{{ route('admin.history') }}" class="h-full mb-4 flex items-center gap-4">
                 <!-- Filter Status -->
-                <select name="status" class="p-2 rounded-lg border border-gray-300" onchange="document.getElementById('filter-form').submit()">
+                <select name="status" class="p-2 rounded-lg border border-gray-300" onchange="document.getElementById('filter-form').submit()"  @change="Alpine.store('loadingState').showLoading();">
                     <option value="">All Status</option>
                     <option value="unpaid" {{ request('status') == 'unpaid' ? 'selected' : '' }}>Unpaid</option>
                     <option value="process" {{ request('status') == 'process' ? 'selected' : '' }}>Process</option>
@@ -85,6 +85,7 @@
     function filterDelay() {
         clearTimeout(timeout);
         timeout = setTimeout(() => {
+            Alpine.store('loadingState').showLoading();
             document.getElementById('filter-form').submit();
         }, 300);
     }
