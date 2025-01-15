@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Rent;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class AdminHistoryController extends Controller
 {
@@ -49,27 +50,31 @@ class AdminHistoryController extends Controller
     }
 
     public function status(Request $request, $id)
-{
-    $rent = Rent::findOrFail($id);
+    {
+        Gate::authorize('isAdmin');
+        $rent = Rent::findOrFail($id);
 
-    // Logika untuk mengubah status berdasarkan status saat ini
-    switch ($rent->status_rent) {
-        case 'process':
-            $rent->status_rent = 'ready_pickup';
-            break;
-        case 'ready_pickup':
-            $rent->status_rent = 'renting';
-            break;
-        case 'renting':
-            $rent->status_rent = 'done';
-            break;
-        default:
-            return redirect()->back()->with('error', 'Status tidak valid.');
+        // Logika untuk mengubah status berdasarkan status saat ini
+        switch ($rent->status_rent) {
+            case 'unpaid':
+                $rent->status_rent = 'process';
+                break;
+            case 'process':
+                $rent->status_rent = 'ready_pickup';
+                break;
+            case 'ready_pickup':
+                $rent->status_rent = 'renting';
+                break;
+            case 'renting':
+                $rent->status_rent = 'done';
+                break;
+            default:
+                return redirect()->back()->with('error', 'Status tidak valid.');
+        }
+
+        $rent->save();
+
+        return redirect()->route('admin.history')->with('success', 'Status berhasil diubah.');
     }
-
-    $rent->save();
-
-    return redirect()->route('admin.history')->with('success', 'Status berhasil diubah.');
-}
 
 }

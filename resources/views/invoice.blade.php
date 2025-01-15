@@ -85,26 +85,28 @@
         {{-- Button --}}
         @if (Auth::user() && Auth::user()->role == 'admin')
             <div class="w-3/6 text-center gap-10 flex flex-row">
+                @if ($rent->status_rent != 'cancelled' && $rent->status_rent != 'done')
                 <x-button variant="secondary" class="py-2 my-3 w-full text-center"
-                as="a"
-                href="{{ route('admin.status', ['id' => $rent->id]) }}">
-                @switch($rent->status_rent)
-                    @case('process')
-                        Ubah ke process
-                        @break
-                    @case('ready_pickup')
-                        Ubah ke renting
-                        @break
-                    @case('renting')
-                        Ubah ke done
-                        @break
-                    @case('done')
-                        Pesanan Selesai
-                        @break
-                    @default
-                        Status Tidak Diketahui
-                @endswitch
-            </x-button>
+                    as="a"
+                    href="{{ route('admin.status', ['id' => $rent->id]) }}">
+                    @switch($rent->status_rent)
+                        @case ('unpaid')
+                            Change Status to Process
+                            @break
+                        @case('process')
+                            Change Status to Ready to Pickup
+                            @break
+                        @case('ready_pickup')
+                            Change Status to Renting
+                            @break
+                        @case('renting')
+                            Change Status to Done
+                            @break
+                        @default
+                            Status Unknown
+                    @endswitch
+                </x-button>
+                @endif
                 <x-button variant="secondary" class="py-2 my-3 w-full text-center" as="a" href="{{ route('admin.history') }}">
                     Back
                 </x-button>
