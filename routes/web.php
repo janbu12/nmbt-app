@@ -38,6 +38,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/orders/cancel/{id}', [InvoiceController::class, 'cancel'])->name('orders.cancel')->middleware('verified');
     Route::post('/orders/payment/{id}', [InvoiceController::class, 'getPaymentToken'])->name('orders.payment')->middleware('verified');
     Route::patch('/orders/payment/{id}', [InvoiceController::class, 'updatePaymentMethod'])->name('orders.payment.update')->middleware('verified');
+    Route::patch('/orders/payment/{id}/success', [InvoiceController::class, 'paymentSuccess'])->name('orders.payment.success')->middleware('verified');
 
     Route::post('/send-invoice', [InvoiceController::class, 'sendToEmail'])->name('invoice.send');
 

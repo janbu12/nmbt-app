@@ -206,7 +206,7 @@
                                 }
                             },
                             onClose: function(result){
-                                alert('You closed the popup without finishing the payment');
+                                // alert('You closed the popup without finishing the payment');
                             },
                         })
                     } else {
