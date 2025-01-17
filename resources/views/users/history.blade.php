@@ -251,7 +251,7 @@
                     console.log('Data yang diterima dari server:', data);
                     if (data.status === 'success') {
                         // Refresh halaman atau lakukan tindakan lain
-                        location.reload();
+                        // location.reload();
                     } else {
                         alert('Terjadi kesalahan: ' + data.message);
                     }

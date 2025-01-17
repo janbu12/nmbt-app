@@ -261,11 +261,24 @@ class InvoiceController extends Controller
 
     public function cancel($id)
     {
+        $client = new Client();
+        $url = 'https://api.sandbox.midtrans.com/v2/' . $id . '/cancel';
+
+        $response = $client->request('POST', $url, [
+            'headers' => [
+              'accept' => 'application/json',
+              'authorization' => 'Basic ' . base64_encode(config('midtrans.server_key')),
+            ],
+          ]);
+
+        // dd($response);
+        $data = json_decode($response->getBody(), true);
+
         $rent = Rent::findOrFail($id);
         $rent->status_rent = 'cancelled';
         $rent->save();
 
-        return response()->json(['status' => 'success', 'message' => 'Pesanan berhasil dibatalkan.']);
+        return response()->json(['status' => 'success', 'message' => 'Pesanan berhasil dibatalkan.', 'data' => $data]);
     }
 
     public function updatePaymentMethod(Request $request, $id)
