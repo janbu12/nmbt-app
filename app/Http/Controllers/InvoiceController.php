@@ -11,9 +11,14 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
-
+use GuzzleHttp\Client;
 class InvoiceController extends Controller
 {
+    private function generateSnapToken($data)
+    {
+
+    }
+
     public function index(Request $request)
     {
         // dd($request);
@@ -159,15 +164,99 @@ class InvoiceController extends Controller
         }
     }
 
-    public function getPaymentToken($id)
+    public function getPaymentToken(Request $request, $id)
     {
         $rent = Rent::findOrFail($id);
+
+        $client = new Client();
+        $url = 'https://api.sandbox.midtrans.com/v2/' . $id . '/status';
+
+        $response = $client->request('GET', $url, [
+            'headers' => [
+              'accept' => 'application/json',
+              'authorization' => 'Basic ' . base64_encode(config('midtrans.server_key')),
+            ],
+          ]);
+
+        // dd($response);
+        $data = json_decode($response->getBody(), true);
+        $statusCode = $data['status_code'];
+
+        if($statusCode == 404){
+            // Handle if transaction is not onPending
+
+            \Midtrans\Config::$serverKey = env('MIDTRANS_SERVER_KEY');
+            \Midtrans\Config::$isProduction = false;
+            \Midtrans\Config::$isSanitized = true;
+            \Midtrans\Config::$is3ds = true;
+
+            $params = [
+                'transaction_details' => [
+                    'order_id' => $rent->id,
+                    'gross_amount' => $rent->total_price,
+                ],
+                'customer_details' => [
+                    'first_name' => $request->user()->firstname,
+                    'last_name' => $request->user()->lastname,
+                    'email' => $request->user()->email,
+                    'phone' => $request->user()->phone,
+                ],
+            ];
+
+            try {
+                // Dapatkan token pembayaran
+                $snapToken = \Midtrans\Snap::getSnapToken($params);
+
+                $rent->snap_token = $snapToken;
+                $rent->save();
+
+                return response()->json(['status' => 'success', 'snapToken' => $rent->snap_token]);
+            } catch (\Exception $e) {
+                // Tangani kesalahan dan kembalikan pesan kesalahan
+                return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
+            }
+        }
+
+        else if(@isset($data['transaction_status']) && $data['transaction_status'] == 'expire') {
+            // Handle if transaction expired
+
+            \Midtrans\Config::$serverKey = env('MIDTRANS_SERVER_KEY');
+            \Midtrans\Config::$isProduction = false;
+            \Midtrans\Config::$isSanitized = true;
+            \Midtrans\Config::$is3ds = true;
+
+            $params = [
+                'transaction_details' => [
+                    'order_id' => $rent->id,
+                    'gross_amount' => $rent->total_price,
+                ],
+                'customer_details' => [
+                    'first_name' => $request->user()->firstname,
+                    'last_name' => $request->user()->lastname,
+                    'email' => $request->user()->email,
+                    'phone' => $request->user()->phone,
+                ],
+            ];
+
+            try {
+                // Dapatkan token pembayaran
+                $snapToken = \Midtrans\Snap::getSnapToken($params);
+
+                $rent->snap_token = $snapToken;
+                $rent->save();
+
+                return response()->json(['status' => 'success', 'snapToken' => $rent->snap_token, 'transaction_status' => $data['transaction_status']]);
+            } catch (\Exception $e) {
+                // Tangani kesalahan dan kembalikan pesan kesalahan
+                return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
+            }
+        }
 
         if ($rent->status_rent !== 'unpaid') {
             return response()->json(['status' => 'error', 'message' => 'Transaksi tidak dapat dibayar.'], 400);
         }
 
-        return response()->json(['status' => 'success', 'snapToken' => $rent->snap_token]);
+        return response()->json(['status' => 'success', 'snapToken' => $rent->snap_token, 'url' => $url, 'response' => $data]);
     }
 
     public function cancel($id)
