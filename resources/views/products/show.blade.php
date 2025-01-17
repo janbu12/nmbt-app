@@ -88,10 +88,13 @@
                         {{ $product->description }}
                     </div>
                     <div class="flex flex-wrap lg:flex-nowrap gap-4 justify-between text-secondary3">
-                        <span class="font-medium text-3xl">
-                            Rp. {{ number_format($product->price ?? 0, 2, ',', '.') }}
-                        </span>
-                        @if (auth()->user()->role != "admin")
+                        <div class="flex gap-3 items-center">
+                            <span class="font-medium text-3xl">
+                                Rp. {{ number_format($product->price ?? 0, 2, ',', '.') }}
+                            </span>
+                            <h1 class="text-lg">Stok: {{ $product->stock }}</h1>
+                        </div>
+                        @if ((auth()->user()->role != "admin") && ($product->stock > 0))
                             <div class="flex items-center space-x-2 h-9 lg:h-auto">
                                 <button type="button" id="decrease" class="bg-base-100 px-3 border border-secondary3 h-full rounded-md hover:bg-secondary3 hover:text-bg3 transition">
                                     -
@@ -108,7 +111,7 @@
                                     +
                                 </button>
                             </div>
-                        @else
+                        @elseif ((auth()->user()->role == "admin"))
                             <div class="flex gap-2">
                                 <x-button variant="secondary" as="a" href="{{ route('products.edit', $product->id) }}">Edit</x-button>
                                 <form action="{{ route('products.destroy', $product->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus produk ini?');">
@@ -117,9 +120,11 @@
                                     <x-button type="submit" variant="danger">Hapus</x-button>
                                 </form>
                             </div>
+                        @else
+                            <x-button variant='danger' disabled>Out Of Stock</x-button>
                         @endif
                     </div>
-                    @if (auth()->user()->role != "admin")
+                    @if (auth()->user()->role != "admin" && $product->stock > 0)
                         <div class="w-full flex justify-start md:justify-end mt-5">
                             <x-button type="submit" variant="secondary">Add To Cart</x-button>
                         </div>
@@ -225,7 +230,9 @@
 
             increaseBtn.addEventListener("click", () => {
                 const currentValue = parseInt(quantityInput.value);
-                quantityInput.value = currentValue + 1;
+                if (currentValue < {{ $product->stock}}) {
+                    quantityInput.value = currentValue + 1;
+                }
             });
 
             decreaseBtn.addEventListener("click", () => {

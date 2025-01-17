@@ -143,6 +143,13 @@
                                     <div class="badge badge-outline 2xl:text-sm lg:text-xs" >
                                         {{ $categories[$product->category_id - 1]->category_name }}
                                     </div>
+                                    <div class="badge badge-outline 2xl:text-sm lg:text-xs {{ $product->stock > 0 ? 'text-green-400':'text-red-400' }}" >
+                                        @if ($product->stock > 0)
+                                            Ready
+                                        @else
+                                            Out of Stock
+                                        @endif
+                                    </div>
                                 </div>
                             </div>
                             @if (auth()->user() && (auth()->user()->role == "admin"))

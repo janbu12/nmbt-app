@@ -113,12 +113,14 @@
                 const pickupDate = '{{ $pickup }}';
                 const returnDate = '{{ $return }}';
                 const selectedItems = @json($items->pluck('id'));
+                const quantities = @json($items->pluck('quantity'));
                 const grandtotal = Math.round({{ $grandtotal }}); // Pastikan grandtotal dibulatkan
 
                 console.log('Data yang akan dikirim:', {
                     pickup_date: pickupDate,
                     return_date: returnDate,
                     selected_items: selectedItems,
+                    quantities: quantities,
                     grandtotal: grandtotal
                 });
 
@@ -135,6 +137,7 @@
                         pickup_date: pickupDate,
                         return_date: returnDate,
                         selected_items: selectedItems,
+                        quantities: quantities,
                         grandtotal: grandtotal
                     })
                 })

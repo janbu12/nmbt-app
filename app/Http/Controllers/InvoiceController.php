@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Mail\InvoiceMail;
 use App\Models\Cart;
+use App\Models\ProductRentModel as Product;
 use App\Models\Rent;
 use App\Models\RentDetailsModel;
 use Carbon\Carbon;
@@ -14,10 +15,6 @@ use Illuminate\Support\Facades\Mail;
 use GuzzleHttp\Client;
 class InvoiceController extends Controller
 {
-    private function generateSnapToken($data)
-    {
-
-    }
 
     public function index(Request $request)
     {
@@ -114,14 +111,26 @@ class InvoiceController extends Controller
             'status' => 'unpaid',
         ]);
 
-        foreach ($request->selected_items as $itemId) {
+        foreach ($request->selected_items as $index => $itemId) {
             $item = Cart::find($itemId);
-            RentDetailsModel::create([
-                'rent_id' => $rent->id,
-                'product_id' => $item->product_id,
-                'quantity' => $item->quantity,
-                'subtotal' => $item->product->price,
-            ]);
+
+            // Pastikan item ditemukan
+            if ($item) {
+                // Buat detail sewa
+                RentDetailsModel::create([
+                    'rent_id' => $rent->id,
+                    'product_id' => $item->product_id,
+                    'quantity' => $request->quantities[$index],
+                    'subtotal' => $item->product->price * $request->quantities[$index],
+                ]);
+
+                // Kurangi stok produk
+                $product = Product::find($item->product_id);
+                if ($product) {
+                    $product->stock -= $request->quantities[$index];
+                    $product->save();
+                }
+            }
         }
 
         Cart::where('user_id', Auth::id())->whereIn('id', $request->selected_items)->delete();
@@ -261,11 +270,52 @@ class InvoiceController extends Controller
 
     public function cancel($id)
     {
+        $client = new Client();
+
+        $url = 'https://api.sandbox.midtrans.com/v2/' . $id . '/status';
+
+        $response = $client->request('GET', $url, [
+            'headers' => [
+              'accept' => 'application/json',
+              'authorization' => 'Basic ' . base64_encode(config('midtrans.server_key')),
+            ],
+        ]);
+
+        // dd($response);
+        $data = json_decode($response->getBody(), true);
+        $statusCode = $data['status_code'];
+
+        if($statusCode == 201){
+            // Handle if transaction is not on pending
+            $url = 'https://api.sandbox.midtrans.com/v2/' . $id . '/cancel';
+
+            $response = $client->request('POST', $url, [
+                'headers' => [
+                  'accept' => 'application/json',
+                  'authorization' => 'Basic ' . base64_encode(config('midtrans.server_key')),
+                ],
+              ]);
+
+            $data = json_decode($response->getBody(), true);
+        }
+
         $rent = Rent::findOrFail($id);
+        $rentDetails = RentDetailsModel::where('rent_id', $rent->id)->get();
+
+        foreach ($rentDetails as $detail) {
+            // Temukan produk berdasarkan product_id
+            $product = Product::find($detail->product_id);
+            if ($product) {
+                // Kembalikan stok produk
+                $product->stock += $detail->quantity; // Tambahkan kembali jumlah yang disewa
+                $product->save(); // Simpan perubahan stok
+            }
+        }
+
         $rent->status_rent = 'cancelled';
         $rent->save();
 
-        return response()->json(['status' => 'success', 'message' => 'Pesanan berhasil dibatalkan.']);
+        return response()->json(['status' => 'success', 'message' => 'Pesanan berhasil dibatalkan.', 'data' => $data]);
     }
 
     public function updatePaymentMethod(Request $request, $id)

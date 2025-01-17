@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cart;
+use App\Models\ProductRentModel as Product;
 use App\Models\Rent;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -52,9 +53,15 @@ class CartController extends Controller
 
         $cartItem = Cart::find($id);
 
+        $product = Product::find($cartItem->product_id);
+
         if ($cartItem) {
             if ($request->quantity < 1) {
                 return redirect()->route('cart.index')->with('error', 'Jumlah barang tidak boleh kurang dari 1.');
+            }
+
+            if ($request->quantity > $product->stock) {
+                return redirect()->route('cart.index')->with('error', 'Jumlah barang ' . $product->name .  ' melebihi stok.');
             }
 
             $cartItem->quantity = $request->quantity;
@@ -90,6 +97,12 @@ class CartController extends Controller
         $request->validate([
             'quantity' => 'required|numeric|min:1',
         ]);
+
+        $product = Product::find($id);
+
+        if($request->quantity > $product->stock){
+            return back()->with('error', 'Jumlah barang ' . $product->name .  ' melebihi stok.');
+        }
 
         $userId = Auth::user()->id;
 
