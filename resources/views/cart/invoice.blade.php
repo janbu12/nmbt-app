@@ -155,6 +155,31 @@
                             onSuccess: function(result) {
                                 console.log(result);
                                 // Handle success
+                                Alpine.store('loadingState').showLoading();
+                                fetch(`/orders/payment/${result.order_id}/success`, {
+                                    method: 'PATCH',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                                    },
+                                    body: JSON.stringify({
+                                        payment_method: result.payment_type
+                                    })
+                                })
+                                .then(response => {
+                                    if (!response.ok) {
+                                        throw new Error('Failed to update payment');
+                                    }
+                                    return response.json();
+                                })
+                                .then(data => {
+                                    console.log('Payment success:', data);
+                                    window.location.href = '/user/history?status=process';
+                                })
+                                .catch(error => {
+                                    console.error('Error updating payment:', error);
+                                    alert('Failed to update payment.');
+                                });
                             },
                             onPending: function(result) {
                                 console.log(result);

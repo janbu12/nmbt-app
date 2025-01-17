@@ -331,6 +331,15 @@ class InvoiceController extends Controller
         return response()->json(['status' => 'success', 'message' => 'Payment method updated successfully.']);
     }
 
+    public function paymentSuccess($id)
+    {
+        $rent = Rent::findOrFail($id);
+        $rent->status_rent = 'process';
+        $rent->save();
+
+        return response()->json(['status' => 'success', 'message' => 'Pembayaran berhasil diterima.']);
+    }
+
     public function sendToEmail(Request $request)
     {
         $request->validate([
