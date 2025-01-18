@@ -47,7 +47,7 @@ class InvoiceController extends Controller
 
         $items = Cart::where('user_id', $idUser)
         ->whereIn('id', $selectedItems)
-        ->with('product')
+        ->with(['product', 'product.images'])
         ->get();
 
         // Ambil nama pengguna pertama (asumsi user_id sama untuk semua barang di cart)
@@ -87,6 +87,7 @@ class InvoiceController extends Controller
             'userName' => $userName,
             'total' => $total,
             'subtotal' => $subtotal,
+            'tax' => $pajak,
             'grandtotal' => $grandtotal,
             'email' => Auth::User()->email,
         ]);
