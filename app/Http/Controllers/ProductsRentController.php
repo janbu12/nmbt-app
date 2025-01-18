@@ -180,10 +180,14 @@ class ProductsRentController extends Controller
             $reviews = $product->reviews()
                                 ->where('rating', $rating)
                                 ->with('user')  // Mengambil informasi pengguna
+                                ->orderBy('id', 'desc')
                                 ->get();
         } else {
             // Jika tidak ada filter rating, ambil semua ulasan
-            $reviews = $product->reviews()->with('user')->get();
+            $reviews = $product->reviews()
+            ->with('user')
+            ->orderBy('id', 'desc')
+            ->get();
         }
 
         return view('products.show',compact('product', 'reviews'));
