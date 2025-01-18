@@ -155,7 +155,7 @@ class InvoiceController extends Controller
 
         $params = [
             'transaction_details' => [
-                'order_id' => $rent->id,
+                'order_id' => 'order-' . $rent->id . '-' . $rent->created_at,
                 'gross_amount' => $grossAmount,
             ],
             'customer_details' => [
@@ -188,7 +188,7 @@ class InvoiceController extends Controller
         $rent = Rent::findOrFail($id);
 
         $client = new Client();
-        $url = 'https://api.sandbox.midtrans.com/v2/' . $id . '/status';
+        $url = 'https://api.sandbox.midtrans.com/v2/order-' . $id . '-' . $rent->created_at . '/status';
 
         $response = $client->request('GET', $url, [
             'headers' => [
@@ -224,7 +224,7 @@ class InvoiceController extends Controller
 
             $params = [
                 'transaction_details' => [
-                    'order_id' => $rent->id,
+                    'order_id' => 'order-' . $rent->id . '-' . $rent->created_at,
                     'gross_amount' => $rent->total_price,
                 ],
                 'customer_details' => [
@@ -260,7 +260,7 @@ class InvoiceController extends Controller
 
             $params = [
                 'transaction_details' => [
-                    'order_id' => $rent->id,
+                    'order_id' => 'order-' . $rent->id . '-' . $rent->created_at,
                     'gross_amount' => $rent->total_price,
                 ],
                 'customer_details' => [
@@ -303,7 +303,9 @@ class InvoiceController extends Controller
 
         $client = new Client();
 
-        $url = 'https://api.sandbox.midtrans.com/v2/' . $id . '/status';
+        $rent = Rent::findOrFail($id);
+
+        $url = 'https://api.sandbox.midtrans.com/v2/order-' . $id . '-' . $rent->created_at . '/status';
 
         $response = $client->request('GET', $url, [
             'headers' => [
@@ -318,7 +320,7 @@ class InvoiceController extends Controller
 
         if($statusCode == 201){
             // Handle if transaction is not on pending
-            $url = 'https://api.sandbox.midtrans.com/v2/' . $id . '/cancel';
+            $url = 'https://api.sandbox.midtrans.com/v2/order-' . $id . '-' . $rent->created_at . '/cancel';
 
             $response = $client->request('POST', $url, [
                 'headers' => [
@@ -363,9 +365,10 @@ class InvoiceController extends Controller
         return response()->json(['status' => 'success', 'message' => 'Payment method updated successfully.']);
     }
 
-    public function paymentSuccess($id)
+    public function paymentSuccess(Request $request, $id)
     {
         $rent = Rent::findOrFail($id);
+        $rent->payment_method = $request->payment_method;
         $rent->status_rent = 'process';
         $rent->save();
 
