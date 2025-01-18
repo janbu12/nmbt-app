@@ -94,6 +94,34 @@
     <x-slot name="scripts">
         <script type="text/javascript" src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="{{ config('midtrans.client_key') }}"></script>
         <script>
+            function sendToEmail(userName, pickupDate, returnDate, items, grandtotal, email, orderId) {
+                Alpine.store('loadingState').showLoading();
+
+                fetch('{{ route("invoice.send") }}', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        },
+                        body: JSON.stringify({
+                            user_name: userName,
+                            pickup_date: pickupDate,
+                            return_date: returnDate,
+                            items: items,
+                            grandtotal: grandtotal,
+                            email: email,
+                            order_id: orderId,
+                        })
+                    })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Failed to send invoice email');
+                        }
+
+                        Alpine.store('loadingState').hideLoading();
+                    })
+            }
+
             document.getElementById('payButton').onclick = function () {
                 // Ambil data yang diperlukan
                 const pickupDate = '{{ $pickup }}';

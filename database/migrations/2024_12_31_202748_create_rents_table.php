@@ -21,6 +21,7 @@ return new class extends Migration
             $table->double('total_price');
             $table->string('payment_method')->nullable();
             $table->string('snap_token')->nullable();
+            $table->string('cancel_reason')->nullable();
             $table->timestamps();
             $table->foreign('user_id')->references('id')->on('users');
         });
