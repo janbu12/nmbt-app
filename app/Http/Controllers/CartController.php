@@ -17,18 +17,42 @@ class CartController extends Controller
     {
         $idUser = Auth::user()->id; // Dapatkan user login
 
+        // Ambil semua cart items untuk user
         $carts = Cart::with(['user', 'product'])
-        ->where('user_id', $idUser)
-        ->get();
+            ->where('user_id', $idUser)
+            ->get();
 
-        $subtotal = $carts->sum(function ($item) {
+        // Array untuk menyimpan nama produk yang stoknya habis
+        $outOfStockProducts = [];
+
+        // Loop untuk memeriksa stok dan menghapus item yang habis
+        foreach ($carts as $cart) {
+            if ($cart->product->stock < $cart->quantity) {
+                // Jika stok habis, hapus item dari cart
+                $outOfStockProducts[] = $cart->product->name; // Simpan nama produk
+                $cart->delete(); // Hapus item dari cart
+            }
+        }
+
+        // Ambil kembali cart items yang tersisa
+        $availableCarts = Cart::with(['user', 'product'])
+            ->where('user_id', $idUser)
+            ->get();
+
+        $subtotal = $availableCarts->sum(function ($item) {
             return $item->product->price * $item->quantity;
         });
 
+        // Jika ada produk yang habis, simpan pesan
+        $message = '';
+        if (!empty($outOfStockProducts)) {
+            $message = 'Item ' . implode(', ', $outOfStockProducts) . ' telah habis.';
+        }
 
         return view('cart.index', [
-            'cartItems' => $carts,
+            'cartItems' => $availableCarts,
             'subtotal' => $subtotal,
+            'message' => $message, // Kirim pesan ke view
         ]);
     }
 
