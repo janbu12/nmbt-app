@@ -170,7 +170,7 @@
                                 console.log(result);
                                 // Handle success
                                 Alpine.store('loadingState').showLoading();
-                                fetch(`/orders/payment/${result.order_id}/success`, {
+                                fetch(`/orders/payment/${data.rent.id}/success`, {
                                     method: 'PATCH',
                                     headers: {
                                         'Content-Type': 'application/json',
@@ -198,7 +198,7 @@
                             onPending: function(result) {
                                 console.log(result);
                                  Alpine.store('loadingState').showLoading();
-                                fetch(`/orders/payment/${result.order_id}`, {
+                                fetch(`/orders/payment/${data.rent.id}`, {
                                     method: 'PATCH',
                                     headers: {
                                         'Content-Type': 'application/json',

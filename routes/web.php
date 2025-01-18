@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminHistoryController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\InvoiceController;
+use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\UserHistoryController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
@@ -39,6 +40,9 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/orders/payment/{id}', [InvoiceController::class, 'getPaymentToken'])->name('orders.payment')->middleware('verified');
     Route::patch('/orders/payment/{id}', [InvoiceController::class, 'updatePaymentMethod'])->name('orders.payment.update')->middleware('verified');
     Route::patch('/orders/payment/{id}/success', [InvoiceController::class, 'paymentSuccess'])->name('orders.payment.success')->middleware('verified');
+
+    Route::get('/orders/review/{id}', [ReviewController::class, 'show'])->name('orders.review');
+    Route::post('/orders/review/{id}', [ReviewController::class, 'submitReview'])->name('orders.submitReview');
 
     Route::post('/send-invoice', [InvoiceController::class, 'sendToEmail'])->name('invoice.send');
 

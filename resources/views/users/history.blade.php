@@ -118,12 +118,14 @@
                                     Detail
                                 </x-button>
                             @elseif(request()->get('status') == 'done')
-                                <x-button as="a" variant="danger" href="{{ route('history.show', $rent->id) }}">
-                                    Review
-                                </x-button>
-                                <x-button as="a" variant="secondary" href="{{ route('history.show', $rent->id) }}">
-                                    Detail
-                                </x-button>
+                                <div class="flex gap-2">
+                                    <x-button as="a" variant="danger" href="{{ route('orders.review', $rent->id) }}">
+                                        Review
+                                    </x-button>
+                                    <x-button as="a" variant="secondary" href="{{ route('history.show', $rent->id) }}">
+                                        Detail
+                                    </x-button>
+                                </div>
                             @else
                                 <div class="flex gap-2">
                                     <button class="p-2 rounded-md bg-red-600 text-bg3 hover:bg-bg1 hover:text-secondary3 hover:border-red-300" onclick="confirmCancel('{{ $rent->id }}')">Cancel</button>
@@ -200,7 +202,7 @@
                                 console.log(result);
                                 // Handle success
                                 Alpine.store('loadingState').showLoading();
-                                fetch(`/orders/payment/${result.order_id}/success`, {
+                                fetch(`/orders/payment/${orderId}/success`, {
                                     method: 'PATCH',
                                     headers: {
                                         'Content-Type': 'application/json',
@@ -228,7 +230,7 @@
                             onPending: function(result) {
                                 console.log(result);
                                 // Handle pending
-                                fetch(`/orders/payment/${result.order_id}`, {
+                                fetch(`/orders/payment/${orderId}`, {
                                     method: 'PATCH',
                                     headers: {
                                         'Content-Type': 'application/json',
