@@ -439,6 +439,18 @@
                 })
             });
 
+
+            @if($message != '')
+                document.addEventListener('DOMContentLoaded', function () {
+                    Swal.fire({
+                        position: "center",
+                        icon: "error",
+                        title: "{{ $message }}",
+                        showConfirmButton: false,
+                        timer: 3000,
+                    });
+                });
+            @endif
         </script>
     </x-slot>
 </x-app-layout>
