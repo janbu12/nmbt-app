@@ -109,11 +109,21 @@
                                 <div class="flex gap-2">
                                     <button class="p-2 rounded-md bg-secondary3 text-bg3 hover:bg-bg1 hover:text-secondary3 hover:border-bg1" onclick="payOrder('{{ $rent->id }}')">Bayar</button>
                                     <button class="p-2 rounded-md bg-red-600 text-bg3 hover:bg-bg1 hover:text-secondary3 hover:border-red-300" onclick="confirmCancel('{{ $rent->id }}')">Cancel</button>
+                                    <x-button as="a" variant="secondary" href="{{ route('history.show', $rent->id) }}">
+                                        Detail
+                                    </x-button>
                                 </div>
-                            @else
+                            @elseif(request()->get('status') == 'cancelled' || request()->get('status') == 'done')
                                 <x-button as="a" variant="secondary" href="{{ route('history.show', $rent->id) }}">
                                     Detail
                                 </x-button>
+                            @else
+                                <div class="flex gap-2">
+                                    <button class="p-2 rounded-md bg-red-600 text-bg3 hover:bg-bg1 hover:text-secondary3 hover:border-red-300" onclick="confirmCancel('{{ $rent->id }}')">Cancel</button>
+                                    <x-button as="a" variant="secondary" href="{{ route('history.show', $rent->id) }}">
+                                        Detail
+                                    </x-button>
+                                </div>
                             @endif
                         </td>
                     </tr>
@@ -129,8 +139,20 @@
         {{-- Modal Konfirmasi Pembatalan --}}
         <div id="cancelModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden z-50">
             <div class="bg-white rounded-lg p-6 w-1/3">
-                <h2 class="text-xl font-semibold mb-4">Konfirmasi Pembatalan</h2>
-                <p>Apakah Anda yakin ingin membatalkan pesanan ini?</p>
+                <h2 class="text-xl font-semibold mb-4">Confirm Cancellation</h2>
+                <p>Are you sure you want to cancel this order?</p>
+
+                <div class="mt-4">
+                    <label for="cancellationReason" class="block text-sm font-medium text-gray-700">Reason for Cancellation</label>
+                    <select id="cancellationReason" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-secondary2 focus:border-secondary2">
+                        <option value="" selected disabled>Choose a reason</option>
+                        <option value="Not using the equipment">Not using the equipment</option>
+                        <option value="Change of plan">Change of plan</option>
+                        <option value="Bad weather">Bad weather</option>
+                        <option value="Others">Others</option>
+                    </select>
+                </div>
+
                 <div class="flex justify-end mt-4">
                     <button id="confirmCancelButton" class="bg-secondary2 text-white px-4 py-2 rounded-lg">Ya, Batalkan</button>
                     <button id="cancelCancelButton" class="ml-2 bg-gray-300 text-black px-4 py-2 rounded-lg" onclick="closeCancelModal()">Batal</button>
@@ -170,6 +192,31 @@
                             onSuccess: function(result) {
                                 console.log(result);
                                 // Handle success
+                                Alpine.store('loadingState').showLoading();
+                                fetch(`/orders/payment/${result.order_id}/success`, {
+                                    method: 'PATCH',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                                    },
+                                    body: JSON.stringify({
+                                        payment_method: result.payment_type
+                                    })
+                                })
+                                .then(response => {
+                                    if (!response.ok) {
+                                        throw new Error('Failed to update payment');
+                                    }
+                                    return response.json();
+                                })
+                                .then(data => {
+                                    console.log('Payment success:', data);
+                                    window.location.href = '/user/history?status=process';
+                                })
+                                .catch(error => {
+                                    console.error('Error updating payment:', error);
+                                    alert('Failed to update payment.');
+                                });
                             },
                             onPending: function(result) {
                                 console.log(result);
@@ -223,8 +270,8 @@
             }
 
             function confirmCancel(orderId) {
-                orderIdToCancel = orderId; // Simpan ID pesanan yang akan dibatalkan
-                document.getElementById('cancelModal').classList.remove('hidden'); // Tampilkan modal konfirmasi
+                orderIdToCancel = orderId;
+                document.getElementById('cancelModal').classList.remove('hidden');
             }
 
             function closeCancelModal() {
@@ -232,6 +279,16 @@
             }
 
             document.getElementById('confirmCancelButton').onclick = function() {
+                const cancellationReason = document.getElementById('cancellationReason').value; // Ambil nilai alasan pembatalan
+
+                if (!cancellationReason) {
+                    Swal.fire({
+                        position: "center",
+                        icon: "error",
+                        title: "Please choose a cancellation reason",
+                    });
+                    return; // Hentikan eksekusi jika alasan tidak diisi
+                }
                 // Kirim permintaan untuk membatalkan pesanan
                 Alpine.store('loadingState').showLoading();
                 fetch(`/orders/cancel/${orderIdToCancel}`, { // Ganti dengan route yang sesuai
@@ -240,6 +297,7 @@
                         'Content-Type': 'application/json',
                         'X-CSRF-TOKEN': '{{ csrf_token() }}'
                     },
+                    body: JSON.stringify({ reason: cancellationReason })
                 })
                 .then(response => {
                     if (!response.ok) {
@@ -251,7 +309,7 @@
                     console.log('Data yang diterima dari server:', data);
                     if (data.status === 'success') {
                         // Refresh halaman atau lakukan tindakan lain
-                        // location.reload();
+                        location.reload();
                     } else {
                         alert('Terjadi kesalahan: ' + data.message);
                     }

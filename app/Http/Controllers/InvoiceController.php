@@ -112,6 +112,7 @@ class InvoiceController extends Controller
             'status' => 'unpaid',
         ]);
 
+        $itemDetails = [];
         foreach ($request->selected_items as $index => $itemId) {
             $item = Cart::find($itemId);
 
@@ -131,6 +132,13 @@ class InvoiceController extends Controller
                     $product->stock -= $request->quantities[$index];
                     $product->save();
                 }
+
+                $itemDetails[] = [
+                    'id' => $item->product_id, // ID produk
+                    'price' => intval(round($item->product->price)), // Harga produk
+                    'quantity' => $request->quantities[$index], // Kuantitas
+                    'name' => $item->product->name, // Nama produk
+                ];
             }
         }
 
@@ -156,6 +164,7 @@ class InvoiceController extends Controller
                 'email' => $request->user()->email,
                 'phone' => $request->user()->phone,
             ],
+            'item_details' => $itemDetails,
         ];
 
         Log::info('Params to Midtrans:', $params);
@@ -192,6 +201,19 @@ class InvoiceController extends Controller
         $data = json_decode($response->getBody(), true);
         $statusCode = $data['status_code'];
 
+        $itemDetails = [];
+        foreach ($rent->rent_details as $detail) {
+            $product = $detail->product; // Ambil produk terkait dari detail sewa
+            if ($product) {
+                $itemDetails[] = [
+                    'id' => $product->id, // ID produk
+                    'price' => intval(round($product->price)), // Harga produk
+                    'quantity' => $detail->quantity, // Jumlah
+                    'name' => $product->name, // Nama produk
+                ];
+            }
+        }
+
         if($statusCode == 404){
             // Handle if transaction is not onPending
 
@@ -211,6 +233,7 @@ class InvoiceController extends Controller
                     'email' => $request->user()->email,
                     'phone' => $request->user()->phone,
                 ],
+                'item_details' => $itemDetails,
             ];
 
             try {
@@ -246,6 +269,7 @@ class InvoiceController extends Controller
                     'email' => $request->user()->email,
                     'phone' => $request->user()->phone,
                 ],
+                'item_details' => $itemDetails,
             ];
 
             try {
@@ -269,8 +293,14 @@ class InvoiceController extends Controller
         return response()->json(['status' => 'success', 'snapToken' => $rent->snap_token, 'url' => $url, 'response' => $data]);
     }
 
-    public function cancel($id)
+    public function cancel(Request $request, $id)
     {
+        $request->validate([
+            'reason' => 'required|string|max:255',
+        ]);
+
+        $reason = $request->input('reason');
+
         $client = new Client();
 
         $url = 'https://api.sandbox.midtrans.com/v2/' . $id . '/status';
@@ -314,6 +344,7 @@ class InvoiceController extends Controller
         }
 
         $rent->status_rent = 'cancelled';
+        $rent->cancel_reason = $reason;
         $rent->save();
 
         return response()->json(['status' => 'success', 'message' => 'Pesanan berhasil dibatalkan.', 'data' => $data]);
