@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Rent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
+use App\Mail\RentStatusUpdateMail;
+use Illuminate\Support\Facades\Mail;
 
 class AdminHistoryController extends Controller
 {
@@ -74,7 +76,10 @@ class AdminHistoryController extends Controller
 
         $rent->save();
 
-        return redirect()->route('admin.history')->with('success', 'Status berhasil diubah.');
+        // Kirim email setelah status diubah
+        Mail::to($rent->user->email)->send(new RentStatusUpdateMail($rent, $rent->status_rent));
+
+        return redirect()->back()->with('success', 'Status berhasil diubah dan email telah dikirim.');
     }
 
 }

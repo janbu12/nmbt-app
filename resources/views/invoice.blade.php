@@ -75,11 +75,19 @@
                     </div>
                 </div>
                 <div class="flex flex-row justify-between mt-2">
-                    Description
+                    Status Order
                     <div>
                         {{ $rent->status_rent }}
                     </div>
                 </div>
+                @if ($rent->status_rent == 'cancelled')
+                    <div class="flex flex-row justify-between mt-2">
+                        Reason of Cancelled
+                        <div>
+                            {{ $rent->cancel_reason }}
+                        </div>
+                    </div>
+                @endif
             </div>
         </div>
         {{-- Button --}}
@@ -119,4 +127,19 @@
             </div>
         @endif
     </div>
+    <x-slot name="scripts">
+        <script>
+            @if (session('success'))
+                document.addEventListener('DOMContentLoaded', function () {
+                    Swal.fire({
+                        position: "center",
+                        icon: "success",
+                        title: "{{ session('success') }}",
+                        showConfirmButton: false,
+                        timer: 2000,
+                    });
+                });
+            @endif
+        </script>
+    </x-slot>
 </x-app-layout>
