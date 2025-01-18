@@ -296,6 +296,18 @@
                 // Initialize with the first image and active thumbnail
                 updateMainImage(currentIndex);
             });
+
+            @if (session('success'))
+                document.addEventListener('DOMContentLoaded', function () {
+                    Swal.fire({
+                        position: "center",
+                        icon: "success",
+                        title: "{{ session('success') }}",
+                        showConfirmButton: false,
+                        timer: 2000,
+                    });
+                });
+            @endif
         </script>
     </x-slot>
 </x-app-layout>

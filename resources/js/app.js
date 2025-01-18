@@ -20,3 +20,30 @@ function formatDate(dateString) {
 }
 
 window.formatDate = formatDate;
+
+function sendToEmail(userName, pickupDate, returnDate, items, grandtotal, email, orderId) {
+    fetch('{{ route("invoice.send") }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+            body: JSON.stringify({
+                user_name: userName,
+                pickup_date: pickupDate,
+                return_date: returnDate,
+                items: items,
+                grandtotal: grandtotal,
+                email: email,
+                order_id: orderId,
+            })
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to send invoice email');
+            }
+            console.log(response);
+        })
+}
+
+window.sendToEmail = sendToEmail;

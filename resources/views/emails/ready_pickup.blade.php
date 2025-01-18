@@ -6,14 +6,6 @@
     <title>Tagihan Pesanan Anda</title>
     <style>
         /* Tailwind CSS styles */
-        body{
-            font-family: 'Poppins', sans-serif;
-            line-height: 1.6;
-            color: #212121;
-            background-color: #F9F9F9;
-            margin: 0;
-            padding: 0;
-        }
         .bg-white { background-color: #ffffff; }
         .text-secondary2 { color: #4A5568; } /* Ganti dengan warna yang sesuai */
         .text-lg { font-size: 1.125rem; }
@@ -38,10 +30,9 @@
 </head>
 <body class="bg-white">
     <div class="p-4">
-        <h1 class="text-2xl font-semibold text-secondary2">Thank you for ordering, {{ $userName }}!</h1>
-        <p class="text-lg">Your order has been received.</p>
-        <p class="text-lg">Pickup Date: {{ $pickup }}</p>
-        <p class="text-lg">Return Date: {{ $return }}</p>
+        <h1 class="text-2xl font-semibold text-secondary2">Perhatian !!!, {{ $userName }}!</h1>
+        <p class="text-lg">Your order is ready for pickup.</p>
+        <p class="text-lg">Date Status Changed: {{ $date }}</p>
         <h2 class="text-xl font-semibold mt-4">Detail Pesanan:</h2>
         <table class="w-full border-collapse border border-gray-300 mt-2">
             <thead>
@@ -61,8 +52,7 @@
                 @endforeach
             </tbody>
         </table>
-        <p class="text-lg font-semibold mt-4">Total: Rp. {{ number_format($grandtotal, 0, ',', '.') }}</p>
-        <p class="mt-4"><a href="{{ route('history.index', ['status' => 'unpaid']) }}" class="text-blue-500">Lihat Tagihan</a></p>
+        <p class="mt-4"><a href="{{ route('history.index', ['status' => 'ready_pickup']) }}" class="text-blue-500">Lihat Tagihan</a></p>
     </div>
 </body>
 </html>
