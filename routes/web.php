@@ -85,7 +85,10 @@ Route::get('/invoice', function() {
 });
 
 Route::get('/test', function() {
-    return view('test');
+    return view('emails.rent_status_update', [
+        'fullName' => 'John Doe',
+       'status' => 'Pending',
+    ]);
 });
 
 Route::get('/test/response', function() {
