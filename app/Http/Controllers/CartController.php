@@ -37,6 +37,7 @@ class CartController extends Controller
         // Ambil kembali cart items yang tersisa
         $availableCarts = Cart::with(['user', 'product'])
             ->where('user_id', $idUser)
+            ->orderBy('id', 'desc')
             ->get();
 
         $subtotal = $availableCarts->sum(function ($item) {
