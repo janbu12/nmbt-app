@@ -34,7 +34,7 @@ class ProductsRentController extends Controller
                 // Melakukan join dengan tabel reviews dan menghitung rata-rata rating
                 $query->leftJoin('reviews', 'products.id', '=', 'reviews.product_id')
                 ->select('products.*', DB::raw('AVG(reviews.rating) as average_rating'))
-                ->groupBy('products.id', 'products.name', 'products.price', 'products.category_id', 'products.created_at', 'products.updated_at', 'products.stock') //Kolomnya harus ditambahkan semua untuk kebutuhan deployment
+                ->groupBy('products.id', 'products.name', 'products.price', 'products.category_id', 'products.created_at', 'products.updated_at', 'products.stock', 'products.description') //Kolomnya harus ditambahkan semua untuk kebutuhan deployment
                 ->orderBy('average_rating', 'desc'); // Mengurutkan berdasarkan rata-rata rating
             }
             // Filter lain sesuai kebutuhan
