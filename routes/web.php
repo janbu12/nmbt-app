@@ -63,7 +63,8 @@ Route::middleware(['auth','role:admin'])->group(function () {
     // Route::get('/admin/item',[App\Http\Controllers\ProductsRentController::class, 'index'])->name('admin.item');
     Route::get('/admin/users', [App\Http\Controllers\AdminController::class, 'users'])->name('admin.users');
     Route::get('/admin/history', [AdminHistoryController::class, 'index'])->name('admin.history');
-    Route::get('/admin/history/export-excel', [AdminHistoryController::class, 'exportExcel'])->name('admin.history.exportExcel');
+    Route::get('/admin/history/history-excel', [AdminHistoryController::class, 'historyExcel'])->name('admin.history.historyExcel');
+    Route::get('/admin/history/detail-history-excel', [AdminHistoryController::class, 'detailHistoryExcel'])->name('admin.history.detailHistoryExcel');
     Route::get('/admin/history/{id}', [AdminHistoryController::class, 'show'])->name('admin.show');
     Route::get('/admin/history/{id}/change-status', [AdminHistoryController::class, 'status'])->name('admin.status');
 

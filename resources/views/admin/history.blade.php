@@ -6,10 +6,47 @@
                 Transaction History
             </div>
             
-            <form action="{{ route('admin.history.exportExcel') }}" method="GET" class="h-full w-full mb-4 flex items-center gap-4 justify-end mr-4">
-                <x-button variant='secondary'>
-                    Export to Excel
-                </x-button>
+            <form action="{{ route('admin.history.historyExcel') }}" method="GET" class="h-full w-fit mb-4 flex items-center gap-4 justify-end mr-4">
+                <div x-data="{ showModal: false, startDate: '', endDate: '', allTime: false }" class="relative">
+                    <x-button variant="secondary" class="w-36" x-on:click="showModal = true">
+                        History to Excel
+                    </x-button>
+                </div>
+                <div x-show="showModal" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50" x-cloak>
+                    <div class="bg-white rounded-lg p-6 w-96 shadow-lg">
+                        <h2 class="text-xl font-semibold mb-4">Export History</h2>
+            
+                        <!-- Pilihan Jangka Waktu -->
+                        <div class="mb-4">
+                            <label class="block font-medium mb-2">Jangka Waktu:</label>
+                            <div class="flex gap-2 items-center">
+                                <input type="date" x-model="startDate" class="border rounded-lg px-3 py-2 w-full">
+                                <span class="text-gray-600">to</span>
+                                <input type="date" x-model="endDate" class="border rounded-lg px-3 py-2 w-full">
+                            </div>
+                            <div class="mt-2">
+                                <label class="inline-flex items-center">
+                                    <input type="checkbox" x-model="allTime" class="rounded">
+                                    <span class="ml-2">All Time</span>
+                                </label>
+                            </div>
+                        </div>
+            
+                        <!-- Tombol Aksi -->
+                        <div class="flex justify-end gap-2">
+                            <x-button variant="secondary" x-on:click="showModal = false">Cancel</x-button>
+                            <x-button variant="primary" x-on:click="submitForm">Export</x-button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+                <form action="{{ route('admin.history.detailHistoryExcel') }}" target="_blank" method="GET" class="h-full w-fit mb-4 flex items-center gap-4 justify-end mr-4">
+                    <!-- Tombol Ekspor -->
+                    {{-- <x-button variant='secondary' class="w-48"> --}}
+                    <x-button variant='secondary' class="w-48">
+                        Detail History to Excel
+                    </x-button>
             </form>
 
             <form id="filter-form" method="GET" action="{{ route('admin.history') }}" class="h-full mb-4 flex items-center gap-4">
@@ -72,7 +109,7 @@
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="5" class="px-4 py-2 text-center">No data was found</td>
+                        <td colspan="7" class="px-4 py-2 text-center">No data was found</td>
                     </tr>
                     @endforelse
                 </tbody>
@@ -86,13 +123,14 @@
 </x-app-layout>
 
 <script>
-    let timeout = null;
 
-    function filterDelay() {
-        clearTimeout(timeout);
-        timeout = setTimeout(() => {
+    document.querySelectorAll('form').forEach((form) => {
+        form.addEventListener('submit', function () {
             Alpine.store('loadingState').showLoading();
-            document.getElementById('filter-form').submit();
-        }, 300);
-    }
+            setTimeout(() => {
+                Alpine.store('loadingState').hideLoading();
+            }, 3000);
+        });
+    });
+
 </script>
