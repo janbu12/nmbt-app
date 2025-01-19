@@ -5,6 +5,12 @@
             <div class="w-full text-start font-bold text-4xl text-secondary2 p-3">
                 Transaction History
             </div>
+            
+            <form action="{{ route('admin.history.exportExcel') }}" method="GET" class="h-full w-full mb-4 flex items-center gap-4 justify-end mr-4">
+                <x-button variant='secondary'>
+                    Export to Excel
+                </x-button>
+            </form>
 
             <form id="filter-form" method="GET" action="{{ route('admin.history') }}" class="h-full mb-4 flex items-center gap-4">
                 <!-- Filter Status -->
