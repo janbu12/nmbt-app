@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\HistoryAdminExport;
 use App\Models\Rent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use App\Mail\RentStatusUpdateMail;
 use Illuminate\Support\Facades\Mail;
+use Maatwebsite\Excel\Facades\Excel;
 
 class AdminHistoryController extends Controller
 {
@@ -82,4 +84,8 @@ class AdminHistoryController extends Controller
         return redirect()->back()->with('success', 'Status berhasil diubah dan email telah dikirim.');
     }
 
+    public function exportExcel()
+    {
+        return Excel::download(new HistoryAdminExport, 'rentHistory.xlsx');
+    }
 }
