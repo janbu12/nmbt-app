@@ -37,7 +37,7 @@
                             <span>{{ $return }}</span>
                         </div>
                         <div class="flex flex-row justify-between">
-                            <span>Total Days Renting</span>
+                            <span>Rent DUration</span>
                             <span>{{ $days ?? 0 }} Days</span>
                         </div>
                 </div>
@@ -78,14 +78,14 @@
                         <span class="font-semibold">Rp. {{ number_format($tax, 0, ',', '.') }}</span>
                     </div>
                     <div class="flex flex-row justify-between items-center text-sm md:text-base">
-                        <span class="font-semibold">Total + Pajak (11%)</span>
+                        <span class="font-semibold">Total + Tax (11%)</span>
                         <span class="font-semibold">Rp. {{ number_format($grandtotal, 0, ',', '.') }}</span>
                     </div>
                 </div>
                 {{-- Button --}}
                 <div class="flex gap-2 text-xs md:text-base">
-                    <x-button as="a" href="{{ route('cart.index') }}" variant="danger" class="text-center w-fit md:w-full text-white rounded-lg">Kembali</x-button>
-                    <x-button id="payButton" variant='secondary' class="w-full text-white rounded-lg">Pilih Pembayaran!</x-button>
+                    <x-button as="a" href="{{ route('cart.index') }}" variant="danger" class="text-center w-fit md:w-full text-white rounded-lg">Back</x-button>
+                    <x-button id="payButton" variant='secondary' class="w-full text-white rounded-lg">Choose Payment!</x-button>
                 </div>
             </div>
         </div>

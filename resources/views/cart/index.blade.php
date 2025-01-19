@@ -30,10 +30,10 @@
             {{-- <div class="sticky top-0 bg-red-500 z-10"> --}}
                 <div class="p-3 flex flex-row justify-between pb-3 sticky top-0 bg-white">
                     <div class="text-2xl font-medium">
-                        Keranjang ({{ count($cartItems) }} item)
+                        Cart ({{ count($cartItems) }} item(s))
                     </div>
                     <button id="check" class="p-2 bg-secondary3 hover:bg-tertiery3 rounded-lg text-white">
-                        Pilih semua
+                        Select All
                     </button>
                 </div>
                 <hr class="font-bold bg-black">
@@ -101,7 +101,7 @@
                                     @csrf
                                     @method('delete')
                                     <div>
-                                        <button class="border rounded-xl bg-secondary3 hover:bg-tertiery3 text-white font-medium py-2 px-3" id="hapus">Hapus</button>
+                                        <button class="border rounded-xl bg-secondary3 hover:bg-tertiery3 text-white font-medium py-2 px-3" id="hapus">Delete</button>
                                     </div>
                                 </form>
 
@@ -112,19 +112,19 @@
                 @endforeach
                 @else
                 <div class="py-4 text-center text-lg font-medium">
-                    Keranjang Kosong, Ayo Mendaki!
+                    Cart Empty, Let's Go Hiking!
                 </div>
             @endif
         </div>
 
         <div class="p-3 flex flex-col bg-white w-full h-full rounded-lg drop-shadow-lg text-tertiery1">
             <div class="text-2xl font-medium">
-                Pembayaran
+                Payment
             </div>
             <hr>
             <div class="flex flex-col h-full">
                 <div class="flex flex-col py-3">
-                    Tanggal Penyewaan
+                    Rent Date
                     <div class="flex flex-row py-2 items-center gap-4">
                         <input type="date" name="pickup_date" id="pickup_date" class="border-4 rounded-xl p-2 w-full">
                         -
@@ -141,7 +141,7 @@
                 <div class="flex py-3 text-2xl flex-row justify-between">
                     <div class="flex-col">
                         <div id="jumlah_hari">
-                            Lama pinjam: {{ $days ?? 0 }} hari
+                            Rent Duration: {{ $days ?? 0 }} days
                         </div>
                         <p class="text-sm" id="harga_harian">(Rp. {{ $totalPrice ?? 0 }})</p>
                     </div>
@@ -150,14 +150,14 @@
                     </div>
                 </div>
                 <div class="flex py-3 text-2xl flex-row justify-between">
-                    Pajak (11%)
+                    Tax (11%)
                     <div id="pajak">
                         Rp. 0
                     </div>
                 </div>
                 <hr>
                 <div class="flex py-3 text-2xl flex-row justify-between">
-                    Total (Pembulatan)
+                    Total
                     <div id="total">
                         Rp. 0
                     </div>
@@ -174,7 +174,7 @@
                 </div> --}}
 
                 <div class=" h-full items-end flex">
-                    <button id="checkoutButton" class="p-2 w-full rounded-lg bg-secondary3 hover:bg-primary3 text-white font-medium">Lanjutkan</button>
+                    <button id="checkoutButton" class="p-2 w-full rounded-lg bg-secondary3 hover:bg-primary3 text-white font-medium">Continue</button>
                 </div>
             </div>
         </div>
@@ -263,7 +263,7 @@
                     const subtotal = calculateSubtotal();
 
                     if (isNaN(startDate) || isNaN(endDate) || endDate < startDate) {
-                        daysDisplay.textContent = 'Lama Pinjam: 0 hari';
+                        daysDisplay.textContent = 'Rent Duration: 0 days';
                         hargaHari.textContent = formatCurrency(0);
                         hargaHarian.textContent = formatCurrency(0);
                         totalPajak.textContent = formatCurrency(0);
@@ -275,7 +275,7 @@
                     const totalHargaHari = hargaPerHari + subtotal;
                     const pajak = totalHargaHari * percentPajak;
 
-                    daysDisplay.textContent = `Lama Pinjam: ${days} hari`;
+                    daysDisplay.textContent = `Rent Duration: ${days} days`;
                     hargaHari.textContent = formatCurrency(totalHargaHari);
                     hargaHarian.textContent = formatCurrency(hargaPerHari);
                     totalPajak.textContent = formatCurrency(pajak);

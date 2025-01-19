@@ -161,7 +161,7 @@
                                     <form action="{{ route('products.destroy', $product->id) }}" method="POST" class="w-full" onsubmit="return confirm('Apakah Anda yakin ingin menghapus produk ini?');">
                                         @csrf
                                         @method('DELETE')
-                                        <x-button type="submit" variant="danger" class="w-full">Hapus</x-button>
+                                        <x-button type="submit" variant="danger" class="w-full">Delete</x-button>
                                     </form>
                                 </div>
                             @endif
