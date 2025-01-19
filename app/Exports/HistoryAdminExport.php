@@ -14,7 +14,7 @@ class HistoryAdminExport implements FromCollection, WithMapping, WithHeadings
     */
     public function collection()
     {
-        return Rent::select('id', 'pickup_date', 'return_date', 'days', 'status_rent', 'total_price', 'payment_method', 'created_at', 'updated_at')
+        return Rent::select('id', 'user_id', 'pickup_date', 'return_date', 'days', 'status_rent', 'total_price', 'payment_method', 'created_at', 'updated_at')
         ->where('status_rent', 'not like', 'unpaid')->get();
     }
 
@@ -22,6 +22,7 @@ class HistoryAdminExport implements FromCollection, WithMapping, WithHeadings
     {
         return [
             $rent->id,
+            $rent->user_id,
             $rent->pickup_date,
             $rent->return_date,
             $rent->days,
@@ -37,6 +38,7 @@ class HistoryAdminExport implements FromCollection, WithMapping, WithHeadings
     {
         return [
             'ID',
+            'User ID',
             'Tanggal Pinjam',
             'Tanggal Kembali',
             'Total Hari',
