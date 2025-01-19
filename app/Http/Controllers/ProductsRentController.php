@@ -40,6 +40,13 @@ class ProductsRentController extends Controller
             // Filter lain sesuai kebutuhan
         }
 
+        if ($request->has('search')) {
+            $search = $request->input('search');
+            $query->leftJoin('categories', 'products.category_id', '=', 'categories.id')
+            ->where('products.name', 'like', "%$search%")
+            ->orWhere('categories.category_name', 'like', "%$search%");
+        }
+
         $products = $query->paginate(6);
 
         $categories = Category::all();
