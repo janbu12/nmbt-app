@@ -12,13 +12,13 @@
             {{-- Navbar Link --}}
             @if (Auth::user() && Auth::user()->role === 'admin')
             <x-navbar.link href="/admin/dashboard">Dashboard</x-navbar.link>
-            <x-navbar.link href="/products">Item</x-navbar.link>
+            <x-navbar.link href="/products">Items</x-navbar.link>
             <x-navbar.link href="/admin/users">Users</x-navbar.link>
-            <x-navbar.link href="/admin/history">Riwayat</x-navbar.link>
+            <x-navbar.link href="/admin/history">History</x-navbar.link>
             @else
-            <x-navbar.link href="/" :variant="$variant" loading="none">Beranda</x-navbar.link>
-            <x-navbar.link href="/#about" :variant="$variant" loading="none">Tentang Kami</x-navbar.link>
-            <x-navbar.link href="/products" :variant="$variant">Sewa</x-navbar.link>
+            <x-navbar.link href="/" :variant="$variant" loading="none">Home</x-navbar.link>
+            <x-navbar.link href="/#about" :variant="$variant" loading="none">About Us</x-navbar.link>
+            <x-navbar.link href="/products" :variant="$variant">Rent</x-navbar.link>
 
             @endif
 
@@ -103,12 +103,12 @@
         <div class="flex flex-col items-center gap-6 mt-4">
             @if (Auth::user() && Auth::user()->role === 'admin')
                 <x-navbar.link href="/admin/dashboard">Dasboard</x-navbar.link>
-                <x-navbar.link href="/admin/item">Item</x-navbar.link>
-                <x-navbar.link href="/admin/history">Riwayat</x-navbar.link>
+                <x-navbar.link href="/admin/item">Items</x-navbar.link>
+                <x-navbar.link href="/admin/history">History</x-navbar.link>
             @else
-                <x-navbar.link href="/" :variant="$variant" loading="none">Beranda</x-navbar.link>
-                <x-navbar.link href="/#about" :variant="$variant" loading="none">Tentang Kami</x-navbar.link>
-                <x-navbar.link href="/products" :variant="$variant" loading="none">Sewa</x-navbar.link>
+                <x-navbar.link href="/" :variant="$variant" loading="none">Home</x-navbar.link>
+                <x-navbar.link href="/#about" :variant="$variant" loading="none">Abount Us</x-navbar.link>
+                <x-navbar.link href="/products" :variant="$variant" loading="none">Rent</x-navbar.link>
             @endif
 
             @if (!auth()->user())

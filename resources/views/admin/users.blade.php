@@ -54,7 +54,7 @@
 
                 // Menampilkan nama lengkap pengguna
                 const fullName = selectedUser.firstname + ' ' + selectedUser.lastname;
-                modalContent.innerHTML += `<h2 class="text-xl font-bold mb-2">Transactions History ${fullName}</h2>`;
+                modalContent.innerHTML += `<h2 class="text-xl font-bold mb-2">Transactions History of ${fullName}</h2>`;
 
                 // Menampilkan riwayat transaksi
                 if (selectedUser && selectedUser.rent && selectedUser.rent.length > 0) {

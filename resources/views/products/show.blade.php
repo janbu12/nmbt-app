@@ -92,7 +92,7 @@
                             <span class="font-medium text-3xl">
                                 Rp. {{ number_format($product->price ?? 0, 2, ',', '.') }}
                             </span>
-                            <h1 class="text-lg">Stok: {{ $product->stock }}</h1>
+                            <h1 class="text-lg">Stock: {{ $product->stock }}</h1>
                         </div>
                         @if ((auth()->user()->role != "admin") && ($product->stock > 0))
                             <div class="flex items-center space-x-2 h-9 lg:h-auto">
@@ -117,7 +117,7 @@
                                 <form action="{{ route('products.destroy', $product->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus produk ini?');">
                                     @csrf
                                     @method('DELETE')
-                                    <x-button type="submit" variant="danger">Hapus</x-button>
+                                    <x-button type="submit" variant="danger">Delete</x-button>
                                 </form>
                             </div>
                         @else

@@ -51,7 +51,7 @@
                 </div>
             </div>
             <p class="text-center text-2xl lg:max-w-[500px] mt-20">
-                Menyediakan semua kebutuhan camping yang anda butuhkan kapanpun yang anda inginkan
+                Providing all the camping needs you need whenever you want!
             </p>
         </div>
 
@@ -113,44 +113,52 @@
 
         {{-- Section Moments --}}
         <div class="px-12 flex flex-col min-h-screen justify-center items-center gap-8 py-12 lg:py-0">
-            <h2 class="text-3xl font-medium">Buat Moment Anda</h2>
+            <h2 class="text-3xl font-medium">Make your moment!</h2>
             <div class="flex flex-wrap justify-center gap-6">
                 <!-- Card 1 -->
                 <div class="bg-white shadow-lg rounded-lg p-4 max-w-xs">
                     <img src="{{ asset('images/moments/moment1.webp') }}" alt="Moment 1" class="w-full h-48 object-cover rounded-t-lg">
-                    <p class="mt-4 text-center">"Layanan NMBT membantu! Semua perlengkapannya berkualitas dan terawat."</p>
+                    <p class="mt-4 text-center">
+                        "NMBT service helps! All the equipment is of high quality and well-maintained.""
+                    </p>
                 </div>
                 <!-- Card 2 -->
                 <div class="bg-white shadow-lg rounded-lg p-4 max-w-xs">
                     <img src="{{ asset('images/moments/moment2.webp') }}" alt="Moment 2" class="w-full h-48 object-cover rounded-t-lg">
-                    <p class="mt-4 text-center">"Nikmati layanan NMBT, Penyediaan perlengkapan berkemah untuk orang-orang terdekat anda."</p>
+                    <p class="mt-4 text-center">
+                    "Enjoy NMBT service, Camping equipment provider for your loved ones."
+                    </p>
                 </div>
                 <!-- Card 3 -->
                 <div class="bg-white shadow-lg rounded-lg p-4 max-w-xs">
                     <img src="{{ asset('images/moments/moment3.webp') }}" alt="Moment 3" class="w-full h-48 object-cover rounded-t-lg">
-                    <p class="mt-4 text-center">"Memberikan solusi mudah bagi para petualang untuk mengakses peralatan camping dengan kualitas terbaik dan harga terjangkau."</p>
+                    <p class="mt-4 text-center">
+                    "Providing easy solutions for adventurers to access camping equipment with the best quality and affordable prices."
+                    </p>
                 </div>
             </div>
-            <x-button as="a" href="{{ route('products.index') }}" variant="secondary" class="text-xs lg:text-base">Lihat Semua Produk Kami</x-button>
+            <x-button as="a" href="{{ route('products.index') }}" variant="secondary" class="text-xs lg:text-base">See our products!</x-button>
         </div>
 
         {{-- Section Kata kata hari ini --}}
         <div class="px-12 flex min-h-screen lg:min-h-fit py-0 md:py-28 justify-center items-center bg-tertiery3">
-            <h2 class="text-center text-lg lg:text-4xl font-medium max-w-2xl lg:max-w-4xl leading-relaxed">"Kami percaya bahwa setiap perjalanan adalah awal dari petualangan yang tak terlupakan. NMBT hadir untuk menyediakan peralatan camping berkualitas, sehingga Anda bisa menikmati keindahan alam dengan nyaman dan aman."</h2>
+            <h2 class="text-center text-lg lg:text-4xl font-medium max-w-2xl lg:max-w-4xl leading-relaxed">
+                "We believe that every journey is the beginning of memorable adventure. NMBT provides high-quality camping equipment, so you can enjoy the beauty of nature with comfort and safety."
+            </h2>
         </div>
 
         {{-- Section Tentang Kami --}}
         <div id="about" class="px-12 flex flex-col min-h-screen justify-center items-center gap-8 my-20 scroll-mt-32">
-            <h2 class="text-3xl font-medium text-center">Tentang Kami</h2>
+            <h2 class="text-3xl font-medium text-center">About Us</h2>
             <div class="max-w-xs">
                 <img src="{{ asset('images/about-us.webp') }}" alt="About Us" class="w-full h-full object-cover rounded-lg">
             </div>
 
             <p class="text-center text-lg max-w-2xl leading-relaxed">
-                NMBT (Nordic Mountain Bound Travelers) adalah penyedia peralatan camping berkualitas yang berkomitmen untuk membantu Anda menikmati keindahan alam dengan nyaman dan aman. Kami percaya bahwa setiap perjalanan adalah awal dari petualangan yang tak terlupakan. Dengan berbagai pilihan perlengkapan camping yang kami tawarkan, Anda dapat menjelajahi alam bebas tanpa khawatir tentang perlengkapan yang Anda butuhkan.
+                NMBT (Nordic Mountain Bound Traveler) is a provider of high-quality camping equipment that is committed to helping you enjoy the beauty of nature with comfort and safety. We believe that every journey is the beginning of a memorable adventure. With various camping equipment options that we offer, you can explore the great outdoors without worrying about the equipment you need.
             </p>
-            <p class="text-center text-lg max-w-2xl leading-relaxed">
-                Tim kami terdiri dari para pecinta alam yang berpengalaman, siap memberikan solusi terbaik untuk kebutuhan camping Anda. Bergabunglah dengan kami dan ciptakan momen tak terlupakan di alam terbuka!
+            <p class="text-center text-lg max-w-2xl leading-relaxed">   
+                Our team consists of experienced outdoor enthusiasts, ready to provide the best solution for your camping needs. Join us and create unforgettable moments in the great outdoors!
             </p>
         </div>
     </div>
@@ -192,9 +200,9 @@
             <div>
                 <h3 class="text-lg font-semibold">Quick link</h3>
                 <ul class="mt-2">
-                    <li><a href="/#" class="hover:underline">Beranda</a></li>
+                    <li><a href="/#" class="hover:underline">Home</a></li>
                     <li><a href="/#about" class="hover:underline">About us</a></li>
-                    <li><a href="{{ route('products.index') }}" class="hover:underline">Sewa</a></li>
+                    <li><a href="{{ route('products.index') }}" class="hover:underline">Rent</a></li>
                 </ul>
             </div>
         </div>
