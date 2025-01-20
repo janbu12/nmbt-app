@@ -1,61 +1,41 @@
-<x-app-layout title="Sewa" bodyClass="bg-tertiery3 w-full items-center overflow-hidden max-h-screen">
-    <div class="flex w-full px-10 h-screen overflow-hidden">
+<x-app-layout title="Sewa" bodyClass="bg-tertiery3 w-full items-center md:overflow-hidden max-h-full md:max-h-screen">
+    <div class="flex flex-col md:flex-row w-full mt-[100px] md:mt-0 px-4 md:px-10 min-h-screen md:min-h-full md:h-screen md:overflow-hidden">
 
         {{-- Sidebar Component --}}
-        <div class="bg-white mr-8 my-8 rounded-3xl drop-shadow-md py-8 px-6 max-w-sm">
+        <div class="bg-white mr-0 md:mr-8 md:my-8 rounded-2xl drop-shadow-md py-8 px-6 max-w-sm w-full">
 
             {{-- Search Bar --}}
-            <form action="{{ route('products.index') }}" method="GET" >
+            <form action="{{ route('products.index') }}" method="GET">
                 <label class="border py-2.5 px-4 rounded-lg border-tertiery1 flex items-center gap-2 hover:cursor-text text-tertiery1 group">
                     <input @keydown.enter="Alpine.store('loadingState').showLoading();" class="w-full focus:outline-none group/Focus:" name="search" value="{{ request('search') }}" placeholder="Search" />
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 16 16"
-                        fill="currentColor"
-                        class="h-6 w-6 opacity-50 group-hover:opacity-100 transition">
-                        <path
-                        fill-rule="evenodd"
-                        d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z"
-                        clip-rule="evenodd" />
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="h-6 w-6 opacity-50 group-hover:opacity-100 transition">
+                        <path fill-rule="evenodd" d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z" clip-rule="evenodd" />
                     </svg>
                 </label>
             </form>
-            {{-- Search Bar End--}}
+            {{-- Search Bar End --}}
             @auth
                 @if (Auth::check() && Auth::user()->role == 'admin')
                     <a href="{{ route('products.create') }}">
                         <x-button variant='secondary' class="w-full px-2 mt-2 flex flex-row justify-between">
-                            <div>
-                                Add Item
-                            </div>
-                            <div>
-                                +
-                            </div>
+                            <div>Add Item</div>
+                            <div>+</div>
                         </x-button>
                     </a>
                 @endif
             @endauth
 
             {{-- Kategori Bar --}}
-            <div class="flex flex-col items-center mt-8 gap-5">
+            <div class="hidden md:flex flex-col items-center mt-8 gap-5">
                 <h1 class="text-tertiery1 font-medium text-2xl">Category</h1>
                 <div class="flex flex-wrap gap-2 items-center justify-center">
                     @foreach ($categories as $category)
                         @php
                         // Ambil query tanpa parameter 'page'
                         $query = array_filter(request()->query(), fn($key) => $key !== 'page', ARRAY_FILTER_USE_KEY);
-
-                        // Ambil kategori yang ada di query
                         $selectedCategories = (array) request('category', []);
-
-                        // Periksa apakah kategori ini sudah dipilih
                         $isSelected = in_array($category->id, $selectedCategories);
-
-                        // Jika kategori ini sudah dipilih, hapus dari array, jika tidak, tambahkan ke array
-                        $newCategories = $isSelected
-                            ? array_diff($selectedCategories, [$category->id])  // Hapus kategori
-                            : array_merge($selectedCategories, [$category->id]); // Tambahkan kategori
-
+                        $newCategories = $isSelected ? array_diff($selectedCategories, [$category->id]) : array_merge($selectedCategories, [$category->id]);
                         $query['category'] = $newCategories;
                         @endphp
 
@@ -67,55 +47,45 @@
                     @endforeach
                 </div>
             </div>
+
             <div class="flex flex-col items-center mt-8 gap-5">
-                <h1 class="text-tertiery1 font-medium text-2xl">Sort By</h1>
+                <h1 class="hidden md:block text-tertiery1 font-medium text-2xl">Sort By</h1>
                 <div class="flex flex-wrap gap-2 items-center justify-center">
                     @foreach ($filters as $filter)
                         <a href="{{ route('products.index', array_merge(request()->query(), ['sort' => $filter])) }}" @click="Alpine.store('loadingState').showLoading();">
                             <button class="px-3 text-sm p-2 rounded-lg {{ request('sort') == $filter ? 'bg-tertiery3 text-secondary3' : 'bg-secondary3 text-bg3 hover:bg-tertiery3 hover:text-secondary3' }}">
-                                {{ $filter}}
+                                {{ $filter }}
                             </button>
                         </a>
                     @endforeach
                 </div>
             </div>
-            {{-- Kategori Bar End--}}
+            {{-- Kategori Bar End --}}
 
         </div>
         {{-- Sidebar Component End --}}
 
         {{-- Main Content --}}
-        <div class="bg-white my-8 rounded-3xl drop-shadow-md w-full flex flex-col gap-5">
+        <div class="md:bg-white my-4 md:my-8 rounded-2xl drop-shadow-md w-full flex flex-col md:gap-5">
 
             {{-- Pagination --}}
-            <div class="border-b px-14 py-4">
-                    {{ $products->appends(request()->query())->links('pagination::custom-pagination') }}
+            <div class="bg-white rounded-2xl border-b px-4 md:px-14 py-4">
+                {{ $products->appends(request()->query())->links('pagination::custom-pagination') }}
             </div>
-            {{-- Pagination End--}}
+            {{-- Pagination End --}}
 
             {{-- Card Item --}}
             <div class="flex flex-shrink flex-wrap w-full gap-5 overflow-auto py-4 justify-center">
-                @foreach ( $products as $product)
-                    {{-- <x-card
-                        :image="asset($product->images->isNotEmpty() ? 'storage/' . $product->images->first()->file_path : 'images/produk-icon-dummy.png')"
-                        :title="$product->name"
-                        :description="$product->teaser"
-                        :price="$product->price"
-                        :category="$product->category->category_name ?? 'Tidak Ada Kategori'"
-                    /> --}}
-                    <a @click="Alpine.store('loadingState').showLoading();" href="{{ route('products.show', $product->id) }}" class="card bg-white w-full md:w-80 xl:w-1/3 2xl:w-96 max-xl: h-auto shadow-lg drop-shadow cursor-pointer hover:scale-90 transition group">
+                @foreach ($products as $product)
+                    <a @click="Alpine.store('loadingState').showLoading();" href="{{ route('products.show', $product->id) }}" class="card bg-white w-full md:w-80 xl:w-1/3 2xl:w-96 max-xl:h-auto shadow-lg drop-shadow cursor-pointer hover:scale-90 transition group">
                         <figure>
                             @if ($product->images->isNotEmpty())
                                 <div class="lg:h-48 lg:h-62">
-                                    <img src="{{ asset('storage/' . $product->images->first()->image_path) }}" alt="Product Image" class="w-full h-full object-cover"/>
+                                    <img src="{{ asset('storage/' . $product->images->first()->image_path) }}" alt="Product Image" class="w-full h-full object-cover" />
                                 </div>
                             @else
                                 <div class="lg:h-48 lg:h-62">
-                                    <img
-                                        src="{{ asset('images/produk-icon-dummy.png') }}"
-                                        alt="Shoes"
-                                        class="w-full h-full object-cover"
-                                    />
+                                    <img src="{{ asset('images/produk-icon-dummy.png') }}" alt="Shoes" class="w-full h-full object-cover" />
                                 </div>
                             @endif
                         </figure>
@@ -127,23 +97,19 @@
                                     @php $averageRatingProduct = round($product->average_rating); @endphp
                                     @for ($i = 1; $i <= 5; $i++)
                                         @if ($i <= $averageRatingProduct)
-                                            <span class="text-yellow-500 }}">&#9733;</span>
+                                            <span class="text-yellow-500">&#9733;</span>
                                         @else
-                                            <span class="text-gray-300 }}">&#9733;</span>
+                                            <span class="text-gray-300">&#9733;</span>
                                         @endif
                                     @endfor
                                 </div>
-                                <span class="text-sm">{{number_format($product->average_rating,1)}}</span>
+                                <span class="text-sm">{{ number_format($product->average_rating, 1) }}</span>
                             </div>
                             <div class="flex flex-col items-end gap-2 mt-2">
-                                <span class="font-medium lg:text-lg 2xl:text-2xl">
-                                    Rp. {{ number_format($product->price ?? 0, 2, ',', '.') }}
-                                </span>
+                                <span class="font-medium lg:text-lg 2xl:text-2xl">Rp. {{ number_format($product->price ?? 0, 2, ',', '.') }}</span>
                                 <div class="card-actions justify-end">
-                                    <div class="badge badge-outline 2xl:text-sm lg:text-xs" >
-                                        {{ $categories[$product->category_id - 1]->category_name }}
-                                    </div>
-                                    <div class="badge badge-outline 2xl:text-sm lg:text-xs {{ $product->stock > 0 ? 'text-green-400':'text-red-400' }}" >
+                                    <div class="badge badge-outline 2xl:text-sm lg:text-xs">{{ $categories[$product->category_id - 1]->category_name }}</div>
+                                    <div class="badge badge-outline 2xl:text-sm lg:text-xs {{ $product->stock > 0 ? 'text-green-400' : 'text-red-400' }}">
                                         @if ($product->stock > 0)
                                             Ready
                                         @else
@@ -169,10 +135,12 @@
                     </a>
                 @endforeach
             </div>
-            {{-- Card Item End--}}
-
+            {{-- Card Item End --}}
+            <div class="block md:hidden bg-white rounded-2xl border-b px-4 md:px-14 py-4">
+                {{ $products->appends(request()->query())->links('pagination::custom-pagination') }}
+            </div>
         </div>
-        {{-- Main Content End--}}
+        {{-- Main Content End --}}
 
     </div>
     <x-slot name="scripts">

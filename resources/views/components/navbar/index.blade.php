@@ -1,6 +1,6 @@
 <div
     id="navbar"
-    class="px-6 md:px-10 py-3 drop-shadow-md w-full z-50 {{ $variant === "transparent" ? 'bg-transparent text-white fixed backdrop-blur-sm' : 'bg-white text-tertiery1'}}"
+    class="fixed px-4 md:px-10 py-3 drop-shadow-md w-full z-50 {{ $variant === "transparent" ? 'bg-transparent text-white fixed backdrop-blur-sm' : 'bg-white text-tertiery1 md:relative'}}"
 >
     <div
         class="flex justify-between">
@@ -32,7 +32,7 @@
         </div>
         <!-- Toggle Button for Mobile -->
         <div class="lg:hidden flex items-center justify-center">
-            <button id="mobile-menu-toggle" class="text-white focus:outline-none hover:bg-gray-950 hover:bg-opacity-30 p-2 rounded">
+            <button id="mobile-menu-toggle" class="{{ $variant === "transparent" ? 'text-white hover:bg-gray-950 hover:bg-opacity-30' : 'text-tertiery1'}} focus:outline-none p-2 rounded">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
                 </svg>
@@ -122,7 +122,10 @@
                         Cart
                         <span class="badge bg-secondary3 text-bg3">{{ auth()->user()->cart->count() }}</span>
                     </x-navbar.link>
-                    <x-navbar.link href="/history" :variant="$variant">History</x-navbar.link>
+                    <x-navbar.link href="/history" :variant="$variant">
+                        Your Orders
+                        <span class="badge bg-secondary3 text-bg3">{{ auth()->user()->rent->count() }}</span>
+                    </x-navbar.link>
                 @endif
                 <a href="/user/profile" class="avatar flex items-center gap-4">
                     <h1 class="font-medium group-hover/userInfo:text-secondary1">{{auth()->user()->firstname}} {{auth()->user()->lastname}}</h1>
@@ -142,7 +145,12 @@
                 </a>
                 <form method="POST" action="{{ route('auth.logout') }}" class="block">
                     @csrf
-                    <x-button type="submit" variant="tertiery" @click="Alpine.store('loadingState').showLoading();">Logout</x-button>
+                    <x-button type="submit"
+                    :variant="$variant == 'transparent' ? 'tertiery' : 'secondary'"
+                      @click="Alpine.store('loadingState').showLoading();"
+                    >
+                        Logout
+                    </x-button>
                 </form>
             @endauth
         </div>
