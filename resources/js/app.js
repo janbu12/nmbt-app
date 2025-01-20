@@ -19,14 +19,18 @@ document.addEventListener('alpine:init', () => {
 });
 
 // Reset loading state saat halaman dimuat
-// document.addEventListener('DOMContentLoaded', () => {
-//     Alpine.store('loadingState').hideLoading();
-// });
+document.addEventListener('DOMContentLoaded', () => {
+    Alpine.store('loadingState').hideLoading();
+});
 
 // Reset loading state saat pengguna meninggalkan halaman
-// window.addEventListener('beforeunload', () => {
-//     Alpine.store('loadingState').hideLoading();
-// });
+window.addEventListener('beforeunload', () => {
+    Alpine.store('loadingState').showLoading();
+    setTimeout(() => {
+        Alpine.store('loadingState').hideLoading();
+    }, 1500);
+});
+
 
 window.Alpine = Alpine;
 Alpine.start();
