@@ -22,3 +22,7 @@ body {
 .btn-tertiery-custom {
     @apply bg-base-100 text-gray-800 hover:text-secondary3
 }
+
+.nav-link.active {
+    @apply font-semibold text-lg
+}

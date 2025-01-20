@@ -7,7 +7,6 @@
         </div>
     </div>
     <div class="flex flex-col text-tertiery1">
-
         <div class="px-12 h-screen flex flex-col items-center justify-center">
             {{-- Carousel Section --}}
             <div class="relative w-full lg:w-3/4 overflow-hidden" id="carousel-container">
@@ -157,7 +156,7 @@
             <p class="text-center text-lg max-w-2xl leading-relaxed">
                 NMBT (Nordic Mountain Bound Traveler) is a provider of high-quality camping equipment that is committed to helping you enjoy the beauty of nature with comfort and safety. We believe that every journey is the beginning of a memorable adventure. With various camping equipment options that we offer, you can explore the great outdoors without worrying about the equipment you need.
             </p>
-            <p class="text-center text-lg max-w-2xl leading-relaxed">   
+            <p class="text-center text-lg max-w-2xl leading-relaxed">
                 Our team consists of experienced outdoor enthusiasts, ready to provide the best solution for your camping needs. Join us and create unforgettable moments in the great outdoors!
             </p>
         </div>
@@ -346,6 +345,30 @@
 
                 // Panggil saat halaman pertama kali dimuat
                 handleScroll();
+            });
+
+            document.addEventListener('DOMContentLoaded', function() {
+                function setActiveLink() {
+                    const hash = window.location.hash;
+                    const links = document.querySelectorAll('.nav-link');
+                    console.log(hash)
+
+                    links.forEach(link => {
+                        // Hapus kelas aktif dari semua tautan
+                        link.classList.remove('active');
+
+                        // Tambahkan kelas aktif jika data-hash cocok dengan hash saat ini
+                        if (link.dataset.hash === hash || (hash === '' && link.dataset.hash === '#')) {
+                            link.classList.add('active');
+                        }
+                    });
+                }
+
+                // Set link aktif saat halaman dimuat
+                setActiveLink();
+
+                // Set link aktif saat hash berubah
+                window.addEventListener('hashchange', setActiveLink);
             });
         </script>
     </x-slot>

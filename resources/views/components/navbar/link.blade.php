@@ -1,7 +1,7 @@
 @props(['href', 'variant' => 'default','loading' => 'default'])
 
 @php
-    $isActive = request()->is(trim($href, '/')) || request()->is(trim($href, '/') . '/*');
+    $isActive = request()->is(trim($href, '/')) || request()->is(trim($href, '/') . '/*' ) || (request()->fullUrl() === url($href));
 @endphp
 
 <a
