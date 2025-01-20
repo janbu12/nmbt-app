@@ -1,13 +1,13 @@
-<x-app-layout title="Forgot Password" bodyClass="bg-tertiery3 justify-center items-center min-h-screen gap-4 text-tertiery1">
-    <a class="hover:scale-110 hover:-translate-y-2 transition duration-300" href="/">
-        <img src="{{asset('images/Logo.png')}}" alt="Logo.png" class="max-w-28 drop-shadow-md">
+<x-app-layout title="Forgot Password" bodyClass="bg-tertiery3 justify-center items-center min-h-screen gap-4 p-4 md:p-0 text-tertiery1">
+    <a @click="Alpine.store('loadingState').showLoading();" class="hover:scale-110 hover:-translate-y-2 transition duration-300" href="/login">
+        <img src="{{asset('images/Logo.png')}}" alt="Logo.png" class="max-w-20 md:max-w-28 drop-shadow-md">
     </a>
     <form method="POST" action="{{ route('password.email') }}" class="bg-white drop-shadow-sm rounded-3xl flex flex-col px-10 py-5">
         @csrf
         <div class="flex justify-center">
             <h1 class="text-center font-semibold text-tertiery1 text-2xl">Forgot Password</h1>
         </div>
-        <div class="flex flex-col min-w-[450px] gap-4 py-8">
+        <div class="flex flex-col w-full md:min-w-[450px] gap-4 py-8">
             <div class="flex flex-col gap-2">
                 <label for="email" class="font-medium">Email</label>
                 <x-input-text name="email" placeholder="Enter Your Email"></x-input-text>
@@ -22,12 +22,12 @@
 
     {{-- ERROR --}}
     @if ($errors->any())
-        <div class="toast toast-end" x-data="{ show: true }" x-init="setTimeout(() => show = false, 2500)" x-show="show">
+        <div class="md:toast md:toast-end" x-data="{ show: true }" x-init="setTimeout(() => show = false, 2500)" x-show="show">
             @foreach ($errors->all() as $error)
                 <div class="alert alert-error">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
-                        class="h-6 w-6 shrink-0 stroke-current"
+                        class="h-6 w-6 shrink-0 stroke-current hidden md:block"
                         fill="none"
                         viewBox="0 0 24 24">
                         <path
