@@ -40,20 +40,6 @@
 
         {{$slot}}
 
-        <script>
-            document.addEventListener('alpine:init', () => {
-                Alpine.store('loadingState', {
-                    isLoading: false,
-                    showLoading() {
-                        this.isLoading = true;
-                    },
-                    hideLoading() {
-                        this.isLoading = false;
-                    },
-                });
-            });
-        </script>
-
         @isset($scripts)
             {{ $scripts }}
         @endisset
