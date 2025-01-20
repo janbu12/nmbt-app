@@ -20,3 +20,5 @@ function formatDate(dateString) {
 }
 
 window.formatDate = formatDate;
+
+Alpine.store('loadingState').hideLoading();

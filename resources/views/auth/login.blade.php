@@ -15,7 +15,13 @@
             <div class="flex flex-col gap-2">
                 <label for="" class="font-medium">Password</label>
                 <x-input-text type="password" name="password" placeholder="Enter Your Password"></x-input-text>
-                <a href="" class="text-end text-sm text-slate-400 hover:text-tertiery1">Forgot Your Password ?</a>
+                <div class="flex justify-between px-2">
+                    <div class="flex items-center">
+                        <input type="checkbox" name="remember" id="remember" checked class="mr-2 cursor-pointer" />
+                        <label for="remember" class="text-sm text-slate-400 cursor-pointer">Remember Me</label>
+                    </div>
+                    <a href="/forgot-password" class="text-end text-sm text-slate-400 hover:text-tertiery1">Forgot Your Password ?</a>
+                </div>
             </div>
 
         </div>
