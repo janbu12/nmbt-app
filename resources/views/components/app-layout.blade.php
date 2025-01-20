@@ -30,7 +30,7 @@
 
     </head>
     <body class="flex flex-col {{$bodyClass ?? ''}}" x-data>
-        @if(!request()->is('login') && !request()->is('register') && !request()->is('cart/invoice'))
+        @if(!request()->is('login') && !request()->is('register') && !request()->is('cart/invoice') && !request()->is('forgot-password') && !request()->is('password*'))
             @include('components.navbar.index', ['variant' => $navbarVariant ?? 'default'])
         @endif
 
