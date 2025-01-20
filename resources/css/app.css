@@ -26,3 +26,24 @@ body {
 .nav-link.active {
     @apply font-semibold text-lg
 }
+
+@media (min-width: 1024px) {
+    #carousel-slides {
+        display: flex;
+        flex-wrap: nowrap; /* Pastikan semua slide dalam satu baris */
+    }
+    #carousel-slides > div {
+        width: 25%; /* 4 gambar per slide */
+    }
+}
+
+@media (max-width: 1023px) {
+    #carousel-slides {
+        display: flex;
+        flex-wrap: nowrap; /* Pastikan semua slide dalam satu baris */
+    }
+    #carousel-slides > div {
+        width: 100%; /* 1 gambar per slide */
+    }
+}
+
