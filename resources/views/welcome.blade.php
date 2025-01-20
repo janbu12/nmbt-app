@@ -7,30 +7,48 @@
         </div>
     </div>
     <div class="flex flex-col text-tertiery1">
-
-        <div class="px-12 h-screen flex flex-col items-center justify-center">
+        <div class="px-4 md:px-12 h-screen flex flex-col items-center justify-center">
             {{-- Carousel Section --}}
             <div class="relative w-full lg:w-3/4 overflow-hidden" id="carousel-container">
                 <!-- Slides Wrapper -->
                 <div id="carousel-slides" class="flex transition-transform duration-700 ease-in-out">
                     <!-- Slide 1 -->
-                    <div class="flex-shrink-0 w-full grid grid-cols-4">
+                    <div class="flex-shrink-0 w-full lg:w-1/4">
                         <img src="{{ asset('images/sliders/camp1.png') }}" alt="Camp 1" class="w-full h-auto shadow-lg" />
+                    </div>
+                    <div class="flex-shrink-0 w-full lg:w-1/4">
                         <img src="{{ asset('images/sliders/camp2.png') }}" alt="Camp 2" class="w-full h-auto shadow-lg" />
+                    </div>
+                    <div class="flex-shrink-0 w-full lg:w-1/4">
                         <img src="{{ asset('images/sliders/camp3.png') }}" alt="Camp 3" class="w-full h-auto shadow-lg" />
+                    </div>
+                    <div class="flex-shrink-0 w-full lg:w-1/4">
                         <img src="{{ asset('images/sliders/camp4.png') }}" alt="Camp 4" class="w-full h-auto shadow-lg" />
                     </div>
                     <!-- Slide 2 -->
-                    <div class="flex-shrink-0 w-full grid grid-cols-4 opacity-75">
+                    <div class="flex-shrink-0 w-full lg:w-1/4">
                         <img src="{{ asset('images/sliders/camp5.webp') }}" alt="Camp 5" class="w-full h-auto shadow-lg" />
+                    </div>
+                    <div class="flex-shrink-0 w-full lg:w-1/4">
                         <img src="{{ asset('images/sliders/camp6.webp') }}" alt="Camp 6" class="w-full h-auto shadow-lg" />
+                    </div>
+                    <div class="flex-shrink-0 w-full lg:w-1/4">
                         <img src="{{ asset('images/sliders/camp7.webp') }}" alt="Camp 7" class="w-full h-auto shadow-lg" />
+                    </div>
+                    <div class="flex-shrink-0 w-full lg:w-1/4">
                         <img src="{{ asset('images/sliders/camp8.webp') }}" alt="Camp 8" class="w-full h-auto shadow-lg" />
                     </div>
-                    <div class="flex-shrink-0 w-full grid grid-cols-4 opacity-75">
+                    <!-- Slide 3 -->
+                    <div class="flex-shrink-0 w-full lg:w-1/4">
                         <img src="{{ asset('images/sliders/camp9.webp') }}" alt="Camp 9" class="w-full h-auto shadow-lg" />
+                    </div>
+                    <div class="flex-shrink-0 w-full lg:w-1/4">
                         <img src="{{ asset('images/sliders/camp10.webp') }}" alt="Camp 10" class="w-full h-auto shadow-lg" />
+                    </div>
+                    <div class="flex-shrink-0 w-full lg:w-1/4">
                         <img src="{{ asset('images/sliders/camp11.webp') }}" alt="Camp 11" class="w-full h-auto shadow-lg" />
+                    </div>
+                    <div class="flex-shrink-0 w-full lg:w-1/4">
                         <img src="{{ asset('images/sliders/camp12.webp') }}" alt="Camp 12" class="w-full h-auto shadow-lg" />
                     </div>
                 </div>
@@ -44,10 +62,8 @@
                 </button>
 
                 <!-- Pagination Dots -->
-                <div class="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
-                    <button class="dot w-3 h-3 bg-gray-100 border-none hover:bg-gray-400 rounded-full"></button>
-                    <button class="dot w-3 h-3 bg-gray-100 border-none hover:bg-gray-400 rounded-full"></button>
-                    <button class="dot w-3 h-3 bg-gray-100 border-none hover:bg-gray-400 rounded-full"></button>
+                <div id="pagination-dots" class="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
+                    <!-- Dots will be generated here by JavaScript -->
                 </div>
             </div>
             <p class="text-center text-2xl lg:max-w-[500px] mt-20">
@@ -56,7 +72,7 @@
         </div>
 
         {{-- Section Top 3 Products --}}
-        <div class="px-12 flex flex-col min-h-screen bg-tertiery3 py-12 lg:py-0 justify-center items-center gap-8">
+        <div class="px-4 md:px-12 flex flex-col min-h-screen bg-tertiery3 py-12 lg:py-0 justify-center items-center gap-8">
             <h2 class="text-3xl font-medium">Top 3 Products</h2>
             <div class="flex flex-wrap lg:flex-nowrap items-center justify-center gap-5">
                 @foreach($topThreeProducts as $index => $product)
@@ -112,43 +128,43 @@
         </div>
 
         {{-- Section Moments --}}
-        <div class="px-12 flex flex-col min-h-screen justify-center items-center gap-8 py-12 lg:py-0">
+        <div class="px-4 md:px-12 flex flex-col min-h-screen justify-center items-center gap-8 py-12 lg:py-0">
             <h2 class="text-3xl font-medium">Make your moment!</h2>
             <div class="flex flex-wrap justify-center gap-6">
                 <!-- Card 1 -->
-                <div class="bg-white shadow-lg rounded-lg p-4 max-w-xs">
+                <div class="bg-white shadow-lg rounded-lg p-4 w-full md:max-w-xs">
                     <img src="{{ asset('images/moments/moment1.webp') }}" alt="Moment 1" class="w-full h-48 object-cover rounded-t-lg">
                     <p class="mt-4 text-center">
                         "NMBT service helps! All the equipment is of high quality and well-maintained.""
                     </p>
                 </div>
                 <!-- Card 2 -->
-                <div class="bg-white shadow-lg rounded-lg p-4 max-w-xs">
+                <div class="bg-white shadow-lg rounded-lg p-4 w-full md:max-w-xs">
                     <img src="{{ asset('images/moments/moment2.webp') }}" alt="Moment 2" class="w-full h-48 object-cover rounded-t-lg">
                     <p class="mt-4 text-center">
                     "Enjoy NMBT service, Camping equipment provider for your loved ones."
                     </p>
                 </div>
                 <!-- Card 3 -->
-                <div class="bg-white shadow-lg rounded-lg p-4 max-w-xs">
+                <div class="bg-white shadow-lg rounded-lg p-4 w-full md:max-w-xs">
                     <img src="{{ asset('images/moments/moment3.webp') }}" alt="Moment 3" class="w-full h-48 object-cover rounded-t-lg">
                     <p class="mt-4 text-center">
                     "Providing easy solutions for adventurers to access camping equipment with the best quality and affordable prices."
                     </p>
                 </div>
             </div>
-            <x-button as="a" href="{{ route('products.index') }}" variant="secondary" class="text-xs lg:text-base">See our products!</x-button>
+            <x-button as="a" href="{{ route('products.index') }}" variant="secondary" class="text-small lg:text-base">See our products!</x-button>
         </div>
 
         {{-- Section Kata kata hari ini --}}
-        <div class="px-12 flex min-h-screen lg:min-h-fit py-0 md:py-28 justify-center items-center bg-tertiery3">
+        <div class="px-4 md:px-12 flex min-h-screen lg:min-h-fit py-0 md:py-28 justify-center items-center bg-tertiery3">
             <h2 class="text-center text-lg lg:text-4xl font-medium max-w-2xl lg:max-w-4xl leading-relaxed">
                 "We believe that every journey is the beginning of memorable adventure. NMBT provides high-quality camping equipment, so you can enjoy the beauty of nature with comfort and safety."
             </h2>
         </div>
 
         {{-- Section Tentang Kami --}}
-        <div id="about" class="px-12 flex flex-col min-h-screen justify-center items-center gap-8 my-20 scroll-mt-32">
+        <div id="about" class="px-4 md:px-12 flex flex-col min-h-screen justify-center items-center gap-8 my-20 scroll-mt-32">
             <h2 class="text-3xl font-medium text-center">About Us</h2>
             <div class="max-w-xs">
                 <img src="{{ asset('images/about-us.webp') }}" alt="About Us" class="w-full h-full object-cover rounded-lg">
@@ -157,7 +173,7 @@
             <p class="text-center text-lg max-w-2xl leading-relaxed">
                 NMBT (Nordic Mountain Bound Traveler) is a provider of high-quality camping equipment that is committed to helping you enjoy the beauty of nature with comfort and safety. We believe that every journey is the beginning of a memorable adventure. With various camping equipment options that we offer, you can explore the great outdoors without worrying about the equipment you need.
             </p>
-            <p class="text-center text-lg max-w-2xl leading-relaxed">   
+            <p class="text-center text-lg max-w-2xl leading-relaxed">
                 Our team consists of experienced outdoor enthusiasts, ready to provide the best solution for your camping needs. Join us and create unforgettable moments in the great outdoors!
             </p>
         </div>
@@ -165,7 +181,7 @@
 
     {{-- Footer --}}
     <footer class="bg-gray-800 text-white py-8">
-        <div class="container mx-auto flex flex-wrap lg:flex-nowrap gap-4 lg:gap-0 justify-between items-center px-12">
+        <div class="container mx-auto flex flex-wrap lg:flex-nowrap gap-4 lg:gap-0 justify-between items-center px-4 md:px-12">
             <div>
                 <h1 class="text-4xl font-bold">NMBT</h1>
                 <p class="text-lg">Nordic Mountain Bound Travelers</p>
@@ -207,146 +223,4 @@
             </div>
         </div>
     </footer>
-
-    <x-slot name="scripts">
-        <script>
-            document.addEventListener('DOMContentLoaded', () => {
-                const slides = document.getElementById('carousel-slides');
-                const dots = document.querySelectorAll('.dot');
-                const prevBtn = document.getElementById('prevBtn');
-                const nextBtn = document.getElementById('nextBtn');
-                const carouselContainer = document.getElementById('carousel-container');
-
-                let currentIndex = 0;
-                const totalSlides = slides.children.length;
-                let slideInterval;
-
-                function updateCarousel() {
-                    const offset = -currentIndex * 100; // Geser slide berdasarkan indeks
-                    slides.style.transform = `translateX(${offset}%)`;
-
-                    // Update active dot
-                    dots.forEach((dot, index) => {
-                        if (index === currentIndex) {
-                            dot.classList.add('bg-gray-700', 'border', 'hover:bg-gray-600', 'border-secondary1');
-                            dot.classList.remove('bg-gray-100', 'border-none', 'hover:bg-gray-400');
-                        } else {
-                            dot.classList.add('bg-gray-100', 'border-none', 'hover:bg-gray-400');
-                            dot.classList.remove('bg-gray-700', 'border', 'hover:bg-gray-600', 'border-secondary1');
-                        }
-                    });
-                }
-
-                function showNextSlide() {
-                    currentIndex = (currentIndex + 1) % totalSlides;
-                    updateCarousel();
-                }
-
-                function showPrevSlide() {
-                    currentIndex = (currentIndex - 1 + totalSlides) % totalSlides;
-                    updateCarousel();
-                }
-
-                function startAutoSlide() {
-                    console.log('start');
-                    slideInterval = setInterval(showNextSlide, 5000); // Pindah slide setiap 5 detik
-                }
-
-                function stopAutoSlide() {
-                    console.log('stop');
-                    clearInterval(slideInterval);
-                }
-
-                // Event Listeners
-                nextBtn.addEventListener('click', () => {
-                    showNextSlide();
-                    stopAutoSlide();
-                    startAutoSlide();
-                });
-
-                prevBtn.addEventListener('click', () => {
-                    showPrevSlide();
-                    stopAutoSlide();
-                    startAutoSlide();
-                });
-
-                dots.forEach((dot, index) => {
-                    dot.addEventListener('click', () => {
-                        currentIndex = index;
-                        updateCarousel();
-                        stopAutoSlide();
-                        startAutoSlide();
-                    });
-                });
-
-                // Auto-play functionality
-                updateCarousel();
-                startAutoSlide();
-            });
-
-            document.addEventListener('DOMContentLoaded', () => {
-                const navbar = document.getElementById('navbar');
-                const navbarLinks = document.querySelectorAll('.nav-link');
-                const loginBtn = document.getElementById('login-btn');
-                const mainBackground = document.getElementById('main-background');
-                const toggleMenu = document.getElementById('mobile-menu-toggle');
-                const transparentClasses = 'bg-transparent text-white';
-                const blackClasses = 'bg-white text-tertiery1';
-                const transparentLinkClasses = 'text-white hover:text-gray-300';
-                const blackLinkClasses = 'text-tertiery1 hover:text-tertiery1';
-
-                function handleScroll() {
-                    const mainBackgroundHeight = mainBackground.offsetHeight;
-                    const scrollY = window.scrollY;
-
-                    if (scrollY >= mainBackgroundHeight) {
-                        // Ubah navbar menjadi transparent-black
-                        navbar.classList.remove(...transparentClasses.split(' '));
-                        navbar.classList.add(...blackClasses.split(' '));
-
-                        // Ubah navbar link
-                        navbarLinks.forEach(link => {
-                            link.classList.remove(...transparentLinkClasses.split(' '));
-                            link.classList.add(...blackLinkClasses.split(' '));
-                        });
-
-                        toggleMenu.classList.remove('text-white');
-                        toggleMenu.classList.add('text-tertiery1');
-
-                        // Ubah login button
-                        if(loginBtn){
-                            loginBtn.classList.remove('btn-tertiery-custom');
-                            loginBtn.classList.add('btn-secondary-custom');
-                        }
-
-                    } else {
-                        // Reset navbar ke transparent
-                        navbar.classList.remove(...blackClasses.split(' '));
-                        navbar.classList.add(...transparentClasses.split(' '));
-
-                        // Ubah login button
-                        navbarLinks.forEach(link => {
-                            link.classList.remove(...blackLinkClasses.split(' '));
-                            link.classList.add(...transparentLinkClasses.split(' '));
-                        });
-
-                        toggleMenu.classList.remove('text-tertiery1');
-                        toggleMenu.classList.add('text-white');
-
-                        // Ubah login button
-                        if(loginBtn){
-                            loginBtn.classList.remove('btn-secondary-custom');
-                            loginBtn.classList.add('btn-tertiery-custom');
-                        }
-                    }
-                }
-
-                // Event listener untuk scroll
-                window.addEventListener('scroll', handleScroll);
-
-                // Panggil saat halaman pertama kali dimuat
-                handleScroll();
-            });
-        </script>
-    </x-slot>
 </x-app-layout>

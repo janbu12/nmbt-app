@@ -1,11 +1,38 @@
 import './bootstrap';
+import './carousel.js';
+import './navbar.js';
 import Alpine from 'alpinejs';
 import Swal from 'sweetalert2';
 
 window.Swal = Swal;
 
-window.Alpine = Alpine;
+document.addEventListener('alpine:init', () => {
+    Alpine.store('loadingState', {
+        isLoading: false,
+        showLoading() {
+            this.isLoading = true;
+        },
+        hideLoading() {
+            this.isLoading = false;
+        },
+    });
+});
 
+// Reset loading state saat halaman dimuat
+document.addEventListener('DOMContentLoaded', () => {
+    Alpine.store('loadingState').hideLoading();
+});
+
+// Reset loading state saat pengguna meninggalkan halaman
+window.addEventListener('beforeunload', () => {
+    Alpine.store('loadingState').showLoading();
+    setTimeout(() => {
+        Alpine.store('loadingState').hideLoading();
+    }, 1500);
+});
+
+
+window.Alpine = Alpine;
 Alpine.start();
 
 function formatDate(dateString) {

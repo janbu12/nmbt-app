@@ -144,7 +144,7 @@ class InvoiceController extends Controller
 
         Cart::where('user_id', Auth::id())->whereIn('id', $request->selected_items)->delete();
 
-        \Midtrans\Config::$serverKey = env('MIDTRANS_SERVER_KEY');
+        \Midtrans\Config::$serverKey = config('midtrans.server_key');
         \Midtrans\Config::$isProduction = false;
         \Midtrans\Config::$isSanitized = true;
         \Midtrans\Config::$is3ds = true;
@@ -217,7 +217,7 @@ class InvoiceController extends Controller
         if($statusCode == 404){
             // Handle if transaction is not onPending
 
-            \Midtrans\Config::$serverKey = env('MIDTRANS_SERVER_KEY');
+            \Midtrans\Config::$serverKey = config('midtrans.server_key');
             \Midtrans\Config::$isProduction = false;
             \Midtrans\Config::$isSanitized = true;
             \Midtrans\Config::$is3ds = true;
@@ -253,7 +253,7 @@ class InvoiceController extends Controller
         else if(@isset($data['transaction_status']) && $data['transaction_status'] == 'expire') {
             // Handle if transaction expired
 
-            \Midtrans\Config::$serverKey = env('MIDTRANS_SERVER_KEY');
+            \Midtrans\Config::$serverKey = config('midtrans.server_key');
             \Midtrans\Config::$isProduction = false;
             \Midtrans\Config::$isSanitized = true;
             \Midtrans\Config::$is3ds = true;

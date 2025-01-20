@@ -1,5 +1,5 @@
 <x-app-layout title="Sewa" bodyClass="bg-tertiery3 w-full items-center min-h-screen text-tertiery1">
-    <div class="w-full px-10 ">
+    <div class="w-full mt-16 md:mt-0 px-4 md:px-10 ">
         <div class="breadcrumbs text-sm text-tertiery1 mt-4">
             <ul>
                 <li @click="Alpine.store('loadingState').showLoading();"><a href="/products">NMBT</a></li>
@@ -84,18 +84,18 @@
                             <p>Rent</p>
                         </div>
                     </div>
-                    <div class="py-5 text-balance">
+                    <div class="py-5 text-pretty md:text-balance">
                         {{ $product->description }}
                     </div>
                     <div class="flex flex-wrap lg:flex-nowrap gap-4 justify-between text-secondary3">
-                        <div class="flex gap-3 items-center">
-                            <span class="font-medium text-3xl">
+                        <div class="flex gap-3 flex-col w-full md:w-fit md:flex-row justify-center items-center">
+                            <span class="font-medium text-2xl md:text-3xl">
                                 Rp. {{ number_format($product->price ?? 0, 2, ',', '.') }}
                             </span>
                             <h1 class="text-lg">Stock: {{ $product->stock }}</h1>
                         </div>
                         @if ((auth()->user()->role != "admin") && ($product->stock > 0))
-                            <div class="flex items-center space-x-2 h-9 lg:h-auto">
+                            <div class="flex w-full justify-center md:w-fit items-center space-x-2 h-9 lg:h-auto">
                                 <button type="button" id="decrease" class="bg-base-100 px-3 border border-secondary3 h-full rounded-md hover:bg-secondary3 hover:text-bg3 transition">
                                     -
                                 </button>
@@ -121,11 +121,13 @@
                                 </form>
                             </div>
                         @else
-                            <x-button variant='danger' disabled>Out Of Stock</x-button>
+                            <div class="flex md:block w-full justify-center md:w-fit">
+                                <x-button variant='danger' disabled>Out Of Stock</x-button>
+                            </div>
                         @endif
                     </div>
                     @if (auth()->user()->role != "admin" && $product->stock > 0)
-                        <div class="w-full flex justify-start md:justify-end mt-5">
+                        <div class="w-full flex justify-center md:justify-end mt-5">
                             <x-button type="submit" variant="secondary">Add To Cart</x-button>
                         </div>
                     @endif
@@ -170,7 +172,7 @@
                     <!-- Filter Rating -->
                     <div class="flex gap-4 mb-4">
                         <form action="{{ route('products.show', $product->id) }}" method="GET">
-                            <div class="flex gap-2">
+                            <div class="flex flex-wrap justify-center md:justify-start gap-2">
                                 @foreach (range(1, 5) as $star)
                                     <button
                                         @click="Alpine.store('loadingState').showLoading();"
