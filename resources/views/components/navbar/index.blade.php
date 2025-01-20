@@ -102,8 +102,9 @@
     <div id="mobile-menu" class="hidden md:hidden py-5">
         <div class="flex flex-col items-center gap-6 mt-4">
             @if (Auth::user() && Auth::user()->role === 'admin')
-                <x-navbar.link href="/admin/dashboard">Dasboard</x-navbar.link>
-                <x-navbar.link href="/admin/item">Items</x-navbar.link>
+                <x-navbar.link href="/admin/dashboard">Dashboard</x-navbar.link>
+                <x-navbar.link href="/products">Items</x-navbar.link>
+                <x-navbar.link href="/admin/users">Users</x-navbar.link>
                 <x-navbar.link href="/admin/history">History</x-navbar.link>
             @else
                 <x-navbar.link href="/#" :variant="$variant" data-hash="#" :loading="$variant == 'transparent' ? 'none' : 'default'">Home</x-navbar.link>
@@ -122,7 +123,7 @@
                         Cart
                         <span class="badge bg-secondary3 text-bg3">{{ auth()->user()->cart->count() }}</span>
                     </x-navbar.link>
-                    <x-navbar.link href="/history" :variant="$variant">
+                    <x-navbar.link href="/user/history?status=done" :variant="$variant">
                         Your Orders
                         <span class="badge bg-secondary3 text-bg3">{{ auth()->user()->rent->count() }}</span>
                     </x-navbar.link>
