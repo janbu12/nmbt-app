@@ -106,9 +106,9 @@
                 <x-navbar.link href="/admin/item">Items</x-navbar.link>
                 <x-navbar.link href="/admin/history">History</x-navbar.link>
             @else
-                <x-navbar.link href="/" :variant="$variant" loading="none">Home</x-navbar.link>
-                <x-navbar.link href="/#about" :variant="$variant" loading="none">Abount Us</x-navbar.link>
-                <x-navbar.link href="/products" :variant="$variant" loading="none">Rent</x-navbar.link>
+                <x-navbar.link href="/" :variant="$variant" :loading="$variant == 'transparent' ? 'none' : 'default'">Home</x-navbar.link>
+                <x-navbar.link href="/#about" :variant="$variant" :loading="$variant == 'transparent' ? 'none' : 'default'">Abount Us</x-navbar.link>
+                <x-navbar.link href="/products" :variant="$variant">Rent</x-navbar.link>
             @endif
 
             @if (!auth()->user())
