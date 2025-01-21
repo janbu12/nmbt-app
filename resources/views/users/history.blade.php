@@ -146,14 +146,14 @@
         </div>
 
         {{-- Modal Konfirmasi Pembatalan --}}
-        <div id="cancelModal" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden z-50">
-            <div class="bg-white rounded-lg p-6 w-1/3">
+        <div id="cancelModal" class="fixed px-2 md:px-0 inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden z-50">
+            <div class="bg-white rounded-lg p-6 w-full md:w-1/3">
                 <h2 class="text-xl font-semibold mb-4">Confirm Cancellation</h2>
                 <p>Are you sure you want to cancel this order?</p>
 
                 <div class="mt-4">
                     <label for="cancellationReason" class="block text-sm font-medium text-gray-700">Reason for Cancellation</label>
-                    <select id="cancellationReason" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-secondary2 focus:border-secondary2">
+                    <select id="cancellationReason" class="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring focus:ring-secondary2 focus:border-secondary2">
                         <option value="" selected disabled>Choose a reason</option>
                         <option value="Not using the equipment">Not using the equipment</option>
                         <option value="Change of plan">Change of plan</option>

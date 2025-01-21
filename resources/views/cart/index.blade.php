@@ -1,4 +1,4 @@
-<x-app-layout title="Cart" bodyClass="bg-tertiery3 gap-1 min-h-screen">
+<x-app-layout title="Cart" bodyClass="md:bg-tertiery3 gap-1 min-h-screen">
     @if (session('error'))
         <div x-data="{ show: true }" x-init="setTimeout(() => show = false, 3000)" x-show="show" class="fixed p-2 min-w-full md:min-w-fit md:toast md:toast-end z-50">
             <div class="alert alert-error">
@@ -37,7 +37,7 @@
         </div>
     @endif
 
-    <div class="mt-[4.5rem] md:mt-0 md:py-5 md:px-10 flex flex-col md:flex-row md:gap-10 min-h-screen md:min-h-fit md:h-full">
+    <div class="mt-[4.5rem] md:mt-0 md:py-5 md:px-10 flex flex-col md:flex-row md:gap-10 md:min-h-fit md:h-full">
 
         {{-- Section Item --}}
         <div class="flex flex-col bg-white w-full h-full md:h-fit md:max-h-[500px] overflow-y-auto md:rounded-lg md:drop-shadow-lg text-tertiery1">
@@ -127,7 +127,7 @@
         </div>
 
         {{-- Section Detail --}}
-        <div class="p-3 shadow-up flex flex-col bg-white w-full h-fit md:h-full md:rounded-lg md:drop-shadow-lg text-tertiery1">
+        <div class="p-3 shadow-up flex flex-col bottom-0 bg-white w-full h-fit md:h-full md:rounded-lg md:drop-shadow-lg text-tertiery1">
             <div class="hidden md:block text-2xl font-medium">
                 Payment
             </div>

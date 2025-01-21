@@ -37,7 +37,7 @@
                             <span>{{ $return }}</span>
                         </div>
                         <div class="flex flex-row justify-between">
-                            <span>Rent DUration</span>
+                            <span>Rent Duration</span>
                             <span>{{ $days ?? 0 }} Days</span>
                         </div>
                 </div>
