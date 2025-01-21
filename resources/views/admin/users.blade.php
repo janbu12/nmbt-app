@@ -1,5 +1,5 @@
 <x-app-layout bodyClass="bg-tertiery3 text-tertiery1 min-h-screen">
-    <div class="container mx-auto my-6 p-4 bg-white rounded-lg">
+    <div class="container overflow-y-auto mx-auto mt-[5.5rem] md:mt-0 my-6 p-4 bg-white rounded-lg">
         <h1 class="text-2xl font-bold mb-4">Users</h1>
 
         <table class="table w-full">

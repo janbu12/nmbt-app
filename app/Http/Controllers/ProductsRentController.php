@@ -32,19 +32,24 @@ class ProductsRentController extends Controller
                 $query->orderBy('price', 'desc');
             } elseif ($sort == 'Rating') {
                 // Melakukan join dengan tabel reviews dan menghitung rata-rata rating
-                $query->leftJoin('reviews', 'products.id', '=', 'reviews.product_id')
-                ->select('products.*', DB::raw('AVG(reviews.rating) as average_rating'))
-                ->groupBy('products.id', 'products.name', 'products.price', 'products.category_id', 'products.created_at', 'products.updated_at', 'products.stock', 'products.description', 'products.teaser') //Kolomnya harus ditambahkan semua untuk kebutuhan deployment
-                ->orderBy('average_rating', 'desc'); // Mengurutkan berdasarkan rata-rata rating
+                // $query->leftJoin('reviews', 'products.id', '=', 'reviews.product_id')
+                // ->select('products.*', DB::raw('AVG(reviews.rating) as average_rating'))
+                // ->groupBy('products.id', 'products.name', 'products.price', 'products.category_id', 'products.created_at', 'products.updated_at', 'products.stock', 'products.description', 'products.teaser') //Kolomnya harus ditambahkan semua untuk kebutuhan deployment
+                // ->orderBy('average_rating', 'desc'); // Mengurutkan berdasarkan rata-rata rating
+
+                $query->withAvg('reviews', 'rating')->orderBy('reviews_avg_rating', 'desc');
             }
             // Filter lain sesuai kebutuhan
         }
 
         if ($request->has('search')) {
             $search = $request->input('search');
-            $query->leftJoin('categories', 'products.category_id', '=', 'categories.id')
-            ->where('products.name', 'like', "%$search%")
-            ->orWhere('categories.category_name', 'like', "%$search%");
+            $query->where(function ($q) use ($search) {
+                $q->where('products.name', 'like', "%$search%")
+                  ->orWhereHas('category', function ($query) use ($search) {
+                      $query->where('category_name', 'like', "%$search%");
+                  });
+            });
         }
 
         $products = $query->paginate(6);

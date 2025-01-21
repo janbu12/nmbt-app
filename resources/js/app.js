@@ -28,7 +28,7 @@ window.addEventListener('beforeunload', () => {
     Alpine.store('loadingState').showLoading();
     setTimeout(() => {
         Alpine.store('loadingState').hideLoading();
-    }, 1500);
+    }, 4000);
 });
 
 

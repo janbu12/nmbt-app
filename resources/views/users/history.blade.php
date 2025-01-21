@@ -69,7 +69,7 @@
                     Cancel
                 </x-button>
             </form>
-            <form action="{{ route('history.index') }}" method="GET">
+            <form action="{{ route('history.index') }}" method="GET" class="lg:w-1/2">
                 <input
                 @keydown.enter="Alpine.store('loadingState').showLoading();"
                 type="text"

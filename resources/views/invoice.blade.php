@@ -1,11 +1,11 @@
 <x-app-layout title="Invoice" bodyClass="bg-tertiery3 min-h-screen">
-    <div class="flex gap-4 flex-col items-center justify-center">
+    <div class="flex mt-[5rem] sm:mt-0 gap-4 flex-col items-center justify-center px-4 md:px-0">
         <div class="pt-3 text-4xl font-semibold text-secondary2">
             Invoice
         </div>
 
         {{-- Invoice Card --}}
-        <div class="bg-white rounded-lg shadow-md p-4 h-4/5 w-3/6 flex flex-col justify-between overflow-auto">
+        <div class="bg-white rounded-lg shadow-md p-4 w-full h-4/5 sm:w-3/6 flex flex-col justify-between overflow-auto">
             <div class="gap-3">
                 <div class="flex flex-row justify-between">
                     No Order
@@ -92,9 +92,9 @@
         </div>
         {{-- Button --}}
         @if (Auth::user() && Auth::user()->role == 'admin')
-            <div class="w-3/6 text-center gap-10 flex flex-row">
+            <div class="text-center lg:gap-10 flex flex-col lg:flex-row w-full justify-center">
                 @if ($rent->status_rent != 'cancelled' && $rent->status_rent != 'done')
-                <x-button variant="secondary" class="py-2 my-3 w-full text-center"
+                <x-button variant="secondary" class="py-2 my-3 min-w-fit text-center"
                     as="a"
                     href="{{ route('admin.status', ['id' => $rent->id]) }}">
                     @switch($rent->status_rent)
@@ -115,16 +115,14 @@
                     @endswitch
                 </x-button>
                 @endif
-                <x-button variant="secondary" class="py-2 my-3 w-full text-center" as="a" href="{{ route('admin.history') }}">
+                <x-button variant="secondary" class="py-2 my-3 min-w-fit text-center" as="a" href="{{ route('admin.history') }}">
                     Back
                 </x-button>
             </div>
         @else
-            <div class="w-3/6 text-center pt-5">
-            <x-button variant="secondary" class="py-2 my-3 w-full" as="a" href="{{ route('history.index') }}">
+            <x-button variant="secondary" class="py-2 my-3 w-fit" as="a" href="{{ route('history.index') }}">
                 Back
             </x-button>
-            </div>
         @endif
     </div>
     <x-slot name="scripts">

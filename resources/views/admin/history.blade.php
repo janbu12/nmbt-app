@@ -1,57 +1,58 @@
 <x-app-layout title="Riwayat" bodyClass="bg-tertiery3 w-full items-center overflow-hidden max-h-screen">
-    <div class="flex w-full px-10 h-screen overflow-hidden flex-col">
+    <div class="flex w-full px-4 lg:px-10 mt-[5rem] md:mt-0 h-screen overflow-hidden flex-col">
         {{-- Sidebar Component --}}
-        <div class="flex flow-row mt-2">
-            <div class="w-full text-start font-bold text-4xl text-secondary2 p-3">
+        <div class="flex flex-col lg:flex-row mt-2">
+            <div class="w-full text-start font-bold text-base lg:text-4xl text-secondary2 p-3">
                 Transaction History
             </div>
-            
-            <form action="{{ route('admin.history.historyExcel') }}" method="GET" class="h-full w-fit mb-4 flex items-center gap-4 justify-end mr-4">
-                <div x-data="{ showModal: false, startDate: '', endDate: '', allTime: false }" class="relative">
-                    <x-button variant="secondary" class="w-36" x-on:click="showModal = true">
-                        History to Excel
-                    </x-button>
-                </div>
-                <div x-show="showModal" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50" x-cloak>
-                    <div class="bg-white rounded-lg p-6 w-96 shadow-lg">
-                        <h2 class="text-xl font-semibold mb-4">Export History</h2>
-            
-                        <!-- Pilihan Jangka Waktu -->
-                        <div class="mb-4">
-                            <label class="block font-medium mb-2">Jangka Waktu:</label>
-                            <div class="flex gap-2 items-center">
-                                <input type="date" x-model="startDate" class="border rounded-lg px-3 py-2 w-full">
-                                <span class="text-gray-600">to</span>
-                                <input type="date" x-model="endDate" class="border rounded-lg px-3 py-2 w-full">
+            <div class="flex flex-col lg:flex-row text-sm md:text-base">
+                <form action="{{ route('admin.history.historyExcel') }}" method="GET" class="h-full w-full lg:w-fit mb-4 flex items-center gap-4 justify-end mr-4">
+                    <div x-data="{ showModal: false, startDate: '', endDate: '', allTime: false }" class="relative w-full lg:w-fit">
+                        <x-button variant="secondary" class="w-full lg:w-36" x-on:click="showModal = true">
+                            History to Excel
+                        </x-button>
+                    </div>
+                    <div x-show="showModal" class="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50" x-cloak>
+                        <div class="bg-white rounded-lg p-6 w-96 shadow-lg">
+                            <h2 class="text-xl font-semibold mb-4">Export History</h2>
+
+                            <!-- Pilihan Jangka Waktu -->
+                            <div class="mb-4">
+                                <label class="block font-medium mb-2">Jangka Waktu:</label>
+                                <div class="flex gap-2 items-center">
+                                    <input type="date" x-model="startDate" class="border rounded-lg px-3 py-2 w-full">
+                                    <span class="text-gray-600">to</span>
+                                    <input type="date" x-model="endDate" class="border rounded-lg px-3 py-2 w-full">
+                                </div>
+                                <div class="mt-2">
+                                    <label class="inline-flex items-center">
+                                        <input type="checkbox" x-model="allTime" class="rounded">
+                                        <span class="ml-2">All Time</span>
+                                    </label>
+                                </div>
                             </div>
-                            <div class="mt-2">
-                                <label class="inline-flex items-center">
-                                    <input type="checkbox" x-model="allTime" class="rounded">
-                                    <span class="ml-2">All Time</span>
-                                </label>
+
+                            <!-- Tombol Aksi -->
+                            <div class="flex justify-end gap-2">
+                                <x-button variant="secondary" x-on:click="showModal = false">Cancel</x-button>
+                                <x-button variant="primary" x-on:click="submitForm">Export</x-button>
                             </div>
-                        </div>
-            
-                        <!-- Tombol Aksi -->
-                        <div class="flex justify-end gap-2">
-                            <x-button variant="secondary" x-on:click="showModal = false">Cancel</x-button>
-                            <x-button variant="primary" x-on:click="submitForm">Export</x-button>
                         </div>
                     </div>
-                </div>
-            </form>
+                </form>
 
-                <form action="{{ route('admin.history.detailHistoryExcel') }}" target="_blank" method="GET" class="h-full w-fit mb-4 flex items-center gap-4 justify-end mr-4">
-                    <!-- Tombol Ekspor -->
-                    {{-- <x-button variant='secondary' class="w-48"> --}}
-                    <x-button variant='secondary' class="w-48">
-                        Detail History to Excel
-                    </x-button>
-            </form>
+                <form action="{{ route('admin.history.detailHistoryExcel') }}" target="_blank" method="GET" class="h-full w-full lg:w-fit mb-4 flex items-center gap-4 justify-end mr-4">
+                        <!-- Tombol Ekspor -->
+                        {{-- <x-button variant='secondary' class="w-48"> --}}
+                        <x-button variant='secondary' class="w-full lg:w-48">
+                            Detail History to Excel
+                        </x-button>
+                </form>
+            </div>
 
-            <form id="filter-form" method="GET" action="{{ route('admin.history') }}" class="h-full mb-4 flex items-center gap-4">
+            <form id="filter-form" method="GET" action="{{ route('admin.history') }}" class="w-full lg:w-fit h-full mb-4 flex items-center gap-2 lg:gap-4">
                 <!-- Filter Status -->
-                <select name="status" class="p-2 rounded-lg border border-gray-300" onchange="document.getElementById('filter-form').submit()"  @change="Alpine.store('loadingState').showLoading();">
+                <select name="status" class="p-2 rounded-lg border w-fit border-gray-300" onchange="document.getElementById('filter-form').submit()"  @change="Alpine.store('loadingState').showLoading();">
                     <option value="">All Status</option>
                     <option value="unpaid" {{ request('status') == 'unpaid' ? 'selected' : '' }}>Unpaid</option>
                     <option value="process" {{ request('status') == 'process' ? 'selected' : '' }}>Process</option>
@@ -67,13 +68,13 @@
                     name="search"
                     value="{{ request('search') }}"
                     placeholder="Search by name or ID"
-                    class="p-2 rounded-lg border border-gray-300 focus"
+                    class="p-2 rounded-lg border border-gray-300 focus w-full lg:w-fit"
                     oninput="filterDelay()"
                 >
             </form>
         </div>
 
-        <div class="bg-white mr-8 my-4 rounded-3xl drop-shadow-md py-8 px-6 flex-col w-full h-full overflow-y-auto">
+        <div class="bg-white mr-8 lg:my-4 rounded-xl drop-shadow-md py-8 px-6 flex-col w-full h-full overflow-y-auto">
             <table class="table w-full">
                 <thead>
                     <tr>
@@ -116,7 +117,7 @@
             </table>
         </div>
 
-        <div class="border-b px-14 py-4">
+        <div class="border-b lg:px-14 py-4">
             {{ $rents->appends(request()->query())->links('pagination::custom-pagination') }}
         </div>
     </div>

@@ -19,7 +19,7 @@
             @endforeach
         </div>
     @endif
-    <div class="container flex flex-col items-center justify-center md:mt-8">
+    <div class="container mt-[4.5rem] flex flex-col items-center justify-center md:mt-8">
         <form action="{{ route('orders.submitReview', $rent->id) }}" method="POST" class="bg-white p-5 rounded-md w-full min-h-screen md:min-h-fit md:w-1/2">
             @csrf
             <h1 class="mb-4">Review Pesanan #{{ $rent->id }}</h1>

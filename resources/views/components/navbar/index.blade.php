@@ -127,23 +127,23 @@
                         Your Orders
                         <span class="badge bg-secondary3 text-bg3">{{ auth()->user()->rent->count() }}</span>
                     </x-navbar.link>
+                    <a href="/user/profile" class="avatar flex items-center gap-4">
+                        <h1 class="font-medium group-hover/userInfo:text-secondary1">{{auth()->user()->firstname}} {{auth()->user()->lastname}}</h1>
+                        <div class="w-12 rounded-full bg-secondary1">
+                            @if (auth()->user()->imageUser)
+                                <img
+                                    class="rounded-full group-hover/userInfo:scale-90 transition-all duration-300"
+                                    alt="user.png"
+                                    src="{{ asset('storage/' . Auth::user()->imageUser) }}" />
+                            @else
+                                <img
+                                    class="rounded-full group-hover/userInfo:scale-90 transition-all duration-300"
+                                    alt="user.png"
+                                    src="{{asset('images/boy.png')}}" />
+                            @endif
+                        </div>
+                    </a>
                 @endif
-                <a href="/user/profile" class="avatar flex items-center gap-4">
-                    <h1 class="font-medium group-hover/userInfo:text-secondary1">{{auth()->user()->firstname}} {{auth()->user()->lastname}}</h1>
-                    <div class="w-12 rounded-full bg-secondary1">
-                    @if (auth()->user()->imageUser)
-                        <img
-                            class="rounded-full group-hover/userInfo:scale-90 transition-all duration-300"
-                            alt="user.png"
-                            src="{{ asset('storage/' . Auth::user()->imageUser) }}" />
-                    @else
-                        <img
-                            class="rounded-full group-hover/userInfo:scale-90 transition-all duration-300"
-                            alt="user.png"
-                            src="{{asset('images/boy.png')}}" />
-                    @endif
-                    </div>
-                </a>
                 <form method="POST" action="{{ route('auth.logout') }}" class="block">
                     @csrf
                     <x-button type="submit"

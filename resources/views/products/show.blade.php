@@ -112,7 +112,7 @@
                                 </button>
                             </div>
                         @elseif ((auth()->user()->role == "admin"))
-                            <div class="flex gap-2">
+                            <div class="flex justify-center w-full lg:justify-end lg:w-fit gap-2">
                                 <x-button variant="secondary" as="a" href="{{ route('products.edit', $product->id) }}">Edit</x-button>
                                 <form action="{{ route('products.destroy', $product->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus produk ini?');">
                                     @csrf
@@ -192,7 +192,7 @@
                         <div class="p-4 bg-gray-50 rounded-lg shadow-sm">
                             <div class="flex items-center gap-4 mb-3">
                                 <div class="w-12 h-12 bg-gray-200 rounded-full">
-                                    <img src="{{ $review->user->imageUser ?? asset('images/boy.png') }}" alt="User Avatar" class="w-full h-full object-cover rounded-full">
+                                    <img src="{{ $review->user->imageUser ? asset('storage/'. $review->user->imageUser) : asset('images/boy.png') }}" alt="User Avatar" class="w-full h-full object-cover rounded-full">
                                 </div>
                                 <div>
                                     <div class="text-sm font-medium">{{ $review->user->lastname }}</div>

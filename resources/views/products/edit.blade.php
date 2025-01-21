@@ -1,5 +1,5 @@
 <x-app-layout title="{{ $page_meta['title'] }}" bodyClass="bg-tertiery3 items-center">
-    <form id="editForm" action="{{ $page_meta['url'] }}" method="POST" enctype="multipart/form-data" class="flex flex-col">
+    <form id="editForm" action="{{ $page_meta['url'] }}" method="POST" enctype="multipart/form-data" class="flex flex-col mt-[5rem] md:mt-0">
         @csrf
         @method('PUT')
 

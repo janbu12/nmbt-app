@@ -73,7 +73,7 @@
                 {{ $products->appends(request()->query())->links('pagination::custom-pagination') }}
             </div>
             {{-- Pagination End --}}
-
+            {{-- @dump($products) --}}
             {{-- Card Item --}}
             <div class="flex md:grid md:grid-cols-2 lg:flex flex-shrink flex-wrap w-full gap-5 overflow-auto py-4 justify-center">
                 @foreach ($products as $product)
