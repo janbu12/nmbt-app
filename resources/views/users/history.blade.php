@@ -1,4 +1,4 @@
-<x-app-layout title="Riwayat" bodyClass="bg-tertiery3 w-full items-center overflow-hidden max-h-screen">
+<x-app-layout title="Riwayat" bodyClass="bg-tertiery3 w-full items-center lg:overflow-hidden max-h-screen">
     <div class="flex mt-16 md:mt-0 w-full lg:px-10 h-screen overflow-hidden flex-col">
         {{-- Sidebar Component --}}
         <div class="flex mt-2">
