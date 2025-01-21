@@ -18,7 +18,7 @@ class UserHistoryController extends Controller
         $search = $request->input('search');
         $status = $request->input('status');
 
-        $rents = Rent::with('user')
+        $rents = Rent::with(['user', 'rent_details.product', 'rent_details.product.images'])
             ->where('user_id', $userId)
             ->when($status, function($query, $status) {
                 $query->where('status_rent', $status);

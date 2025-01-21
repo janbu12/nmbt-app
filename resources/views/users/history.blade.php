@@ -1,19 +1,19 @@
 <x-app-layout title="Riwayat" bodyClass="bg-tertiery3 w-full items-center overflow-hidden max-h-screen">
-    <div class="flex mt-16 md:mt-0 w-full md:px-10 h-screen overflow-hidden flex-col">
+    <div class="flex mt-16 md:mt-0 w-full lg:px-10 h-screen overflow-hidden flex-col">
         {{-- Sidebar Component --}}
         <div class="flex mt-2">
-            <div class="w-full text-start font-bold text-base md:text-2xl text-secondary2 p-2 md:p-3">
+            <div class="w-full text-start font-bold text-base lg:text-2xl text-secondary2 p-2 lg:p-3">
                 Your Orders
             </div>
         </div>
-        <div class="flex flex-col gap-2 px-2 md:p-0 md:flex-row justify-between">
+        <div class="flex flex-col gap-2 px-2 lg:p-0 lg:flex-row justify-between">
             <form class="flex w-full gap-2 text-[0.6rem] md:text-base" action="{{ route('history.index') }}" method="GET">
                 <x-button
                     type="submit"
                     name="status"
                     value="unpaid"
                     variant="{{ request()->get('status') == 'unpaid' ? 'secondary' : 'tertiery' }}"
-                    class="flex w-full md:w-fit items-center justify-center flex-col md:flex-row px-3 md:px-4 gap-1"
+                    class="flex w-full lg:w-fit items-center justify-center flex-col lg:flex-row px-3 lg:px-4 gap-1"
                 >
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 0 0 2.25-2.25V6.75A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25v10.5A2.25 2.25 0 0 0 4.5 19.5Z" />
@@ -25,7 +25,7 @@
                     name="status"
                     value="process"
                     variant="{{ request()->get('status') == 'process' ? 'secondary' : 'tertiery' }}"
-                    class="flex w-full md:w-fit items-center justify-center flex-col md:flex-row px-3 md:px-4 gap-1"
+                    class="flex w-full lg:w-fit items-center justify-center flex-col lg:flex-row px-3 lg:px-4 gap-1"
                 >
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
@@ -37,7 +37,7 @@
                     name="status"
                     value="ready_pickup"
                     variant="{{ request()->get('status') == 'ready_pickup' ? 'secondary' : 'tertiery' }}"
-                    class="flex w-full md:w-fit items-center justify-center flex-col md:flex-row px-3 md:px-4 gap-1"
+                    class="flex w-full lg:w-fit items-center justify-center flex-col lg:flex-row px-3 lg:px-4 gap-1"
                 >
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                         <path stroke-linecap="round" stroke-linejoin="round" d="m20.25 7.5-.625 10.632a2.25 2.25 0 0 1-2.247 2.118H6.622a2.25 2.25 0 0 1-2.247-2.118L3.75 7.5m8.25 3v6.75m0 0-3-3m3 3 3-3M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125Z" />
@@ -49,7 +49,7 @@
                     name="status"
                     value="done"
                     variant="{{ request()->get('status') == 'done' ? 'secondary' : 'tertiery' }}"
-                    class="flex w-full md:w-fit items-center justify-center flex-col md:flex-row px-3 md:px-4 gap-1"
+                    class="flex w-full lg:w-fit items-center justify-center flex-col lg:flex-row px-3 lg:px-4 gap-1"
                 >
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
@@ -61,7 +61,7 @@
                     name="status"
                     value="cancelled"
                     variant="{{ request()->get('status') == 'cancelled' ? 'secondary' : 'tertiery' }}"
-                    class="flex w-full md:w-fit items-center justify-center flex-col md:flex-row px-3 md:px-4 gap-1"
+                    class="flex w-full lg:w-fit items-center justify-center flex-col lg:flex-row px-3 lg:px-4 gap-1"
                 >
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
                         <path stroke-linecap="round" stroke-linejoin="round" d="m9.75 9.75 4.5 4.5m0-4.5-4.5 4.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
@@ -80,74 +80,77 @@
             </form>
         </div>
 
+        <div class="flex lg:mx-0 px-2 lg:px-0 my-4 drop-shadow-md flex-col w-full h-full">
 
-        <div class="hidden md:flex bg-white my-4 rounded-xl drop-shadow-md p-4 flex-col w-full h-full overflow-y-auto">
-            <table class="table w-full">
-                <thead>
-                    <tr>
-                        <th>No Order</th>
-                        <th>Pickup Date</th>
-                        <th>Return Date</th>
-                        <th>Total Price</th>
-                        <th>Status</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @forelse ($rents as $rent)
-                    <tr class="bg-white hover:bg-blue-100">
-                        <td >{{ $rent->id }}</td>
-                        <td >{{ $rent->pickup_date }}</td>
-                        <td >{{ $rent->return_date }}</td>
-                        <td >Rp. {{ number_format($rent->total_price, 0, ',', '.') }}</td>
-                        <td >{{ ($rent->status_rent == "done" ? 'Done' :
-                                ($rent->status_rent == 'ready_pickup' ? 'Ready Pickup':
-                                ($rent->status_rent == 'process' ? 'Process':
-                                ($rent->status_rent == 'unpaid' ? 'Unpaid': 'Cancel'))))}}</td>
-                        <td class="px-4 py-2">
-                            @if (request()->get('status') == 'unpaid')
-                                <div class="flex gap-2">
-                                    <button class="p-2 rounded-md bg-secondary3 text-bg3 hover:bg-bg1 hover:text-secondary3 hover:border-bg1" onclick="payOrder('{{ $rent->id }}')">Bayar</button>
-                                    <button class="p-2 rounded-md bg-red-600 text-bg3 hover:bg-bg1 hover:text-secondary3 hover:border-red-300" onclick="confirmCancel('{{ $rent->id }}')">Cancel</button>
+            {{-- Tablet - PC --}}
+            <div class="overflow-y-auto rounded-xl bg-white p-4 w-full h-full">
+                <table class="table w-full">
+                    <thead class="text-base">
+                        <tr>
+                            <th>No Order</th>
+                            <th>Pickup Date</th>
+                            <th>Return Date</th>
+                            <th>Total Price</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse ($rents as $rent)
+                        <tr class="bg-white hover:bg-blue-100">
+                            <td >{{ $rent->id }}</td>
+                            <td>{{ $rent->pickup_date }}</td>
+                            <td >{{ $rent->return_date }}</td>
+                            <td >Rp. {{ number_format($rent->total_price, 0, ',', '.') }}</td>
+                            <td >{{ ($rent->status_rent == "done" ? 'Done' :
+                                    ($rent->status_rent == 'ready_pickup' ? 'Ready Pickup':
+                                    ($rent->status_rent == 'process' ? 'Process':
+                                    ($rent->status_rent == 'unpaid' ? 'Unpaid': 'Cancel'))))}}</td>
+                            <td class="px-4 py-2">
+                                @if (request()->get('status') == 'unpaid')
+                                    <div class="flex gap-2">
+                                        <button class="p-2 rounded-md bg-secondary3 text-bg3 hover:bg-bg1 hover:text-secondary3 hover:border-bg1" onclick="payOrder('{{ $rent->id }}')">Bayar</button>
+                                        <button class="p-2 rounded-md bg-red-600 text-bg3 hover:bg-bg1 hover:text-secondary3 hover:border-red-300" onclick="confirmCancel('{{ $rent->id }}')">Cancel</button>
+                                        <x-button as="a" variant="secondary" class="sm:px-4" href="{{ route('history.show', $rent->id) }}">
+                                            Detail
+                                        </x-button>
+                                    </div>
+                                @elseif(request()->get('status') == 'cancelled')
                                     <x-button as="a" variant="secondary" href="{{ route('history.show', $rent->id) }}">
                                         Detail
                                     </x-button>
-                                </div>
-                            @elseif(request()->get('status') == 'cancelled')
-                                <x-button as="a" variant="secondary" href="{{ route('history.show', $rent->id) }}">
-                                    Detail
-                                </x-button>
-                            @elseif(request()->get('status') == 'done')
-                                <div class="flex gap-2">
-                                    <x-button as="a" variant="danger" href="{{ route('orders.review', $rent->id) }}">
-                                        Review
-                                    </x-button>
-                                    <x-button as="a" variant="secondary" href="{{ route('history.show', $rent->id) }}">
-                                        Detail
-                                    </x-button>
-                                </div>
-                            @else
-                                <div class="flex gap-2">
-                                    <button class="p-2 rounded-md bg-red-600 text-bg3 hover:bg-bg1 hover:text-secondary3 hover:border-red-300" onclick="confirmCancel('{{ $rent->id }}')">Cancel</button>
-                                    <x-button as="a" variant="secondary" href="{{ route('history.show', $rent->id) }}">
-                                        Detail
-                                    </x-button>
-                                </div>
-                            @endif
-                        </td>
-                    </tr>
-                    @empty
-                    <tr>
-                        <td colspan="5" class="px-4 py-2 text-center">No data was found</td>
-                    </tr>
-                    @endforelse
-                </tbody>
-            </table>
+                                @elseif(request()->get('status') == 'done')
+                                    <div class="flex gap-2">
+                                        <x-button as="a" variant="danger" href="{{ route('orders.review', $rent->id) }}">
+                                            Review
+                                        </x-button>
+                                        <x-button as="a" variant="secondary" href="{{ route('history.show', $rent->id) }}">
+                                            Detail
+                                        </x-button>
+                                    </div>
+                                @else
+                                    <div class="flex gap-2">
+                                        <button class="p-2 rounded-md bg-red-600 text-bg3 hover:bg-bg1 hover:text-secondary3 hover:border-red-300" onclick="confirmCancel('{{ $rent->id }}')">Cancel</button>
+                                        <x-button as="a" variant="secondary" href="{{ route('history.show', $rent->id) }}">
+                                            Detail
+                                        </x-button>
+                                    </div>
+                                @endif
+                            </td>
+                        </tr>
+                        @empty
+                        <tr>
+                            <td colspan="5" class="px-4 py-2 text-center">No data was found</td>
+                        </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
         </div>
 
         {{-- Modal Konfirmasi Pembatalan --}}
-        <div id="cancelModal" class="fixed px-2 md:px-0 inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden z-50">
-            <div class="bg-white rounded-lg p-6 w-full md:w-1/3">
+        <div id="cancelModal" class="fixed px-2 lg:px-0 inset-0 flex items-center justify-center bg-black bg-opacity-50 hidden z-50">
+            <div class="bg-white rounded-lg p-6 w-full lg:w-1/3">
                 <h2 class="text-xl font-semibold mb-4">Confirm Cancellation</h2>
                 <p>Are you sure you want to cancel this order?</p>
 
@@ -169,7 +172,7 @@
             </div>
         </div>
 
-        <div class="hidden md:flex border-b px-14 py-4">
+        <div class="flex px-2 lg:px-0 w-full border-b pb-4">
             {{ $rents->appends(request()->query())->links('pagination::custom-pagination') }}
         </div>
     </div>

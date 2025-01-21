@@ -1,7 +1,7 @@
 <x-app-layout title="Invoice" bodyClass="gap-4 h-screen items-center" x-data="{ isLoading: false }">
     {{-- Item Card --}}
     <div class="w-full flex">
-        <div class="hidden md:block w-full h-screen overflow-y-auto">
+        <div class="hidden lg:block w-full h-screen overflow-y-auto">
             <div class="flex flex-col space-y-4 mt-2">
                 @foreach ($items as $item)
                     <div class="flex flex-row items-center border-b border-gray-300 p-2">
@@ -21,7 +21,7 @@
         </div>
 
         {{-- Invoice --}}
-        <div class="bg-white rounded-lg shadow-md h-screen w-full md:w-3/6 flex flex-col justify-between">
+        <div class="bg-white rounded-lg shadow-md h-screen w-full lg:w-3/6 flex flex-col justify-between">
             <div>
                 <div class="flex flex-col gap-2 p-4 drop-shadow bg-white">
                         <div class="flex flex-row justify-between">
@@ -46,20 +46,20 @@
                     <div class="text-start mt-4">
                         <span class="font-semibold">Order Details</span>
                     </div>
-                    <div class="w-full h-[350px] md:h-80 overflow-y-auto">
+                    <div class="w-full h-[350px] lg:h-80 overflow-y-auto">
                         <div class="flex flex-col space-y-2 mt-2">
                             @foreach ($items as $item)
                                 <div class="flex flex-row">
-                                    <div class="w-1/4 block md:hidden">
+                                    <div class="w-1/4 block lg:hidden">
                                         <img src="{{ $item->product->images->first()->url ?? asset('images/produk-icon-dummy.png') }}" alt="{{ $item->product->name }}" class="w-full h-auto rounded">
                                     </div>
-                                    <div class="flex-1 flex flex-col ml-4 md:ml-0">
-                                        <div class="flex flex-col md:flex-row justify-between">
+                                    <div class="flex-1 flex flex-col ml-4 lg:ml-0">
+                                        <div class="flex flex-col lg:flex-row justify-between">
                                             <div class="flex gap-2">
-                                                <span class="text-sm md:font-normal  font-semibold">{{ $item->product->name }}</span>
+                                                <span class="text-sm lg:font-normal  font-semibold">{{ $item->product->name }}</span>
                                                 <p class="text-sm text-gray-600">x {{ $item->quantity }}</p>
                                             </div>
-                                            <span class="md:font-medium font-normal">Rp. {{ number_format($item->total, 0, ',', '.') }}</span>
+                                            <span class="lg:font-medium font-normal">Rp. {{ number_format($item->total, 0, ',', '.') }}</span>
                                         </div>
                                     </div>
                                 </div>

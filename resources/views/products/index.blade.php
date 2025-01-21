@@ -1,8 +1,8 @@
-<x-app-layout title="Sewa" bodyClass="bg-tertiery3 w-full items-center md:overflow-hidden max-h-full md:max-h-screen">
-    <div class="flex flex-col md:flex-row w-full mt-[100px] md:mt-0 px-4 md:px-10 min-h-screen md:min-h-full md:h-screen md:overflow-hidden">
+<x-app-layout title="Sewa" bodyClass="bg-tertiery3 w-full items-center lg:overflow-hidden max-h-full lg:max-h-screen">
+    <div class="flex flex-col lg:flex-row w-full mt-[100px] md:mt-4 lg:mt-0 px-4 lg:px-10 min-h-screen lg:min-h-full lg:h-screen lg:overflow-hidden">
 
         {{-- Sidebar Component --}}
-        <div class="bg-white mr-0 md:mr-8 md:my-8 rounded-2xl drop-shadow-md py-8 px-6 max-w-sm w-full">
+        <div class="bg-white mr-0 lg:mr-8 lg:my-8 rounded-2xl drop-shadow-md py-8 px-6 lg:max-w-sm w-full">
 
             {{-- Search Bar --}}
             <form action="{{ route('products.index') }}" method="GET">
@@ -66,25 +66,25 @@
         {{-- Sidebar Component End --}}
 
         {{-- Main Content --}}
-        <div class="md:bg-white my-4 md:my-8 rounded-2xl drop-shadow-md w-full flex flex-col md:gap-5">
+        <div class="lg:bg-white my-4 lg:my-8 rounded-2xl drop-shadow-md w-full flex flex-col lg:gap-5">
 
             {{-- Pagination --}}
-            <div class="bg-white rounded-2xl border-b px-4 md:px-14 py-4">
+            <div class="bg-white rounded-2xl border-b px-4 lg:px-14 py-4">
                 {{ $products->appends(request()->query())->links('pagination::custom-pagination') }}
             </div>
             {{-- Pagination End --}}
 
             {{-- Card Item --}}
-            <div class="flex flex-shrink flex-wrap w-full gap-5 overflow-auto py-4 justify-center">
+            <div class="flex md:grid md:grid-cols-2 lg:flex flex-shrink flex-wrap w-full gap-5 overflow-auto py-4 justify-center">
                 @foreach ($products as $product)
-                    <a @click="Alpine.store('loadingState').showLoading();" href="{{ route('products.show', $product->id) }}" class="card bg-white w-full md:w-80 xl:w-1/3 2xl:w-96 max-xl:h-auto shadow-lg drop-shadow cursor-pointer hover:scale-90 transition group">
+                    <a @click="Alpine.store('loadingState').showLoading();" href="{{ route('products.show', $product->id) }}" class="card bg-white w-full lg:w-80 xl:w-1/3 2xl:w-96 max-xl:h-auto shadow-lg drop-shadow cursor-pointer hover:scale-90 transition group">
                         <figure>
                             @if ($product->images->isNotEmpty())
-                                <div class="lg:h-48 lg:h-62">
+                                <div class="h-48 h-62 pt-4 px-4">
                                     <img src="{{ asset('storage/' . $product->images->first()->image_path) }}" alt="Product Image" class="w-full h-full object-cover" />
                                 </div>
                             @else
-                                <div class="lg:h-48 lg:h-62">
+                                <div class="h-48 h-62 pt-4 px-4">
                                     <img src="{{ asset('images/produk-icon-dummy.png') }}" alt="Shoes" class="w-full h-full object-cover" />
                                 </div>
                             @endif
@@ -136,7 +136,7 @@
                 @endforeach
             </div>
             {{-- Card Item End --}}
-            <div class="block md:hidden bg-white rounded-2xl border-b px-4 md:px-14 py-4">
+            <div class="block lg:hidden bg-white rounded-2xl border-b px-4 lg:px-14 py-4">
                 {{ $products->appends(request()->query())->links('pagination::custom-pagination') }}
             </div>
         </div>
