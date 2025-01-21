@@ -132,21 +132,21 @@
             <h2 class="text-3xl font-medium">Make your moment!</h2>
             <div class="flex flex-wrap justify-center gap-6">
                 <!-- Card 1 -->
-                <div class="bg-white shadow-lg rounded-lg p-4 w-full md:max-w-xs">
+                <div class="bg-white drop-shadow rounded-lg p-4 w-full md:max-w-xs">
                     <img src="{{ asset('images/moments/moment1.webp') }}" alt="Moment 1" class="w-full h-48 object-cover rounded-t-lg">
                     <p class="mt-4 text-center">
                         "NMBT service helps! All the equipment is of high quality and well-maintained.""
                     </p>
                 </div>
                 <!-- Card 2 -->
-                <div class="bg-white shadow-lg rounded-lg p-4 w-full md:max-w-xs">
+                <div class="bg-white drop-shadow rounded-lg p-4 w-full md:max-w-xs">
                     <img src="{{ asset('images/moments/moment2.webp') }}" alt="Moment 2" class="w-full h-48 object-cover rounded-t-lg">
                     <p class="mt-4 text-center">
                     "Enjoy NMBT service, Camping equipment provider for your loved ones."
                     </p>
                 </div>
                 <!-- Card 3 -->
-                <div class="bg-white shadow-lg rounded-lg p-4 w-full md:max-w-xs">
+                <div class="bg-white drop-shadow rounded-lg p-4 w-full md:max-w-xs">
                     <img src="{{ asset('images/moments/moment3.webp') }}" alt="Moment 3" class="w-full h-48 object-cover rounded-t-lg">
                     <p class="mt-4 text-center">
                     "Providing easy solutions for adventurers to access camping equipment with the best quality and affordable prices."

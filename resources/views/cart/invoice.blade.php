@@ -21,9 +21,9 @@
         </div>
 
         {{-- Invoice --}}
-        <div class="bg-white rounded-lg shadow-md p-4 h-screen w-full md:w-3/6 flex flex-col justify-between">
+        <div class="bg-white rounded-lg shadow-md h-screen w-full md:w-3/6 flex flex-col justify-between">
             <div>
-                <div class="flex flex-col gap-2">
+                <div class="flex flex-col gap-2 p-4 drop-shadow bg-white">
                         <div class="flex flex-row justify-between">
                             <span>Name</span>
                             <span>{{ $userName }}</span>
@@ -42,32 +42,34 @@
                         </div>
                 </div>
 
-                <div class="text-start mt-4">
-                    <span class="font-semibold">Order Details</span>
-                </div>
-                <div class="w-full h-[350px] md:h-80 overflow-y-auto">
-                    <div class="flex flex-col space-y-2 mt-2">
-                        @foreach ($items as $item)
-                            <div class="flex flex-row">
-                                <div class="w-1/4 block md:hidden">
-                                    <img src="{{ $item->product->images->first()->url ?? asset('images/produk-icon-dummy.png') }}" alt="{{ $item->product->name }}" class="w-full h-auto rounded">
-                                </div>
-                                <div class="flex-1 flex flex-col ml-4 md:ml-0">
-                                    <div class="flex flex-col md:flex-row justify-between">
-                                        <div class="flex gap-2">
-                                            <span class="text-sm md:font-normal  font-semibold">{{ $item->product->name }}</span>
-                                            <p class="text-sm text-gray-600">x {{ $item->quantity }}</p>
+                <div class="px-4">
+                    <div class="text-start mt-4">
+                        <span class="font-semibold">Order Details</span>
+                    </div>
+                    <div class="w-full h-[350px] md:h-80 overflow-y-auto">
+                        <div class="flex flex-col space-y-2 mt-2">
+                            @foreach ($items as $item)
+                                <div class="flex flex-row">
+                                    <div class="w-1/4 block md:hidden">
+                                        <img src="{{ $item->product->images->first()->url ?? asset('images/produk-icon-dummy.png') }}" alt="{{ $item->product->name }}" class="w-full h-auto rounded">
+                                    </div>
+                                    <div class="flex-1 flex flex-col ml-4 md:ml-0">
+                                        <div class="flex flex-col md:flex-row justify-between">
+                                            <div class="flex gap-2">
+                                                <span class="text-sm md:font-normal  font-semibold">{{ $item->product->name }}</span>
+                                                <p class="text-sm text-gray-600">x {{ $item->quantity }}</p>
+                                            </div>
+                                            <span class="md:font-medium font-normal">Rp. {{ number_format($item->total, 0, ',', '.') }}</span>
                                         </div>
-                                        <span class="md:font-medium font-normal">Rp. {{ number_format($item->total, 0, ',', '.') }}</span>
                                     </div>
                                 </div>
-                            </div>
-                        @endforeach
+                            @endforeach
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div class="flex flex-col gap-4">
+            <div class="shadow-up w-full bg-white p-4 flex flex-col gap-4">
                 <div class="flex flex-col gap-2">
                     <div class="flex flex-row justify-between items-center text-sm md:text-base">
                         <span class="font-semibold">Subtotal</span>
