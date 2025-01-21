@@ -99,7 +99,7 @@
     </div>
 
     <!-- Mobile Menu -->
-    <div id="mobile-menu" class="hidden md:hidden py-5">
+    <div id="mobile-menu" class="hidden lg:hidden py-5">
         <div class="flex flex-col items-center gap-6 mt-4">
             @if (Auth::user() && Auth::user()->role === 'admin')
                 <x-navbar.link href="/admin/dashboard">Dashboard</x-navbar.link>

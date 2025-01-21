@@ -1,10 +1,10 @@
-<x-app-layout title="Cart" bodyClass="md:bg-tertiery3 gap-1 min-h-screen">
+<x-app-layout title="Cart" bodyClass="lg:bg-tertiery3 gap-1 min-h-screen">
     @if (session('error'))
-        <div x-data="{ show: true }" x-init="setTimeout(() => show = false, 3000)" x-show="show" class="fixed p-2 min-w-full md:min-w-fit md:toast md:toast-end z-50">
+        <div x-data="{ show: true }" x-init="setTimeout(() => show = false, 3000)" x-show="show" class="fixed p-2 min-w-full lg:min-w-fit lg:toast lg:toast-end z-50">
             <div class="alert alert-error">
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    class="h-6 w-6 shrink-0 stroke-current hidden md:block"
+                    class="h-6 w-6 shrink-0 stroke-current hidden lg:block"
                     fill="none"
                     viewBox="0 0 24 24">
                     <path
@@ -17,12 +17,12 @@
             </div>
         </div>
     @elseif ($errors->any())
-        <div x-data="{ show: true }" x-init="setTimeout(() => show = false, 3000)" x-show="show" class="fixed p-2 min-w-full md:min-w-fit md:toast toast-end z-50">
+        <div x-data="{ show: true }" x-init="setTimeout(() => show = false, 3000)" x-show="show" class="fixed p-2 min-w-full lg:min-w-fit lg:toast toast-end z-50">
             @foreach ($errors->all() as $error)
                 <div class="alert alert-error">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
-                        class="h-6 w-6 shrink-0 stroke-current hidden md:block"
+                        class="h-6 w-6 shrink-0 stroke-current hidden lg:block"
                         fill="none"
                         viewBox="0 0 24 24">
                         <path
@@ -37,13 +37,13 @@
         </div>
     @endif
 
-    <div class="mt-[4.5rem] md:mt-0 md:py-5 md:px-10 flex flex-col md:flex-row md:gap-10 md:min-h-fit md:h-full">
+    <div class="mt-[4.5rem] md:mt-0 lg:py-5 lg:px-10 flex flex-col lg:flex-row lg:gap-10 lg:min-h-fit lg:h-full">
 
         {{-- Section Item --}}
-        <div class="flex flex-col bg-white w-full h-full md:h-fit md:max-h-[500px] overflow-y-auto md:rounded-lg md:drop-shadow-lg text-tertiery1">
+        <div class="flex flex-col bg-white w-full h-full lg:h-fit lg:max-h-[500px] overflow-y-auto lg:rounded-lg lg:drop-shadow-lg text-tertiery1">
 
             <div class="p-3 flex flex-row justify-between items-center pb-3 drop-shadow-md sticky top-0 bg-white">
-                <div class="text-lg md:text-2xl font-medium">
+                <div class="text-lg lg:text-2xl font-medium">
                     Cart ({{ count($cartItems) }} item(s))
                 </div>
                 <button id="check" class="p-2 bg-secondary3 hover:bg-tertiery3 rounded-lg text-white">
@@ -72,11 +72,11 @@
                         </div>
 
                         <div class="flex flex-col px-3 w-full">
-                            <div class="font-medium text-base md:text-2xl">
+                            <div class="font-medium text-base lg:text-2xl">
                                 {{ $item->product->name }}
                             </div>
-                            <div class="flex w-full mt-2 md:mt-0 justify-between">
-                                <div class="flex text-base md:text-lg">
+                            <div class="flex w-full mt-2 lg:mt-0 justify-between">
+                                <div class="flex text-base lg:text-lg">
                                     Rp. {{ number_format($item->product->price, 0, ',', '.') }}
                                 </div>
                                 <div class="flex flex-row gap-2">
@@ -104,8 +104,8 @@
                                 </div>
                             </div>
 
-                            <div class="flex w-full h-full justify-end mt-2 md:mt-0 md:justify-between md:items-end">
-                                <div class="hidden md:block text-2xl align-baseline">
+                            <div class="flex w-full h-full justify-end mt-2 lg:mt-0 lg:justify-between lg:items-end">
+                                <div class="hidden lg:block text-2xl align-baseline">
                                     Rp. {{ number_format($item->product->price * $item->quantity, 0, ',', '.') }}
                                 </div>
 
@@ -127,19 +127,19 @@
         </div>
 
         {{-- Section Detail --}}
-        <div class="p-3 shadow-up flex flex-col bottom-0 bg-white w-full h-fit md:h-full md:rounded-lg md:drop-shadow-lg text-tertiery1">
-            <div class="hidden md:block text-2xl font-medium">
+        <div class="p-3 shadow-up flex flex-col bottom-0 bg-white w-full h-fit lg:h-full lg:rounded-lg lg:drop-shadow-lg text-tertiery1">
+            <div class="hidden lg:block text-2xl font-medium">
                 Payment
             </div>
-            <hr class="hidden md:block">
-            <div class="flex flex-col h-fit md:h-full">
-                <div class="flex flex-col md:py-3">
-                    <div class="flex flex-wrap md:flex-nowrap w-full py-2 items-center gap-3 md:gap-4">
+            <hr class="hidden lg:block">
+            <div class="flex flex-col h-fit lg:h-full">
+                <div class="flex flex-col lg:py-3">
+                    <div class="flex flex-wrap lg:flex-nowrap w-full py-2 items-center gap-3 lg:gap-4">
                         <div class="w-full">
                             <label for="pickup_date">Pickup Date</label>
                             <input type="date" name="pickup_date" id="pickup_date" class="border-4 rounded-xl p-2 w-full">
                         </div>
-                        <span class="hidden md:block">
+                        <span class="hidden lg:block">
                             -
                         </span>
                         <div class="w-full">
@@ -148,32 +148,32 @@
                         </div>
                     </div>
                 </div>
-                <hr class="mt-2 md:mt-0">
-                <div class="hidden md:flex py-3 text-2xl flex-row justify-between">
+                <hr class="mt-2 lg:mt-0">
+                <div class="hidden lg:flex py-3 text-2xl flex-row justify-between">
                     Subtotal
                     <div id="subtotal">
                         Rp. {{ $subtotal ?? 0 }}
                     </div>
                 </div>
-                <div class="flex mt-2 md:mt-0 md:py-3 text-base md:text-2xl flex-row justify-between">
-                    <div class="flex flex-row w-full md:w-fit md:flex-col justify-between md:justify-start">
+                <div class="flex mt-2 lg:mt-0 lg:py-3 text-base lg:text-2xl flex-row justify-between">
+                    <div class="flex flex-row w-full lg:w-fit lg:flex-col justify-between lg:justify-start">
                         <div id="jumlah_hari">
                             Rent Duration: {{ $days ?? 0 }} days
                         </div>
-                        <p class="text-end md:text-start md:text-sm" id="harga_harian">(Rp. {{ $totalPrice ?? 0 }})</p>
+                        <p class="text-end lg:text-start lg:text-sm" id="harga_harian">(Rp. {{ $totalPrice ?? 0 }})</p>
                     </div>
-                    <div class="hidden md:block" id="harga_hari">
+                    <div class="hidden lg:block" id="harga_hari">
                         Rp. {{ $totalPrice ?? 0 }}
                     </div>
                 </div>
-                <div class="flex mt-2 md:mt-0 md:py-3 text-base md:text-2xl flex-row justify-between">
+                <div class="flex mt-2 lg:mt-0 lg:py-3 text-base lg:text-2xl flex-row justify-between">
                     Tax (11%)
                     <div id="pajak">
                         Rp. 0
                     </div>
                 </div>
-                <hr class="mt-2 md:mt-0">
-                <div class="flex py-3 text-lg md:text-2xl flex-row justify-between">
+                <hr class="mt-2 lg:mt-0">
+                <div class="flex py-3 text-lg lg:text-2xl flex-row justify-between">
                     Total
                     <div id="total">
                         Rp. 0
@@ -190,7 +190,7 @@
                     </div>
                 </div> --}}
 
-                <div class="h-fit md:h-full items-end flex mb-4 md:mb-0">
+                <div class="h-fit lg:h-full items-end flex mb-4 lg:mb-0">
                     <button id="checkoutButton" class="p-2 w-full rounded-lg bg-secondary3 hover:bg-primary3 text-white font-medium">Checkout</button>
                 </div>
             </div>
