@@ -1,11 +1,11 @@
 <x-app-layout title="Invoice" bodyClass="bg-tertiery3 min-h-screen">
-    <div class="flex gap-4 flex-col items-center justify-center">
+    <div class="flex mt-[5rem] sm:mt-0 gap-4 flex-col items-center justify-center">
         <div class="pt-3 text-4xl font-semibold text-secondary2">
             Invoice
         </div>
 
         {{-- Invoice Card --}}
-        <div class="bg-white rounded-lg shadow-md p-4 h-4/5 w-3/6 flex flex-col justify-between overflow-auto">
+        <div class="bg-white rounded-lg shadow-md p-4 h-4/5 sm:w-3/6 flex flex-col justify-between overflow-auto">
             <div class="gap-3">
                 <div class="flex flex-row justify-between">
                     No Order
@@ -120,11 +120,9 @@
                 </x-button>
             </div>
         @else
-            <div class="w-3/6 text-center pt-5">
-            <x-button variant="secondary" class="py-2 my-3 w-full" as="a" href="{{ route('history.index') }}">
+            <x-button variant="secondary" class="py-2 my-3 w-fit" as="a" href="{{ route('history.index') }}">
                 Back
             </x-button>
-            </div>
         @endif
     </div>
     <x-slot name="scripts">
