@@ -13,10 +13,14 @@
 {{-- </x-app-layout> --}}
 
 <x-app-layout bodyClass="bg-tertiery3 text-tertiery1">
-    <div class="container mt-[5rem] md:mt-0 mx-auto my-8">
+    <div class="container mt-[5rem] md:mt-8 mx-auto my-8">
         <div class="bg-white p-6 rounded-xl">
-            <h1 class="text-xl font-bold mb-4">Summary</h1>
-
+            <div class="flex gap-4 items-center mb-4">
+                <h1 class="text-xl font-bold">Summary</h1>
+                <x-button as="a" href="{{ route('admin.report') }}">
+                    Download PDF
+                </x-button>
+            </div>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 <!-- Total Rents -->
                 <div class="card bg-base-100 drop-shadow p-4">

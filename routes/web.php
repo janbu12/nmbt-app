@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminHistoryController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\InvoiceController;
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\UserHistoryController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
@@ -71,7 +72,7 @@ Route::middleware(['auth','role:admin'])->group(function () {
     Route::get('/admin/history/detail-history-excel', [AdminHistoryController::class, 'detailHistoryExcel'])->name('admin.history.detailHistoryExcel');
     Route::get('/admin/history/{id}', [AdminHistoryController::class, 'show'])->name('admin.show');
     Route::get('/admin/history/{id}/change-status', [AdminHistoryController::class, 'status'])->name('admin.status');
-
+    Route::get('/admin/report', [ReportController::class, 'generateReport'])->name('admin.report');
 });
 
 
@@ -101,6 +102,16 @@ Route::get('/test', function() {
     ]);
 });
 
-Route::get('/test/response', function() {
-    return response()->json(['message'=>'success']);
+Route::get('/test', function() {
+    $items = App\Models\RentDetailsModel::with(['product', 'product.images'])->get();
+    $rent = App\Models\Rent::all();
+    $totalBorrowed = $rent->count();
+    $totalIncome = $items->sum('subtotal');
+
+    $quantityRentTotal = Illuminate\Support\Facades\DB::table('rent_details as rd')
+            ->join('rents as r', 'rd.rent_id', '=', 'r.id')
+            ->whereIn('r.status_rent', ['done', 'renting'])
+            ->sum('rd.quantity');
+
+    return view('pdf.report', compact('items','totalBorrowed', 'totalIncome', 'quantityRentTotal'));
 });
