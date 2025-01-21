@@ -13,7 +13,7 @@
 {{-- </x-app-layout> --}}
 
 <x-app-layout bodyClass="bg-tertiery3 text-tertiery1">
-    <div class="container mx-auto my-8">
+    <div class="container mt-[5rem] md:mt-0 mx-auto my-8">
         <div class="bg-white p-6 rounded-xl">
             <h1 class="text-xl font-bold mb-4">Summary</h1>
 
