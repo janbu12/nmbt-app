@@ -12,6 +12,7 @@ class ReportController extends Controller
 {
     public function generateReport(Request $request)
     {
+        // dd($request);
         // Ambil data yang diperlukan
         $items = RentDetailsModel::with(['product', 'product.images'])->limit(100)->get();
         $rent = Rent::all();
@@ -27,6 +28,8 @@ class ReportController extends Controller
         // Hitung pendapatan berdasarkan hari dan bulan
         $incomeByDay = $this->calculateIncomeByDay($rent);
         $incomeByMonth = $this->calculateIncomeByMonth($rent);
+        $rentsByDay = $this->calculateRentsByDay($rent);
+        $rentsByMonth = $this->calculateRentsByMonth($rent);
 
         // Buat view untuk PDF
         $pdf = FacadePdf::loadView('pdf.report', compact(
@@ -38,7 +41,9 @@ class ReportController extends Controller
             'totalIncome',
             'quantityRentTotal',
             'incomeByDay',
-            'incomeByMonth'
+            'incomeByMonth',
+            'rentsByDay',
+            'rentsByMonth',
         ));
 
         // Kembalikan PDF sebagai response
@@ -48,24 +53,58 @@ class ReportController extends Controller
 // Fungsi untuk menghitung pendapatan berdasarkan hari
     private function calculateIncomeByDay($rent)
     {
-        // Logika untuk menghitung pendapatan berdasarkan hari
-        // Misalnya, Anda bisa menggunakan koleksi untuk mengelompokkan dan menjumlahkan pendapatan
         return $rent->groupBy(function($date) {
-            return \Carbon\Carbon::parse($date->created_at)->format('Y-m-d'); // Mengelompokkan berdasarkan tanggal
+            return \Carbon\Carbon::parse($date->created_at)->format('Y-m-d');
         })->map(function($day) {
-            return $day->sum('total_price'); // Menghitung total pendapatan per hari
-        })->sortKeys();
+            return $day->sum('total_price');
+        })->sortKeys()->map(function($income, $key) {
+            return [
+                'income' => $income,
+                'formatted_date' => \Carbon\Carbon::createFromFormat('Y-m-d', $key)->format('d F Y')
+            ];
+        });
     }
 
-// Fungsi untuk menghitung pendapatan berdasarkan bulan
     private function calculateIncomeByMonth($rent)
     {
-        // Logika untuk menghitung pendapatan berdasarkan bulan
         return $rent->groupBy(function($date) {
-            return \Carbon\Carbon::parse($date->created_at)->format('Y-m'); // Mengelompokkan berdasarkan bulan
+            return \Carbon\Carbon::parse($date->created_at)->format('Y-m');
         })->map(function($month) {
-            return $month->sum('total_price'); // Menghitung total pendapatan per bulan
-        })->sortKeys();
+            return $month->sum('total_price');
+        })->sortKeys()->map(function($income, $key) {
+            return [
+                'income' => $income,
+                'formatted_date' => \Carbon\Carbon::createFromFormat('Y-m', $key)->format('F Y')
+            ];
+        });
+    }
+
+    private function calculateRentsByDay($rent)
+    {
+        return $rent->groupBy(function($date) {
+            return \Carbon\Carbon::parse($date->created_at)->format('Y-m-d');
+        })->map(function($day) {
+            return $day->count();
+        })->sortKeys()->map(function($rents, $key) {
+            return [
+                'rents' => $rents,
+                'formatted_date' => \Carbon\Carbon::createFromFormat('Y-m-d', $key)->format('d F Y')
+            ];
+        });
+    }
+
+    private function calculateRentsByMonth($rent)
+    {
+        return $rent->groupBy(function($date) {
+            return \Carbon\Carbon::parse($date->created_at)->format('Y-m');
+        })->map(function($month) {
+            return $month->count();
+        })->sortKeys()->map(function($rents, $key) {
+            return [
+                'rents' => $rents,
+                'formatted_date' => \Carbon\Carbon::createFromFormat('Y-m', $key)->format('F Y')
+            ];
+        });
     }
 
 }
