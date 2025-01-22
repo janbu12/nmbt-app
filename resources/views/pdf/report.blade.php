@@ -49,8 +49,13 @@
         }
 
         p {
+            margin-left: 10px;
             margin-bottom: 10px;
             font-size: 16px;
+        }
+
+        li {
+            margin-left: 10px;
         }
 
         strong {
@@ -94,6 +99,10 @@
                 font-size: 20px;
             }
 
+            h3 {
+                font-size: 18px;
+            }
+
             p {
                 font-size: 14px;
             }
@@ -118,8 +127,8 @@
             <p>Total Done Rents: <strong>{{ $doneRents }}</strong></p>
             <p>Total Income: <strong>Rp. {{ number_format($totalIncome, 2, ',', '.') }}</strong></p>
         </div>
-        <h2>1. Income</h2>
-        <h3>- By Day</h3>
+        <h3>Income</h3>
+        <li>By Month</li>
         <div class="table-responsive mt-4">
             <table class="table">
                 <thead>
@@ -133,18 +142,17 @@
                     @php
                         $no = 1
                     @endphp
-                    @foreach ($incomeByDay as $date => $income)
+                    @foreach ($incomeByMonth as $data)
                         <tr>
                             <td>{{ $no++ }}</td>
-                            <td>{{ $date }}</td>
-                            <td>Rp. {{ number_format($income, 2, ',', '.') }}</td>
+                            <td>{{ $data['formatted_date'] }}</td>
+                            <td>Rp. {{ number_format($data['income'], 2, ',', '.') }}</td>
                         </tr>
                     @endforeach
                 </tbody>
             </table>
         </div>
-
-        <h3>- By Month</h3>
+        <li>By Day</li>
         <div class="table-responsive mt-4">
             <table class="table">
                 <thead>
@@ -158,40 +166,61 @@
                     @php
                         $no = 1
                     @endphp
-                    @foreach ($incomeByMonth as $date => $income)
+                    @foreach ($incomeByDay as $data)
                         <tr>
                             <td>{{ $no++ }}</td>
-                            <td>{{ $date }}</td>
-                            <td>Rp. {{ number_format($income, 2, ',', '.') }}</td>
+                            <td>{{ $data['formatted_date'] }}</td>
+                            <td>Rp. {{ number_format($data['income'], 2, ',', '.') }}</td>
                         </tr>
                     @endforeach
                 </tbody>
             </table>
         </div>
 
-        <h2>2. Rents</h2>
-        <h3>- By Day</h3>
-
-
-        <h3>- By Month</h3>
-
+        <h3>Rents</h3>
+        <li>By Month</li>
         <div class="table-responsive mt-4">
             <table class="table">
                 <thead>
                     <tr>
-                        <th>Item</th>
-                        <th>Harga</th>
-                        <th>Terjual</th>
-                        <th>Total</th>
+                        <th>No</th>
+                        <th>Tanggal</th>
+                        <th>Number of Rents</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($items as $item)
+                    @php
+                        $no = 1
+                    @endphp
+                    @foreach ($rentsByMonth as $data)
                         <tr>
-                            <td>{{ $item->product->name }}</td>
-                            <td>Rp. {{ number_format($item->product->price, 2, ',', '.') }}</td>
-                            <td>{{ $item->quantity }}</td>
-                            <td>Rp. {{ number_format(($item->quantity * $item->product->price), 2, ',', '.') }}</td>
+                            <td>{{ $no++ }}</td>
+                            <td>{{ $data['formatted_date'] }}</td>
+                            <td>{{ $data['rents'] }}</td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+        <li>By Day</li>
+        <div class="table-responsive mt-4">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Tanggal</th>
+                        <th>Number of Rents</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @php
+                        $no = 1
+                    @endphp
+                    @foreach ($rentsByDay as $data)
+                        <tr>
+                            <td>{{ $no++ }}</td>
+                            <td>{{ $data['formatted_date'] }}</td>
+                            <td>{{ $data['rents'] }}</td>
                         </tr>
                     @endforeach
                 </tbody>

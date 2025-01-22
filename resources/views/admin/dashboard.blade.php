@@ -3,8 +3,12 @@
     @dump($totalDoneRents)
     @dump($totalRenting)
     @dump($totalOngoingRents)
-    @dump($totalIncome)
-    @dump($topTenProducts) --}}
+    @dump($totalIncome) --}}
+    @php
+        $encode = json_encode($topTenProducts);
+        $decode = json_decode($encode, true);
+    @endphp
+    @dump($decode)
     {{-- @dump($quantityRentTotal) --}}
     {{-- @dump($topThreeCategories) --}}
     {{-- @dump($transactions) --}}
