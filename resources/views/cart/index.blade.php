@@ -321,7 +321,7 @@
                         Swal.fire({
                             position: "center",
                             icon: "error",
-                            title: "Tanggal awal tidak boleh kurang dari tanggal hari ini.",
+                            title: "Pickup date can't be earlier than today.",
                             showConfirmButton: false,
                             timer: 2000,
                         });
@@ -332,7 +332,7 @@
                             Swal.fire({
                                 position: "center",
                                 icon: "error",
-                                title: "Tanggal akhir minimal 2 hari dari tanggal awal",
+                                title: "Minimum rental duration is 2 days.",
                                 showConfirmButton: false,
                                 timer: 2000,
                             });
@@ -354,7 +354,7 @@
                         Swal.fire({
                             position: "center",
                             icon: "error",
-                            title: "Tanggal akhir tidak boleh kurang dari tanggal awal.",
+                            title: "Return date can't be earlier than pickup date.",
                             showConfirmButton: false,
                             timer: 2000,
                         });
@@ -365,7 +365,7 @@
                             Swal.fire({
                                 position: "center",
                                 icon: "error",
-                                title: "Tanggal akhir minimal 2 hari dari tanggal awal",
+                                title: "Minimum rental duration is 2 days.",
                                 showConfirmButton: false,
                                 timer: 2000,
                             });

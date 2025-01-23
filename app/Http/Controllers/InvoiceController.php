@@ -26,9 +26,9 @@ class InvoiceController extends Controller
                 'selected_items' => 'required|array|min:1',
             ],
             [
-                'pickup_date.required' => 'Tanggal awal harus diisi.',
-                'return_date.required' => 'Tanggal akhir harus diisi.',
-                'selected_items.required' => 'Anda harus memilih minimal satu barang.',
+                'pickup_date.required' => 'Pickup date should be filled.',
+                'return_date.required' => 'Return date should be filled.',
+                'selected_items.required' => 'You should select at least one item.',
             ]
         );
 
@@ -42,7 +42,7 @@ class InvoiceController extends Controller
         $returnDate = Carbon::parse($request->input('return_date'));
 
         if ($returnDate->lt($pickupDate->copy()->addDays(2))) {
-            return back()->with('error', 'Tanggal akhir harus minimal 2 hari setelah tanggal awal.');
+            return back()->with('error', 'Return date should be at least 2 days after pickup date.');
         }
 
         $items = Cart::where('user_id', $idUser)
@@ -59,7 +59,7 @@ class InvoiceController extends Controller
             $totalDays = $days * 5000;
         }
         else {
-            return back()->with('error', 'Tanggal akhir harus lebih besar atau sama dengan tanggal mulai.');
+            return back()->with('error', 'Return date should be greater or equal than pickup date.');
         }
 
         $pickupDateFormatted = $pickupDate->translatedFormat('d F Y');
@@ -287,7 +287,7 @@ class InvoiceController extends Controller
         }
 
         if ($rent->status_rent !== 'unpaid') {
-            return response()->json(['status' => 'error', 'message' => 'Transaksi tidak dapat dibayar.'], 400);
+            return response()->json(['status' => 'error', 'message' => 'Transaction error.'], 400);
         }
 
         return response()->json(['status' => 'success', 'snapToken' => $rent->snap_token, 'url' => $url, 'response' => $data]);
@@ -349,7 +349,7 @@ class InvoiceController extends Controller
         $rent->cancel_reason = $reason;
         $rent->save();
 
-        return response()->json(['status' => 'success', 'message' => 'Pesanan berhasil dibatalkan.', 'data' => $data]);
+        return response()->json(['status' => 'success', 'message' => 'Order cancelled successfully.', 'data' => $data]);
     }
 
     public function updatePaymentMethod(Request $request, $id)
@@ -372,7 +372,7 @@ class InvoiceController extends Controller
         $rent->status_rent = 'process';
         $rent->save();
 
-        return response()->json(['status' => 'success', 'message' => 'Pembayaran berhasil diterima.']);
+        return response()->json(['status' => 'success', 'message' => 'Payment success, order is being processed.']);
     }
 
     public function sendToEmail(Request $request)

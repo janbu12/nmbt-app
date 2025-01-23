@@ -47,7 +47,7 @@ class CartController extends Controller
         // Jika ada produk yang habis, simpan pesan
         $message = '';
         if (!empty($outOfStockProducts)) {
-            $message = 'Item ' . implode(', ', $outOfStockProducts) . ' telah habis.';
+            $message = 'Item ' . implode(', ', $outOfStockProducts) . ' is out of stock.';
         }
 
         return view('cart.index', [
@@ -63,10 +63,10 @@ class CartController extends Controller
 
         if ($cartItem) {
             $cartItem->delete(); // Hapus item dari database
-            return redirect()->route('cart.index')->with('success', 'Item berhasil dihapus dari keranjang.');
+            return redirect()->route('cart.index')->with('success', 'Success delete item from cart.');
         }
 
-        return redirect()->route('cart.index')->with('error', 'Item tidak ditemukan.');
+        return redirect()->route('cart.index')->with('error', 'Item not found.');
     }
 
     public function update(Request $request, $id)
@@ -82,20 +82,20 @@ class CartController extends Controller
 
         if ($cartItem) {
             if ($request->quantity < 1) {
-                return redirect()->route('cart.index')->with('error', 'Jumlah barang tidak boleh kurang dari 1.');
+                return redirect()->route('cart.index')->with('error', 'Quantity must be greater than 0.');
             }
 
             if ($request->quantity > $product->stock) {
-                return redirect()->route('cart.index')->with('error', 'Jumlah barang ' . $product->name .  ' melebihi stok.');
+                return redirect()->route('cart.index')->with('error', 'The quantity of  ' . $product->name .  ' is greater than the stock.');
             }
 
             $cartItem->quantity = $request->quantity;
             $cartItem->save();
 
-            return redirect()->route('cart.index')->with('success', 'Jumlah barang berhasil diperbarui.');
+            return redirect()->route('cart.index')->with('success', 'Success update item in cart.');
         }
 
-        return redirect()->route('cart.index')->with('error', 'Item tidak ditemukan.');
+        return redirect()->route('cart.index')->with('error', 'Item not found.');
     }
 
 
@@ -109,7 +109,7 @@ class CartController extends Controller
             $days = $startDate->diffInDays($endDate);
             $totalPrice = $days * $pricePerDay;
         } else {
-            return back()->with('error', 'Tanggal akhir harus lebih besar atau sama dengan tanggal mulai.');
+            return back()->with('error', 'Return date must be greater or equal to pickup date.');
         }
 
         return view('cart.index', [
@@ -126,7 +126,7 @@ class CartController extends Controller
         $product = Product::find($id);
 
         if($request->quantity > $product->stock){
-            return back()->with('error', 'Jumlah barang ' . $product->name .  ' melebihi stok.');
+            return back()->with('error', 'The quantity of ' . $product->name .  ' is greater than the stock.');
         }
 
         $userId = Auth::user()->id;
