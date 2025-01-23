@@ -24,13 +24,13 @@ class ReviewController extends Controller
             'reviews.*.comment' => 'required|string|max:255',
             'reviews.*.product_id' => 'required|exists:products,id',
         ],[
-            'reviews.*.rating.required' => 'Rating harus diisi.',
-            'reviews.*.rating.integer' => 'Rating harus berupa angka.',
-            'reviews.*.rating.between' => 'Rating harus antara 1-5.',
-            'reviews.*.comment.required' => 'Komentar harus diisi.',
-            'reviews.*.comment.max' => 'Komentar maksimal 255 karakter.',
-            'reviews.*.product_id.required' => 'Produk harus dipilih.',
-            'reviews.*.product_id.exists' => 'Produk yang dipilih tidak ditemukan.',
+            'reviews.*.rating.required' => 'Rating should be filled.',
+            'reviews.*.rating.integer' => 'Rating should be numeric.',
+            'reviews.*.rating.between' => 'Rating should be between 1 and 5.',
+            'reviews.*.comment.required' => 'Comment should be filled.',
+            'reviews.*.comment.max' => 'Comment should not be more than 255 characters.',
+            'reviews.*.product_id.required' => 'Item should be selected.',
+            'reviews.*.product_id.exists' => 'Selected item does not exist.',
          ]);
 
         // dd($request);
@@ -48,6 +48,6 @@ class ReviewController extends Controller
         $rent = Rent::findOrFail($id);
         $rent->status_rent = 'reviewed';
 
-        return redirect()->route('history.index')->with('success', 'Review berhasil dikirim.');
+        return redirect()->route('history.index')->with('success', 'Review send successfully..');
     }
 }

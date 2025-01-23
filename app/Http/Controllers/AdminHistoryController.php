@@ -74,7 +74,7 @@ class AdminHistoryController extends Controller
                 $rent->status_rent = 'done';
                 break;
             default:
-                return redirect()->back()->with('error', 'Status tidak valid.');
+                return redirect()->back()->with('error', 'Status invalid.');
         }
 
         $rent->save();
@@ -82,7 +82,7 @@ class AdminHistoryController extends Controller
         // Kirim email setelah status diubah
         Mail::to($rent->user->email)->send(new RentStatusUpdateMail($rent, $rent->status_rent));
 
-        return redirect()->back()->with('success', 'Status berhasil diubah dan email telah dikirim.');
+        return redirect()->back()->with('success', 'Success update status and email is sent.');
     }
 
     public function historyExcel()
