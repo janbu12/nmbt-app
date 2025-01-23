@@ -4,11 +4,6 @@
     @dump($totalRenting)
     @dump($totalOngoingRents)
     @dump($totalIncome) --}}
-    @php
-        $encode = json_encode($topTenProducts);
-        $decode = json_decode($encode, true);
-    @endphp
-    @dump($decode)
     {{-- @dump($quantityRentTotal) --}}
     {{-- @dump($topThreeCategories) --}}
     {{-- @dump($transactions) --}}
@@ -122,6 +117,12 @@
                     </div>
                 </div>
             </div>
+            <input type="hidden" name="topTenProducts" value="{{ json_encode($topTenProducts) }}">
+            <input type="hidden" name="transactions" value="{{ json_encode($transactions) }}">
+            <input type="hidden" name="rentalLabel" value="{{ json_encode($months) }}">
+            <input type="hidden" name="rentalData" value="{{ json_encode($totals) }}">
+            <input type="hidden" name="incomeLabel" value="{{ json_encode($monthsIncome) }}">
+            <input type="hidden" name="incomeData" value="{{ json_encode($totalsIncome) }}">
         </form>
 
 
@@ -138,7 +139,7 @@
             <div class="bg-white p-8 mt-8 rounded-xl w-full">
                 <canvas id="topTenProductChart"></canvas>
             </div>
-            <div class="bg-white p-8 mt-8 rounded-xl w-full">
+            <div id="capture" class="bg-white p-8 mt-8 rounded-xl w-full">
                 <canvas id="categoriesChart"></canvas>
             </div>
         </div>

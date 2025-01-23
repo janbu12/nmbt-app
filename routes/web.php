@@ -112,6 +112,12 @@ Route::get('/test', function() {
             ->join('rents as r', 'rd.rent_id', '=', 'r.id')
             ->whereIn('r.status_rent', ['done', 'renting'])
             ->sum('rd.quantity');
+    $data = [
+        'name' => 'NMBT App',
+        'address' => 'Uber Street Gotham City',
+        'phone' => '081234567890',
+        'email' => 'admin@example.com',
+    ];
 
-    return view('pdf.report', compact('items','totalBorrowed', 'totalIncome', 'quantityRentTotal'));
+    return view('pdf.report', compact('items','totalBorrowed', 'totalIncome', 'quantityRentTotal', 'data'));
 });
