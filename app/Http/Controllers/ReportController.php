@@ -7,6 +7,7 @@ use App\Models\RentDetailsModel;
 use Barryvdh\DomPDF\Facade\Pdf as FacadePdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Spatie\Browsershot\Browsershot;
 
 class ReportController extends Controller
 {
@@ -24,6 +25,12 @@ class ReportController extends Controller
         $ongoingRent = $request->input('ongoing_rents');
         $quantityRentTotal = $request->input('quantity_rented_product');
         $totalIncome = $request->input('income');
+        $topTenProducts = json_decode($request->input('topTenProducts'), true);
+        $transactions = json_decode($request->input('transactions'), true);
+        $rentalLabel = json_decode($request->input('rentalLabel'), true);
+        $rentalData = json_decode($request->input('rentalData'), true);
+        $incomeLabel = json_decode($request->input('incomeLabel'), true);
+        $incomeData = json_decode($request->input('incomeData'), true);
 
         // Hitung pendapatan berdasarkan hari dan bulan
         $incomeByDay = $this->calculateIncomeByDay($rent);
@@ -31,23 +38,64 @@ class ReportController extends Controller
         $rentsByDay = $this->calculateRentsByDay($rent);
         $rentsByMonth = $this->calculateRentsByMonth($rent);
 
-        // Buat view untuk PDF
-        $pdf = FacadePdf::loadView('pdf.report', compact(
-            'items',
-            'totalBorrowed',
-            'doneRents',
-            'totalRenting',
-            'ongoingRent',
-            'totalIncome',
-            'quantityRentTotal',
-            'incomeByDay',
-            'incomeByMonth',
-            'rentsByDay',
-            'rentsByMonth',
-        ));
+        $viewData = [
+            'name' => 'NMBT App',
+            'address' => 'Uber Street Gotham City',
+            'phone' => '081234567890',
+            'email' => 'admin@example.com',
+            'items' => $items,
+            'totalBorrowed' => $totalBorrowed,
+            'doneRents' => $doneRents,
+            'totalRenting' => $totalRenting,
+            'ongoingRent' => $ongoingRent,
+            'totalIncome' => $totalIncome,
+            'quantityRentTotal' => $quantityRentTotal,
+            'incomeByDay' => $incomeByDay,
+            'incomeByMonth' => $incomeByMonth,
+            'rentsByDay' => $rentsByDay,
+            'rentsByMonth' => $rentsByMonth,
+            'topTenProducts' => $topTenProducts,
+            'transactions' => $transactions,
+            'rentalLabel' => $rentalLabel,
+            'rentalData' => $rentalData,
+            'incomeLabel' => $incomeLabel,
+            'incomeData' => $incomeData,
+        ];
 
-        // Kembalikan PDF sebagai response
-        return $pdf->download('report.pdf');
+        // return view('pdf.report', [
+        //     'name' => 'NMBT App',
+        //     'address' => 'Uber Street Gotham City',
+        //     'phone' => '081234567890',
+        //     'email' => 'admin@example.com',
+        //     'items' => $items,
+        //     'totalBorrowed' => $totalBorrowed,
+        //     'doneRents' => $doneRents,
+        //     'totalRenting' => $totalRenting,
+        //     'ongoingRent' => $ongoingRent,
+        //     'totalIncome' => $totalIncome,
+        //     'quantityRentTotal' => $quantityRentTotal,
+        //     'incomeByDay' => $incomeByDay,
+        //     'incomeByMonth' => $incomeByMonth,
+        //     'rentsByDay' => $rentsByDay,
+        //     'rentsByMonth' => $rentsByMonth,
+        //     'topTenProducts' => $topTenProducts,
+        //     'transactions' => $transactions,
+        //     'rentalLabel' => $rentalLabel,
+        //     'rentalData' => $rentalData,
+        //     'incomeLabel' => $incomeLabel,
+        //     'incomeData' => $incomeData,
+        // ]);
+
+        $html = view('pdf.report', $viewData)->render();
+
+        Browsershot::html($html)
+        ->timeout(60)
+        ->showBackground()
+        ->margins(4, 0, 4, 0)
+        ->format('A4')
+        ->save(storage_path('/app/public/report.pdf'));
+
+        return response()->download(storage_path('/app/public/report.pdf'));
     }
 
 // Fungsi untuk menghitung pendapatan berdasarkan hari
