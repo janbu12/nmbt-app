@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Rent;
 use App\Models\RentDetailsModel;
-use Barryvdh\DomPDF\Facade\Pdf as FacadePdf;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Spatie\Browsershot\Browsershot;
@@ -86,16 +86,23 @@ class ReportController extends Controller
         //     'incomeData' => $incomeData,
         // ]);
 
-        $html = view('pdf.report', $viewData)->render();
+        // $html = view('pdf.report', $viewData)->render();
 
-        Browsershot::html($html)
-        ->timeout(60)
-        ->showBackground()
-        ->margins(4, 0, 4, 0)
-        ->format('A4')
-        ->save(storage_path('/app/public/report.pdf'));
+        // Browsershot::html($html)
+        // ->timeout(60)
+        // ->showBackground()
+        // ->margins(4, 0, 4, 0)
+        // ->format('A4')
+        // ->save(storage_path('/app/public/report.pdf'));
+
+        $pdf = Pdf::loadView('pdf.report', $viewData)
+        ->setPaper('a4', 'portrait');
+
+        $pdf->save(storage_path('app/public/report.pdf'));
 
         return response()->download(storage_path('/app/public/report.pdf'));
+
+        // return view('pdf.report', $viewData);
     }
 
 // Fungsi untuk menghitung pendapatan berdasarkan hari
