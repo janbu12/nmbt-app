@@ -37,7 +37,7 @@ class InvoiceController extends Controller
         $now = Carbon::now( );
         $operationalClose = Carbon::today()->setHour(19)->setMinute(0);
 
-        dd($now, $operationalClose);
+        // dd($now, $operationalClose);
 
         if ($now->greaterThan($operationalClose)) {
             return back()->with('error', 'Orders cannot be placed after 19:00 WIB. Please order earlier.');
