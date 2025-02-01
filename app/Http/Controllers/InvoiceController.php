@@ -34,6 +34,16 @@ class InvoiceController extends Controller
 
         setlocale(LC_TIME, 'id_ID.UTF-8');
         Carbon::setLocale('id');
+        $now = Carbon::now( );
+        $operationalClose = Carbon::today()->setHour(19)->setMinute(0);
+
+        dd($now, $operationalClose);
+
+        if ($now->greaterThan($operationalClose)) {
+            return back()->with('error', 'Orders cannot be placed after 19:00 WIB. Please order earlier.');
+        }
+
+
         $idUser = Auth::User()->id;
 
         $selectedItems = $request->input('selected_items', []);
@@ -41,8 +51,8 @@ class InvoiceController extends Controller
         $pickupDate = Carbon::parse($request->input('pickup_date'));
         $returnDate = Carbon::parse($request->input('return_date'));
 
-        if ($returnDate->lt($pickupDate->copy()->addDays(2))) {
-            return back()->with('error', 'Return date should be at least 2 days after pickup date.');
+        if ($returnDate->lt($pickupDate->copy()->addDays(1))) {
+            return back()->with('error', 'Return date should be at least 1 days after pickup date.');
         }
 
         $items = Cart::where('user_id', $idUser)
