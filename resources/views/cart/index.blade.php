@@ -128,8 +128,13 @@
 
         {{-- Section Detail --}}
         <div class="p-3 shadow-up flex flex-col bottom-0 bg-white w-full h-fit lg:h-full lg:rounded-lg lg:drop-shadow-lg text-tertiery1">
-            <div class="hidden lg:block text-2xl font-medium">
-                Payment
+            <div class="flex items-center justify-between">
+                <div class="hidden lg:block text-2xl font-medium">
+                    Payment
+                </div>
+                <div>
+                    Operational hours 07.00 - 19.00 WIB
+                </div>
             </div>
             <hr class="hidden lg:block">
             <div class="flex flex-col h-fit lg:h-full">
@@ -328,11 +333,11 @@
                         startDateInput.value = '';
                     } else {
                         const days = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24));
-                        if (days < 2) {
+                        if (days < 1) {
                             Swal.fire({
                                 position: "center",
                                 icon: "error",
-                                title: "Minimum rental duration is 2 days.",
+                                title: "Minimum rental duration is 1 days.",
                                 showConfirmButton: false,
                                 timer: 2000,
                             });
@@ -361,11 +366,11 @@
                         endDateInput.value = ''; // Reset end date
                     } else {
                         const days = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24));
-                        if (days < 2) {
+                        if (days < 1) {
                             Swal.fire({
                                 position: "center",
                                 icon: "error",
-                                title: "Minimum rental duration is 2 days.",
+                                title: "Minimum rental duration is 1 days.",
                                 showConfirmButton: false,
                                 timer: 2000,
                             });
