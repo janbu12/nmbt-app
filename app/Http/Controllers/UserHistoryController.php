@@ -28,7 +28,7 @@ class UserHistoryController extends Controller
                 ->orWhere('pickup_date', 'like', "%$search%");
             })
             ->orderBy('id', 'desc') // Urutkan berdasarkan kolom ID secara descending
-            ->paginate(10); // Pagination dengan 10 item per halaman
+            ->paginate(8);
 
 
         return view('users.history', [

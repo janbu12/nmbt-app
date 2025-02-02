@@ -1,5 +1,5 @@
-<x-app-layout title="Riwayat" bodyClass="bg-tertiery3 w-full items-center lg:overflow-hidden max-h-screen">
-    <div class="flex mt-16 md:mt-0 w-full lg:px-10 h-screen overflow-hidden flex-col">
+<x-app-layout title="Riwayat" bodyClass="bg-tertiery3 w-full items-center overflow-auto lg:overflow-hidden lg:max-h-screen">
+    <div class="flex mt-16 md:mt-0 w-full lg:px-10 h-screen overflow-auto flex-col">
         {{-- Sidebar Component --}}
         <div class="flex mt-2">
             <div class="w-full text-start font-bold text-base lg:text-2xl text-secondary2 p-2 lg:p-3">
@@ -83,7 +83,7 @@
         <div class="flex lg:mx-0 px-2 lg:px-0 my-4 drop-shadow-md flex-col w-full h-full">
 
             {{-- Tablet - PC --}}
-            <div class="overflow-y-auto rounded-xl bg-white p-4 w-full h-full">
+            <div class="overflow-auto rounded-xl bg-white p-4 w-full h-full">
                 <table class="table w-full">
                     <thead class="text-base">
                         <tr>
