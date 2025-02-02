@@ -35,7 +35,7 @@
             <h1 class="text-tertiery1 text-2xl font-semibold">Details Product</h1>
             <div class="flex flex-col gap-2">
                 <label for="description">Description Product</label>
-                <textarea id="description" name="description" placeholder="Description" class="textarea textarea-bordered" rows="3" required>{{ old('description', $product->description) }}</textarea>
+                <textarea id="description" name="description" placeholder="Description" class="textarea textarea-bordered" rows="7" required>{{ old('description', $product->description) }}</textarea>
             </div>
             <div class="flex gap-4">
                 <div class="flex flex-col w-full gap-2">

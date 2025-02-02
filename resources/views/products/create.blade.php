@@ -32,7 +32,7 @@
             <h1 class="text-tertiery1 text-2xl font-semibold">Details Product</h1>
             <div class="flex flex-col gap-2">
                 <label for="">Description Product</label>
-                <textarea name="description" placeholder="Description" class="textarea textarea-bordered" rows="3" required></textarea>
+                <textarea name="description" placeholder="Description" class="textarea textarea-bordered" rows="7" required></textarea>
             </div>
             <div class="flex gap-4">
                 <div class="flex flex-col w-full gap-2">
