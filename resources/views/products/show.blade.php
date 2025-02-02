@@ -229,20 +229,21 @@
             const increaseBtn = document.getElementById("increase");
             const decreaseBtn = document.getElementById("decrease");
 
+            if (increaseBtn && decreaseBtn && quantityInput){
+                increaseBtn.addEventListener("click", () => {
+                    const currentValue = parseInt(quantityInput.value);
+                    if (currentValue < {{ $product->stock}}) {
+                        quantityInput.value = currentValue + 1;
+                    }
+                });
 
-            increaseBtn.addEventListener("click", () => {
-                const currentValue = parseInt(quantityInput.value);
-                if (currentValue < {{ $product->stock}}) {
-                    quantityInput.value = currentValue + 1;
-                }
-            });
-
-            decreaseBtn.addEventListener("click", () => {
-                const currentValue = parseInt(quantityInput.value);
-                if (currentValue > 1) {
-                    quantityInput.value = currentValue - 1;
-                }
-            });
+                decreaseBtn.addEventListener("click", () => {
+                    const currentValue = parseInt(quantityInput.value);
+                    if (currentValue > 1) {
+                        quantityInput.value = currentValue - 1;
+                    }
+                });
+            }
 
             document.addEventListener("DOMContentLoaded", () => {
                 const images = @json($product->images);
@@ -257,7 +258,11 @@
 
                 // Update main image and active thumbnail
                 const updateMainImage = (index) => {
-                    mainImage.src = `{{ asset('storage/') }}/${images[index].image_path}`;
+                    if(!images[index]){
+                        mainImage.src = "{{ asset('images/produk-icon-dummy.png') }}";
+                    }else{
+                        mainImage.src = `{{ asset('storage/') }}/${images[index].image_path}`;
+                    }
 
                     // Remove 'border-primary' class from all thumbnails
                     thumbnails.forEach((thumbnail) => thumbnail.classList.remove("ring-2"));
