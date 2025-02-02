@@ -85,7 +85,7 @@
                         </div>
                     </div>
                     <div class="py-5 text-pretty md:text-balance">
-                        {{ $product->description }}
+                        {!! nl2br(e($product->description)) !!}
                     </div>
                     <div class="flex flex-wrap lg:flex-nowrap gap-4 justify-between text-secondary3">
                         <div class="flex gap-3 flex-col w-full md:w-fit md:flex-row justify-center items-center">
