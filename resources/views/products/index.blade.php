@@ -91,7 +91,7 @@
                         </figure>
                         <div class="card-body text-tertiery1">
                             <h2 class="card-title lg:text-base">{{ $product->name }}</h2>
-                            <p class="lg:text-sm 2xl:text-base">{{ $product->teaser }}</p>
+                            <p class="lg:text-sm 2xl:text-base">{{ Str::limit($product->teaser, 100, '...') }}</p>
                             <div class="flex items-center gap-2">
                                 <div class="flex space-x-1 lg:text-xl 2xl:text-3xl">
                                     @php $averageRatingProduct = round($product->average_rating); @endphp
