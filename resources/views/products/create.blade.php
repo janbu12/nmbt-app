@@ -89,7 +89,7 @@
         <script>
             function validateFileInput(event) {
                 const files = event.target.files;
-                const allowedExtensions = ["image/jpeg", "image/png", "image/jpg"];
+                const allowedExtensions = ["image/jpeg", "image/png", "image/jpg", "image/webp"];
                 const maxFileSize = 2 * 1024 * 1024; // 2MB
                 const maxImages = 5;
 
@@ -106,7 +106,7 @@
                 Array.from(files).forEach((file, index) => {
                     if (!allowedExtensions.includes(file.type)) {
                         isValid = false;
-                        errorMessage = "Only PNG, JPEG, or JPG files are allowed.";
+                        errorMessage = "Only PNG, JPEG, WEBP, or JPG files are allowed.";
                     } else if (file.size > maxFileSize) {
                         isValid = false;
                         errorMessage = "Each file must not exceed 2MB.";
