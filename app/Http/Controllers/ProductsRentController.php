@@ -86,7 +86,7 @@ class ProductsRentController extends Controller
             'price' => 'required|numeric',
             'stock' => 'required|integer',
             'images' => 'nullable|array|max:5',
-            'images.*' => 'image|mimes:jpeg,png,jpg|max:2048',
+            'images.*' => 'image|mimes:jpeg,png,jpg,webp|max:2048',
         ]);
 
         $product = Product::create($request->only(['name', 'category_id', 'description', 'teaser', 'price', 'stock']));
