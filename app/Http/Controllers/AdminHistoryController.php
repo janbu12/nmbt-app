@@ -8,6 +8,8 @@ use App\Models\Rent;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use App\Mail\RentStatusUpdateMail;
+use App\Models\ProductRentModel;
+use App\Models\RentDetailsModel;
 use Illuminate\Support\Facades\Mail;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -58,7 +60,7 @@ class AdminHistoryController extends Controller
     {
         Gate::authorize('isAdmin');
         $rent = Rent::findOrFail($id);
-
+        $rent = Rent::findOrFail($id);
         // Logika untuk mengubah status berdasarkan status saat ini
         switch ($rent->status_rent) {
             case 'unpaid':
@@ -71,7 +73,16 @@ class AdminHistoryController extends Controller
                 $rent->status_rent = 'renting';
                 break;
             case 'renting':
+                $rentDetails = RentDetailsModel::where('rent_id', $rent->id)->get();
+                foreach ($rentDetails as $detail) {
+                    $product = ProductRentModel::find($detail->product_id);
+                    if ($product) {
+                        $product->stock += $detail->quantity;
+                        $product->save();
+                    }
+                }
                 $rent->status_rent = 'done';
+                $rent->save();
                 break;
             default:
                 return redirect()->back()->with('error', 'Status invalid.');
