@@ -22,11 +22,20 @@
                             <div>+</div>
                         </x-button>
                     </a>
+                    <form action="{{ route('admin.hargasewa.update') }}" method="POST" class="mt-4">
+                        @csrf
+                        @method('PATCH')
+                        <label for="" class=" text-sm w-full flex flex-col mb-1.5">Rental Price of All Products <span class="text-xs text-slate-400">Please press enter to edit</span></label>
+                        <x-input-text type="text" name="harga_sewa" value="{{ $rules->harga_sewa }}"
+                            class=""
+                        />
+                    </form>
                 @endif
             @endauth
 
+
             {{-- Kategori Bar --}}
-            <div class="hidden md:flex flex-col items-center mt-8 gap-5">
+            <div class="hidden md:flex flex-col items-center mt-5 gap-5">
                 <h1 class="text-tertiery1 font-medium text-2xl">Category</h1>
                 <div class="flex flex-wrap gap-2 items-center justify-center">
                     @foreach ($categories as $category)

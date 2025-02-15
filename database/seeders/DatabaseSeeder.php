@@ -22,7 +22,8 @@ class DatabaseSeeder extends Seeder
             ProductSeeders::class,
             RentSeeder::class,
             ReviewSeeder::class,
-            CartSeeder::class
+            CartSeeder::class,
+            RuleSeeder::class
         ]);
     }
 }
