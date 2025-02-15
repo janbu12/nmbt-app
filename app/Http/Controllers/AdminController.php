@@ -36,6 +36,22 @@ class AdminController extends Controller
             ->orderBy('total_transactions', 'DESC')
             ->get();
 
+        $rentedProducts = DB::table('products as p')
+            ->select(
+                'p.id as product_id',
+                'p.name',
+                'c.category_name',
+                'p.stock',
+                DB::raw('SUM(rd.quantity) as total_rented')
+            )
+            ->join('categories as c', 'p.category_id', '=', 'c.id')
+            ->join('rent_details as rd', 'p.id', '=', 'rd.product_id')
+            ->join('rents as r', 'rd.rent_id', '=', 'r.id')
+            ->whereIn('r.status_rent', ['renting'])
+            ->groupBy('p.id', 'p.name', 'c.category_name', 'p.stock')
+            ->orderBy('total_rented', 'DESC')
+            ->get();
+
         // Siapkan data untuk grafik
         $monthsIncome = $monthlyIncome->pluck('month');
         $totalsIncome = $monthlyIncome->pluck('totals_income');
@@ -64,7 +80,8 @@ class AdminController extends Controller
                 'totals',
                 'monthsIncome',
                 'totalsIncome',
-                'transactions'
+                'transactions',
+                'rentedProducts'
             ));
     }
 
