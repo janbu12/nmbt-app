@@ -123,7 +123,7 @@
                                     ($rent->status_rent == 'unpaid' ? 'Unpaid':
                                     ($rent->status_rent == 'renting' ? 'Renting': 'Cancel')))))}}</td>
                                     @if (request()->get('status') == "unpaid")
-                                      <td id="countdown-{{ $rent->id }}" data-expiry="{{ \Carbon\Carbon::parse($rent->payment_expires_at)->toIso8601String() }}"></td>                       
+                                      <td id="countdown-{{ $rent->id }}" data-expiry="{{ \Carbon\Carbon::parse($rent->payment_expires_at)->toIso8601String() }}"></td>
                                     @endif
                             <td class="px-4 py-2 flex justify-center">
                                 @if (request()->get('status') == 'unpaid')
@@ -359,13 +359,15 @@
             function updateCountdowns() {
                 document.querySelectorAll('td[id^="countdown-"]').forEach(td => {
                     let expiryTime = new Date(td.getAttribute('data-expiry')).getTime();
+                    let orderId = td.id.replace("countdown-", "");
                     let interval = setInterval(() => {
                         let now = new Date().getTime();
                         let distance = expiryTime - now;
-        
+
                         if (distance < 0) {
                             clearInterval(interval);
                             td.innerText = "Expired";
+                            cancelExpiredOrder(orderId);
                         } else {
                             // let hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)); // Kalo itungannya jam
                             let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
@@ -376,7 +378,31 @@
                     }, 1000);
                 });
             }
+
+            function cancelExpiredOrder(orderId) {
+                fetch(`/orders/cancel/${orderId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: JSON.stringify({ reason: "Payment expired" })
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to cancel expired order');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Order expired and cancelled:', data);
+                    location.reload();
+                })
+                .catch(error => {
+                    console.error('Error cancelling expired order:', error);
+                });
+            }
             document.addEventListener("DOMContentLoaded", updateCountdowns);
-        </script>        
+        </script>
     </x-slot>
 </x-app-layout>

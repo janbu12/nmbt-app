@@ -35,7 +35,7 @@ class InvoiceController extends Controller
         setlocale(LC_TIME, 'id_ID.UTF-8');
         Carbon::setLocale('id');
         $now = Carbon::now( );
-        $operationalClose = Carbon::today()->setHour(19)->setMinute(0);
+        $operationalClose = Carbon::today()->setHour(23)->setMinute(0);
 
         // dd($now, $operationalClose);
 
