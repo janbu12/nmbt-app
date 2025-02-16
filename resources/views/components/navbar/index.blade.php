@@ -13,6 +13,7 @@
             @if (Auth::user() && Auth::user()->role === 'admin')
             <x-navbar.link href="/admin/dashboard">Dashboard</x-navbar.link>
             <x-navbar.link href="/products">Items</x-navbar.link>
+            <x-navbar.link href="/admin/category">Category</x-navbar.link>
             <x-navbar.link href="/admin/users">Users</x-navbar.link>
             <x-navbar.link href="/admin/history">History</x-navbar.link>
             @else
@@ -104,6 +105,7 @@
             @if (Auth::user() && Auth::user()->role === 'admin')
                 <x-navbar.link href="/admin/dashboard">Dashboard</x-navbar.link>
                 <x-navbar.link href="/products">Items</x-navbar.link>
+                <x-navbar.link href="/admin/category">Category</x-navbar.link>
                 <x-navbar.link href="/admin/users">Users</x-navbar.link>
                 <x-navbar.link href="/admin/history">History</x-navbar.link>
             @else
