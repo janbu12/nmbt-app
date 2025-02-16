@@ -127,7 +127,7 @@
                                             Detail
                                         </x-button>
                                     </div>
-                                @elseif(request()->get('status') == 'cancelled')
+                                @elseif(request()->get('status') == 'cancelled' || request()->get('status') == 'renting')
                                     <x-button as="a" variant="secondary" href="{{ route('history.show', $rent->id) }}">
                                         Detail
                                     </x-button>
