@@ -6,6 +6,7 @@ use App\Models\CategoryModel as Category;
 use App\Models\ProductImageModel as ProductImage;
 use App\Models\ProductRentModel as Product;
 use App\Models\Review;
+use App\Models\Rule;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Storage;
@@ -57,8 +58,9 @@ class ProductsRentController extends Controller
         $categories = Category::all();
         $filters = ['Rating', 'Lowest Price', 'Highest Price'];
         $totalProducts = Product::count();
+        $rules = Rule::findOrFail(1);
 
-        return view('products.index', compact('products', 'categories', 'filters', 'totalProducts'));
+        return view('products.index', compact('products', 'categories', 'filters', 'totalProducts', 'rules'));
     }
 
     public function create()
@@ -203,5 +205,13 @@ class ProductsRentController extends Controller
         }
 
         return view('products.show',compact('product', 'reviews'));
+    }
+
+    public function updateHargaSewa(){
+        Gate::authorize('isAdmin');
+        $rules = Rule::findOrFail(1);
+        $rules->update(['harga_sewa' => request('harga_sewa')]);
+
+        return redirect()->back()->with('success', 'Harga sewa per hari updated successfully!');
     }
 }

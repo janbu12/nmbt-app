@@ -38,6 +38,7 @@
     @endif
 
     <div class="mt-[4.5rem] md:mt-0 lg:py-5 lg:px-10 flex flex-col lg:flex-row lg:gap-10 lg:min-h-fit lg:h-full">
+        {{-- @dump($rules->harga_sewa) --}}
 
         {{-- Section Item --}}
         <div class="flex flex-col bg-white w-full h-full lg:h-fit lg:max-h-[500px] overflow-y-auto lg:rounded-lg lg:drop-shadow-lg text-tertiery1">
@@ -293,7 +294,7 @@
                     }
 
                     const days = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24));
-                    const hargaPerHari = days * 5000;
+                    const hargaPerHari = days * {{ $rules->harga_sewa }};
                     const totalHargaHari = hargaPerHari + subtotal;
                     const pajak = totalHargaHari * percentPajak;
 

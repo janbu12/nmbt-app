@@ -39,7 +39,7 @@
             </div>
             <div class="flex gap-4">
                 <div class="flex flex-col w-full gap-2">
-                    <label for="price">Price <span class="text-red-700">*</span></label>
+                    <label for="price">Deposit Price<span class="text-red-700">*</span></label>
                     <input id="price" class="input input-bordered w-full" type="number" name="price" step="0.01" placeholder="Price" value="{{ old('price', $product->price) }}" required>
                 </div>
                 <div class="flex flex-col w-full gap-2">

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Cart;
 use App\Models\ProductRentModel as Product;
 use App\Models\Rent;
+use App\Models\Rule;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -21,6 +22,7 @@ class CartController extends Controller
         $carts = Cart::with(['user', 'product'])
             ->where('user_id', $idUser)
             ->get();
+        $rules = Rule::findOrFail(1);
 
         // Array untuk menyimpan nama produk yang stoknya habis
         $outOfStockProducts = [];
@@ -53,16 +55,17 @@ class CartController extends Controller
         return view('cart.index', [
             'cartItems' => $availableCarts,
             'subtotal' => $subtotal,
-            'message' => $message, // Kirim pesan ke view
+            'message' => $message,
+            'rules' => $rules,
         ]);
     }
 
     public function destroy($id)
     {
-        $cartItem = Cart::find($id); // Cari item berdasarkan ID
+        $cartItem = Cart::find($id);
 
         if ($cartItem) {
-            $cartItem->delete(); // Hapus item dari database
+            $cartItem->delete();
             return redirect()->route('cart.index')->with('success', 'Success delete item from cart.');
         }
 

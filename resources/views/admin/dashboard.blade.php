@@ -125,7 +125,6 @@
             <input type="hidden" name="incomeData" value="{{ json_encode($totalsIncome) }}">
         </form>
 
-
         <div class="flex gap-5 flex-wrap lg:flex-nowrap w-full">
             <div class="bg-white p-8 mt-8 rounded-xl w-full">
                 <canvas id="myChart"></canvas>
@@ -142,6 +141,31 @@
             <div id="capture" class="bg-white p-8 mt-8 rounded-xl w-full">
                 <canvas id="categoriesChart"></canvas>
             </div>
+        </div>
+        <div class="container overflow-y-auto mx-auto md:mt-8 p-4 bg-white rounded-lg max-h-svh">
+            <h1 class="text-2xl font-bold mb-4">Products in rental</h1>
+            <table class="table w-full">
+                <thead>
+                    <tr>
+                        <th>No.</th>
+                        <th>Product name</th>
+                        <th>Category</th>
+                        <th>Stock</th>
+                        <th>Number of rentals</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($rentedProducts as $product)
+                        <tr>
+                            <td>{{ $loop->index + 1 }}</td>
+                            <td>{{ $product->name }}</td>
+                            <td>{{ $product->category_name }}</td>
+                            <td>{{ $product->stock }}</td>
+                            <td>{{ $product->total_rented }}</td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
         </div>
     </div>
 

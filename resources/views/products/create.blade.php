@@ -36,7 +36,7 @@
             </div>
             <div class="flex gap-4">
                 <div class="flex flex-col w-full gap-2">
-                    <label for="">Price <span class="text-red-700">*</span></label>
+                    <label for="">Deposit Price <span class="text-red-700">*</span></label>
                     <input class="input input-bordered w-full" type="number" name="price" step="0.01" placeholder="Price" required>
                 </div>
                 <div class="flex flex-col w-full gap-2">

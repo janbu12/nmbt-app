@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminHistoryController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\InvoiceController;
+use App\Http\Controllers\ProductsRentController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\UserHistoryController;
@@ -73,6 +74,7 @@ Route::middleware(['auth','role:admin'])->group(function () {
     Route::get('/admin/history/{id}', [AdminHistoryController::class, 'show'])->name('admin.show');
     Route::get('/admin/history/{id}/change-status', [AdminHistoryController::class, 'status'])->name('admin.status');
     Route::get('/admin/report', [ReportController::class, 'generateReport'])->name('admin.report');
+    Route::patch('/admin/hargasewa/update', [ProductsRentController::class, 'updateHargaSewa'])->name('admin.hargasewa.update');
 });
 
 
