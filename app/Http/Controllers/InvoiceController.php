@@ -154,10 +154,20 @@ class InvoiceController extends Controller
         }
 
         $taxAmount = intval(round($request->tax));
+        $totalDays = intval(round($request->totalDays));
 
+        // Harga Sewa
+        $itemDetails[] = [
+            'id' => 'RENTPRICE',
+            'price' => intval(round($totalDays)),
+            'quantity' => 1,
+            'name' => 'Rent Price',
+        ];
+
+        // Pajak
         $itemDetails[] = [
             'id' => 'TAX',
-            'price' => intval(round($taxAmount)), // Pajak sebagai item
+            'price' => intval(round($taxAmount)),
             'quantity' => 1,
             'name' => 'Tax',
         ];
