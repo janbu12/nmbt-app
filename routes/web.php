@@ -77,7 +77,7 @@ Route::middleware(['auth','role:admin'])->group(function () {
     Route::get('/admin/history/detail-history-excel', [AdminHistoryController::class, 'detailHistoryExcel'])->name('admin.history.detailHistoryExcel');
     Route::get('/admin/history/{id}', [AdminHistoryController::class, 'show'])->name('admin.show');
     Route::get('/admin/history/{id}/change-status', [AdminHistoryController::class, 'status'])->name('admin.status');
-    Route::get('/admin/report', [ReportController::class, 'generateReport'])->name('admin.report');
+    Route::post('/admin/report', [ReportController::class, 'generateReport'])->name('admin.report');
     Route::patch('/admin/hargasewa/update', [ProductsRentController::class, 'updateHargaSewa'])->name('admin.hargasewa.update');
 });
 
