@@ -22,7 +22,7 @@
                 <p>Disarankan menggunakan mode dekstop</p>
             </div>
         </div>
-        <form class="bg-white p-6 rounded-xl" action="{{ route('admin.report') }}" method="GET">
+        <form class="bg-white p-6 rounded-xl" action="{{ route('admin.report') }}" method="POST">
             @csrf
             <div class="flex gap-4 items-center justify-between lg:justify-start mb-4">
                 <h1 class="text-xl font-bold">Summary</h1>
