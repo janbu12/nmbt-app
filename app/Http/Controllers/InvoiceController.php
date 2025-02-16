@@ -112,6 +112,7 @@ class InvoiceController extends Controller
             'return_date' => 'required|date',
             'selected_items' => 'required|array',
             'grandtotal' => 'required|numeric',
+            'tax' => 'required|numeric',
         ]);
 
         $rent = Rent::create([
@@ -151,6 +152,15 @@ class InvoiceController extends Controller
                 ];
             }
         }
+
+        $taxAmount = $request->input->get('tax');
+
+        $itemDetails[] = [
+            'id' => 'TAX',
+            'price' => intval(round($taxAmount)), // Pajak sebagai item
+            'quantity' => 1,
+            'name' => 'Tax',
+        ];
 
         Cart::where('user_id', Auth::id())->whereIn('id', $request->selected_items)->delete();
 
