@@ -131,7 +131,7 @@
                 const selectedItems = @json($items->pluck('id'));
                 const quantities = @json($items->pluck('quantity'));
                 const grandtotal = Math.round({{ $grandtotal }}); // Pastikan grandtotal dibulatkan
-                const tax = '{{ $tax }}';
+                const tax = Math.round({{ $tax }});
 
                 console.log('Data yang akan dikirim:', {
                     pickup_date: pickupDate,
