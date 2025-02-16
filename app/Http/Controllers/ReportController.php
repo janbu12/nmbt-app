@@ -15,7 +15,7 @@ class ReportController extends Controller
     {
         // dd($request);
         // Ambil data yang diperlukan
-        $items = RentDetailsModel::with(['product', 'product.images'])->limit(100)->get();
+        // $items = RentDetailsModel::with(['product', 'product.images'])->limit(100)->get();
         $rent = Rent::all();
 
         // Ambil data dari request
@@ -43,7 +43,7 @@ class ReportController extends Controller
             'address' => 'Uber Street Gotham City',
             'phone' => '081234567890',
             'email' => 'admin@example.com',
-            'items' => $items,
+            // 'items' => $items,
             'totalBorrowed' => $totalBorrowed,
             'doneRents' => $doneRents,
             'totalRenting' => $totalRenting,

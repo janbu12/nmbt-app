@@ -222,10 +222,10 @@
     {{-- @vite('resources/css/app.css') --}}
 
     <!-- Highcharts JS -->
-    <script src="https://code.highcharts.com/highcharts.js"></script>
+    {{-- <script src="https://code.highcharts.com/highcharts.js"></script>
     <script src="https://code.highcharts.com/modules/exporting.js"></script>
     <script src="https://code.highcharts.com/modules/export-data.js"></script>
-    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+    <script src="https://code.highcharts.com/modules/accessibility.js"></script> --}}
 </head>
 <body class="antialiased flex flex-col h-screen text-sm font-sans text-gray-700 tracking-tight">
     {{-- Header: This contains the company logo, name,
@@ -386,7 +386,7 @@
         </table>
     </div>
 
-    <script>
+    {{-- <script>
         const topTenProducts = @json($topTenProducts);
 
         const productsArray = Object.values(topTenProducts).map(item => ({
@@ -507,6 +507,6 @@
                 }))
             }]
         });
-    </script>
+    </script> --}}
 </body>
 </html>
