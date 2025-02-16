@@ -153,7 +153,7 @@ class InvoiceController extends Controller
             }
         }
 
-        $taxAmount = $request->input->get('tax');
+        $taxAmount = intval(round($request->tax));
 
         $itemDetails[] = [
             'id' => 'TAX',
