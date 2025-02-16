@@ -132,6 +132,7 @@
                 const quantities = @json($items->pluck('quantity'));
                 const grandtotal = Math.round({{ $grandtotal }}); // Pastikan grandtotal dibulatkan
                 const tax = Math.round({{ $tax }});
+                const totalDays = Math.round({{ $totalDays }});
 
                 console.log('Data yang akan dikirim:', {
                     pickup_date: pickupDate,
@@ -140,6 +141,7 @@
                     quantities: quantities,
                     grandtotal: grandtotal,
                     tax: tax,
+                    totalDays: totalDays,
                 });
 
                 Alpine.store('loadingState').showLoading();
@@ -158,6 +160,7 @@
                         quantities: quantities,
                         grandtotal: grandtotal,
                         tax: tax,
+                        totalDays: totalDays,
                     })
                 })
                 .then(response => {
