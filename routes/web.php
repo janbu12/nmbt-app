@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminHistoryController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\ReviewController;
@@ -66,6 +67,9 @@ Route::middleware('guest')->group(function () {
 Route::middleware(['auth','role:admin'])->group(function () {
     Route::get('/admin/dashboard', [App\Http\Controllers\AdminController::class, 'index'])->name('admin.dashboard');
     // Route::get('/admin/item',[App\Http\Controllers\ProductsRentController::class, 'index'])->name('admin.item');
+    Route::get('/admin/category', [CategoryController::class, 'index'])->name('category.index');
+    Route::post('/admin/category', [CategoryController::class, 'store'])->name('category.store');
+    Route::put('/admin/category/{id}', [CategoryController::class, 'update'])->name('category.update');
     Route::get('/admin/users', [App\Http\Controllers\AdminController::class, 'users'])->name('admin.users');
     Route::get('/admin/history', [AdminHistoryController::class, 'index'])->name('admin.history');
     Route::get('/admin/history/history-excel', [AdminHistoryController::class, 'historyExcel'])->name('admin.history.historyExcel');
