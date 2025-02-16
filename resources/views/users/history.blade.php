@@ -128,7 +128,7 @@
                             <td class="px-4 py-2 flex justify-center">
                                 @if (request()->get('status') == 'unpaid')
                                     <div class="flex gap-2">
-                                        <button class="p-2 rounded-md bg-secondary3 text-bg3 hover:bg-bg1 hover:text-secondary3 hover:border-bg1" onclick="payOrder('{{ $rent->id }}')">Bayar</button>
+                                        <button id="pay-button-{{ $rent->id }}" class="p-2 rounded-md bg-secondary3 text-bg3 hover:bg-bg1 hover:text-secondary3 hover:border-bg1" onclick="payOrder('{{ $rent->id }}')">Pay</button>
                                         <button class="p-2 rounded-md bg-red-600 text-bg3 hover:bg-bg1 hover:text-secondary3 hover:border-red-300" onclick="confirmCancel('{{ $rent->id }}')">Cancel</button>
                                         <x-button as="a" variant="secondary" class="sm:px-4" href="{{ route('history.show', $rent->id) }}">
                                             Detail
@@ -364,16 +364,23 @@
                         let now = new Date().getTime();
                         let distance = expiryTime - now;
 
-                        if (distance < 0) {
+                        if (distance <= 0) {
                             clearInterval(interval);
                             td.innerText = "Expired";
+                            
                             cancelExpiredOrder(orderId);
+
+                            // Matikan tombol bayar
+                            let rentId = td.id.replace("countdown-", ""); // Ambil ID dari countdown
+                            let payButton = document.querySelector(`#pay-button-${rentId}`);
+                            if (payButton) {
+                                payButton.disabled = true;
+                                payButton.classList.add("opacity-50", "cursor-not-allowed");
+                            }
                         } else {
-                            // let hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)); // Kalo itungannya jam
                             let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
                             let seconds = Math.floor((distance % (1000 * 60)) / 1000);
-                            // td.innerText = `${hours}h ${minutes}m ${seconds}s`;
-                            td.innerText = `${minutes}m ${seconds}s`; //Kalo itungan menit
+                            td.innerText = `${minutes}m ${seconds}s`;
                         }
                     }, 1000);
                 });
@@ -403,6 +410,6 @@
                 });
             }
             document.addEventListener("DOMContentLoaded", updateCountdowns);
-        </script>
+        </script>        
     </x-slot>
 </x-app-layout>
