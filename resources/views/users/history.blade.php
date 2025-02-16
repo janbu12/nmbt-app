@@ -97,14 +97,17 @@
             {{-- Tablet - PC --}}
             <div class="overflow-auto rounded-xl bg-white p-4 w-full h-full">
                 <table class="table w-full">
-                    <thead class="text-base">
+                    <thead class="text-base w-full">
                         <tr>
                             <th>No Order</th>
                             <th>Pickup Date</th>
                             <th>Return Date</th>
                             <th>Total Price</th>
                             <th>Status</th>
-                            <th>Action</th>
+                            @if (request()->get('status') == "unpaid")
+                                <th>Payment Expires At</th>
+                            @endif
+                            <th class="text-center">Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -119,7 +122,10 @@
                                     ($rent->status_rent == 'process' ? 'Process':
                                     ($rent->status_rent == 'unpaid' ? 'Unpaid':
                                     ($rent->status_rent == 'renting' ? 'Renting': 'Cancel')))))}}</td>
-                            <td class="px-4 py-2">
+                                    @if (request()->get('status') == "unpaid")
+                                      <td id="countdown-{{ $rent->id }}" data-expiry="{{ \Carbon\Carbon::parse($rent->payment_expires_at)->toIso8601String() }}"></td>                       
+                                    @endif
+                            <td class="px-4 py-2 flex justify-center">
                                 @if (request()->get('status') == 'unpaid')
                                     <div class="flex gap-2">
                                         <button class="p-2 rounded-md bg-secondary3 text-bg3 hover:bg-bg1 hover:text-secondary3 hover:border-bg1" onclick="payOrder('{{ $rent->id }}')">Bayar</button>
@@ -153,7 +159,7 @@
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="5" class="px-4 py-2 text-center">No data was found</td>
+                            <td colspan="7" class="px-4 py-2 text-center">No data was found</td>
                         </tr>
                         @endforelse
                     </tbody>
@@ -349,5 +355,28 @@
                 });
             };
         </script>
+        <script>
+            function updateCountdowns() {
+                document.querySelectorAll('td[id^="countdown-"]').forEach(td => {
+                    let expiryTime = new Date(td.getAttribute('data-expiry')).getTime();
+                    let interval = setInterval(() => {
+                        let now = new Date().getTime();
+                        let distance = expiryTime - now;
+        
+                        if (distance < 0) {
+                            clearInterval(interval);
+                            td.innerText = "Expired";
+                        } else {
+                            // let hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)); // Kalo itungannya jam
+                            let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                            let seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                            // td.innerText = `${hours}h ${minutes}m ${seconds}s`;
+                            td.innerText = `${minutes}m ${seconds}s`; //Kalo itungan menit
+                        }
+                    }, 1000);
+                });
+            }
+            document.addEventListener("DOMContentLoaded", updateCountdowns);
+        </script>        
     </x-slot>
 </x-app-layout>

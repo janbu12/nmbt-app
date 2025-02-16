@@ -121,6 +121,8 @@ class InvoiceController extends Controller
             'return_date' => $request->return_date,
             'total_price' => $request->grandtotal,
             'status' => 'unpaid',
+            // 'payment_expires_at' => Carbon::now()->addHours(24)->toDateTimeString()
+            'payment_expires_at' => Carbon::now()->addMinutes(2)
         ]);
 
         $itemDetails = [];
