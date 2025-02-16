@@ -120,10 +120,11 @@
                             <td >{{ ($rent->status_rent == "done" ? 'Done' :
                                     ($rent->status_rent == 'ready_pickup' ? 'Ready Pickup':
                                     ($rent->status_rent == 'process' ? 'Process':
-                                    ($rent->status_rent == 'unpaid' ? 'Unpaid': 'Cancel'))))}}</td>
-                            @if (request()->get('status') == "unpaid")
-                            <td id="countdown-{{ $rent->id }}" data-expiry="{{ \Carbon\Carbon::parse($rent->payment_expires_at)->toIso8601String() }}"></td>                       
-                            @endif
+                                    ($rent->status_rent == 'unpaid' ? 'Unpaid':
+                                    ($rent->status_rent == 'renting' ? 'Renting': 'Cancel')))))}}</td>
+                                    @if (request()->get('status') == "unpaid")
+                                      <td id="countdown-{{ $rent->id }}" data-expiry="{{ \Carbon\Carbon::parse($rent->payment_expires_at)->toIso8601String() }}"></td>                       
+                                    @endif
                             <td class="px-4 py-2 flex justify-center">
                                 @if (request()->get('status') == 'unpaid')
                                     <div class="flex gap-2">
@@ -133,7 +134,7 @@
                                             Detail
                                         </x-button>
                                     </div>
-                                @elseif(request()->get('status') == 'cancelled')
+                                @elseif(request()->get('status') == 'cancelled' || request()->get('status') == 'renting')
                                     <x-button as="a" variant="secondary" href="{{ route('history.show', $rent->id) }}">
                                         Detail
                                     </x-button>
