@@ -194,7 +194,7 @@ class InvoiceController extends Controller
                 'email' => $request->user()->email,
                 'phone' => $request->user()->phone,
             ],
-            'item_details' => $itemDetails,
+            // 'item_details' => $itemDetails,
         ];
 
         Log::info('Params to Midtrans:', $params);
@@ -263,7 +263,7 @@ class InvoiceController extends Controller
                     'email' => $request->user()->email,
                     'phone' => $request->user()->phone,
                 ],
-                'item_details' => $itemDetails,
+                // 'item_details' => $itemDetails,
             ];
 
             try {
@@ -299,7 +299,7 @@ class InvoiceController extends Controller
                     'email' => $request->user()->email,
                     'phone' => $request->user()->phone,
                 ],
-                'item_details' => $itemDetails,
+                // 'item_details' => $itemDetails,
             ];
 
             try {
