@@ -7,7 +7,7 @@
             </div>
         </div>
         <div class="flex flex-col gap-2 px-2 lg:p-0 lg:flex-row justify-between">
-            <form class="flex w-full gap-2 text-[0.6rem] md:text-base" action="{{ route('history.index') }}" method="GET">
+            <form class="flex w-full gap-2 text-[0.6rem] md:text-base overflow-x-auto" action="{{ route('history.index') }}" method="GET">
                 <x-button
                     type="submit"
                     name="status"
