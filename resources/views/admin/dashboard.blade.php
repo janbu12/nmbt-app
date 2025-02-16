@@ -49,7 +49,7 @@
                 <div class="card bg-base-100 drop-shadow p-4">
                     <div class="flex justify-between items-center">
                         <div>
-                            <h2 class="text-lg font-semibold">Total Done Rents</h2>
+                            <h2 class="text-lg font-semibold">Total Done Rents Transactions</h2>
                             <p class="text-xl md:text-3xl font-bold">{{ $totalDoneRents }}</p>
                             <input type="hidden" name="done_rents" value="{{ $totalDoneRents }}">
                         </div>
@@ -63,7 +63,7 @@
                 <div class="card bg-base-100 drop-shadow p-4">
                     <div class="flex justify-between items-center">
                         <div>
-                            <h2 class="text-lg font-semibold">Total Renting</h2>
+                            <h2 class="text-lg font-semibold">Total Renting Transactions</h2>
                             <p class="text-xl md:text-3xl font-bold">{{ $totalRenting }}</p>
                             <input type="hidden" name="total_renting" value="{{ $totalRenting }}">
                         </div>
@@ -77,7 +77,7 @@
                 <div class="card bg-base-100 drop-shadow p-4">
                     <div class="flex justify-between items-center">
                         <div>
-                            <h2 class="text-lg font-semibold">Total Ongoing Rents</h2>
+                            <h2 class="text-lg font-semibold">Total Ongoing Rents Transactions</h2>
                             <p class="text-xl md:text-3xl font-bold">{{ $totalOngoingRents }}</p>
                             <input type="hidden" name="ongoing_rents" value="{{ $totalOngoingRents }}">
                         </div>
