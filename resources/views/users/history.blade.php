@@ -117,7 +117,8 @@
                             <td >{{ ($rent->status_rent == "done" ? 'Done' :
                                     ($rent->status_rent == 'ready_pickup' ? 'Ready Pickup':
                                     ($rent->status_rent == 'process' ? 'Process':
-                                    ($rent->status_rent == 'unpaid' ? 'Unpaid': 'Cancel'))))}}</td>
+                                    ($rent->status_rent == 'unpaid' ? 'Unpaid':
+                                    ($rent->status_rent == 'renting' ? 'Renting': 'Cancel')))))}}</td>
                             <td class="px-4 py-2">
                                 @if (request()->get('status') == 'unpaid')
                                     <div class="flex gap-2">
